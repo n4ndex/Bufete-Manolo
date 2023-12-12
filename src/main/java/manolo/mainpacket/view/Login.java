@@ -3,7 +3,6 @@ package manolo.mainpacket.view;
 import manolo.mainpacket.model.LoginTexts;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -12,6 +11,7 @@ public class Login extends JFrame{
     int amountPanels = 3;
     int amountLabels = 4;
     int amountTextFields = 3;
+    int amountPasswordFields = 1;
     int amountButtons = 1;
 
     ArrayList<JPanel> panels = new ArrayList<>();
@@ -26,6 +26,7 @@ public class Login extends JFrame{
         createPanels(amountPanels);
         createLabels(amountLabels);
         createTextField(amountTextFields);
+        createPasswordField(amountPasswordFields);
         createButtons(amountButtons);
 
         // Visualización de elementos en ventana
@@ -69,8 +70,12 @@ public class Login extends JFrame{
 
     private void addTLTV() {
         for (int i = 1; i < amountLabels; i++) {
-            panels.get(1).add(labels.get(i));
-            panels.get(1).add(textFields.get(i-1));
+            if (i != amountLabels-1) {
+                panels.get(1).add(labels.get(i));
+                panels.get(1).add(textFields.get(i-1));
+            } else {
+                addPassword();
+            }
         }
     }
 
@@ -96,6 +101,12 @@ public class Login extends JFrame{
         }
     }
 
+    private void createPasswordField(int max) {
+        for (int i = 0; i < max; i++) {
+            JPasswordField passwordField = new JPasswordField(30);
+            passwordFields.add(passwordField);
+        }
+    }
     private void createLabels(int max) {
         for (int i = 0; i < max; i++) {
             JLabel label = new JLabel(model.getTextsList().get(i));
