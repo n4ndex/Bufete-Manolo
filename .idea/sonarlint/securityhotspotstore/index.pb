@@ -34,3 +34,5 @@ b
 2src/main/java/manolo/mainpacket/view/Register.java,e\4\e4c5671c7f5f1e0cac2a3f43ca19b8217d7ff82e
 w
 G.idea/sonarlint/issuestore/8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d,b\4\b4a0b63ce8560bbc5de0f9995c20cc861dc2adb3
+a
+1src/main/java/manolo/mainpacket/assets.properties,6\4\6410b5a3a5706991b689c91c8567786b0b3b9437

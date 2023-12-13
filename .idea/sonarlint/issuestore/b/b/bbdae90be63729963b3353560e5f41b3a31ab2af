@@ -1,5 +1,7 @@
 
 V
-java:S1128"4Remove this unused import 'groovy.util.logging.Log'.(ί²ιωÿÿÿÿ8»µ‘Ζ1
-[
-java:S1128"9Remove this unused import 'manolo.mainpacket.view.Login'.(…Ϊνόωÿÿÿÿ8–ωΤ‘Ζ1
+java:S1128"4Remove this unused import 'groovy.util.logging.Log'.(ί²ιωÿÿÿÿ8Ρ‹§Ζ1
+U
+java:S1128"8Remove this unused import 'manolo.mainpacket.view.Menu'.(κλ΅8Ρ‹§Ζ1
+Y
+java:S1128"<Remove this unused import 'manolo.mainpacket.view.Register'.(ύ°Η½8Ρ‹§Ζ1
