@@ -9,8 +9,8 @@ import java.util.ArrayList;
 public class Login extends JFrame{
 
     int amountPanels = 3;
-    int amountLabels = 4;
-    int amountTextFields = 3;
+    int amountLabels = 3;
+    int amountTextFields = 1;
     int amountPasswordFields = 1;
     int amountButtons = 1;
 
@@ -50,8 +50,7 @@ public class Login extends JFrame{
 
     private void combinePanels() {
         // Configurar diseño del panel 1 (GridLayout)
-        panels.get(1).setLayout(new GridLayout(amountLabels + amountTextFields, 2));
-
+        panels.get(1).setLayout(new BoxLayout(panels.get(1), BoxLayout.Y_AXIS));
         // Configurar diseño del panel final (FlowLayout centrado)
         panels.get(2).setLayout(new FlowLayout(FlowLayout.CENTER));
 
@@ -75,6 +74,7 @@ public class Login extends JFrame{
                 panels.get(1).add(textFields.get(i-1));
             } else {
                 addPassword();
+                addRegisterLink();
             }
         }
     }
@@ -82,6 +82,13 @@ public class Login extends JFrame{
     private void addPassword() {
         panels.get(1).add(new JLabel("Contraseña:"));
         panels.get(1).add(passwordFields.get(0));
+    }
+    private void addRegisterLink() {
+        JLabel registerLabel = new JLabel(model.getTextsList().get(3));
+        registerLabel.setForeground(Color.BLUE);
+        registerLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        labels.add(registerLabel);
+        panels.get(1).add(registerLabel);
     }
     private void addButtons() {
         panels.get(1).add(buttons.get(0));
@@ -116,7 +123,7 @@ public class Login extends JFrame{
 
     private void createButtons(int max) {
         for (int i = 0; i < max; i++) {
-            JButton button = new JButton(model.getTextsList().get(4));
+            JButton button = new JButton(model.getTextsList().get(model.getTextsList().size()-1));
             buttons.add(button);
         }
     }

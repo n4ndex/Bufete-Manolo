@@ -5,12 +5,9 @@ import java.util.ArrayList;
 
 public class Menu {
 
-    ArrayList<JLabel>etiquetas = new ArrayList<>();
-    public Menu() {
-        createLabels();
-    }
+    ArrayList<JLabel> etiquetas = new ArrayList<>();
 
-    private void createLabels() {
+    public Menu() {
 
     }
 

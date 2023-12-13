@@ -11,8 +11,8 @@ public class LoginTexts {
     private void fillTexts() {
         textsList.add("LOGIN");       // 0
         textsList.add("NickName");    // 1
-        textsList.add("Nombre");      // 2
-        textsList.add("Contraseña");  // 3
+        textsList.add("Contraseña");  // 2
+        textsList.add("¿No tienes una cuenta? Regístrate aquí"); // 3
         textsList.add("Acceder");     // 4
     }
 
