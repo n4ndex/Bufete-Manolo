@@ -1,4 +1,4 @@
-package manolo.mainpacket.ftpserver;
+package manolo.mainpacket.controller.ftpserver;
 
 import org.apache.commons.net.*;
 import org.apache.commons.net.ftp.*;
