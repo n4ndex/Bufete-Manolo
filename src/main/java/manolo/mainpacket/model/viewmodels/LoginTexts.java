@@ -1,4 +1,4 @@
-package manolo.mainpacket.model;
+package manolo.mainpacket.model.viewmodels;
 
 import java.util.ArrayList;
 

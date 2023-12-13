@@ -1,11 +1,15 @@
 package manolo.mainpacket.view;
 
-import manolo.mainpacket.model.RegisterTexts;
+import lombok.Getter;
+import lombok.Setter;
+import manolo.mainpacket.model.viewmodels.RegisterTexts;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+@Getter
+@Setter
 public class Register extends JFrame {
 
     int amountPanels = 3;
@@ -141,6 +145,6 @@ public class Register extends JFrame {
         this.setTitle("Login Bufete");
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setVisible(true);
+        this.setVisible(false);
     }
 }

@@ -7,7 +7,7 @@ import java.io.*;
 
 public class FtpService {
 
-    public FTPClient loginFtp(String host, int port, String username, String password) throws Exception {
+    public FTPClient loginFtp(String host, int port, String username, String password) {
         FTPClient ftpClient = new FTPClient();
         ftpClient.addProtocolCommandListener(new ProtocolCommandListener() {
             @Override
@@ -23,8 +23,12 @@ public class FtpService {
                         System.currentTimeMillis(), protocolCommandEvent.getMessage());
             }
         });
-        ftpClient.connect(host, port);
-        ftpClient.login(username, password);
+        try {
+            ftpClient.connect(host, port);
+            ftpClient.login(username, password);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return ftpClient;
     }
 

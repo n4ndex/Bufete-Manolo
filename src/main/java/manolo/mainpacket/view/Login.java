@@ -1,12 +1,16 @@
 package manolo.mainpacket.view;
 
-import manolo.mainpacket.model.LoginTexts;
+import lombok.Getter;
+import lombok.Setter;
+import manolo.mainpacket.model.viewmodels.LoginTexts;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Login extends JFrame{
+@Getter
+@Setter
+public class Login extends JFrame {
 
     int amountPanels = 3;
     int amountLabels = 3;
@@ -69,9 +73,9 @@ public class Login extends JFrame{
 
     private void addTLTV() {
         for (int i = 1; i < amountLabels; i++) {
-            if (i != amountLabels-1) {
+            if (i != amountLabels - 1) {
                 panels.get(1).add(labels.get(i));
-                panels.get(1).add(textFields.get(i-1));
+                panels.get(1).add(textFields.get(i - 1));
             } else {
                 addPassword();
                 addRegisterLink();
@@ -83,6 +87,7 @@ public class Login extends JFrame{
         panels.get(1).add(new JLabel("Contraseña:"));
         panels.get(1).add(passwordFields.get(0));
     }
+
     private void addRegisterLink() {
         JLabel registerLabel = new JLabel(model.getTextsList().get(3));
         registerLabel.setForeground(Color.BLUE);
@@ -90,6 +95,7 @@ public class Login extends JFrame{
         labels.add(registerLabel);
         panels.get(1).add(registerLabel);
     }
+
     private void addButtons() {
         panels.get(1).add(buttons.get(0));
     }
@@ -114,6 +120,7 @@ public class Login extends JFrame{
             passwordFields.add(passwordField);
         }
     }
+
     private void createLabels(int max) {
         for (int i = 0; i < max; i++) {
             JLabel label = new JLabel(model.getTextsList().get(i));
@@ -123,7 +130,7 @@ public class Login extends JFrame{
 
     private void createButtons(int max) {
         for (int i = 0; i < max; i++) {
-            JButton button = new JButton(model.getTextsList().get(model.getTextsList().size()-1));
+            JButton button = new JButton(model.getTextsList().get(model.getTextsList().size() - 1));
             buttons.add(button);
         }
     }

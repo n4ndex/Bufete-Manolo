@@ -1,4 +1,4 @@
-package manolo.mainpacket.model;
+package manolo.mainpacket.model.controllermodels;
 
 import lombok.Getter;
 import lombok.Setter;
