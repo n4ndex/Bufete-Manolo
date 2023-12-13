@@ -1,0 +1,10 @@
+
+g	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8Åª„îÅ1
+Z
+java:S1854"8Remove this useless assignment to local variable "port".(úûîıÿÿÿÿ8¤âÑîÅ1
+K
+java:S1481")Remove this unused "port" local variable.(úûîıÿÿÿÿ8§âÑîÅ1
+G	java:S106"+Replace this use of System.out by a logger.(«îÑ‘8Òª„îÅ1
+G	java:S106"+Replace this use of System.out by a logger.(¬Á…8Óª„îÅ1
+L	java:S106"+Replace this use of System.out by a logger.(İˆú•ıÿÿÿÿ8ÿ¶‡îÅ1
+L	java:S106"+Replace this use of System.out by a logger.(Ûı¡Çûÿÿÿÿ8Ö‘îÅ1
