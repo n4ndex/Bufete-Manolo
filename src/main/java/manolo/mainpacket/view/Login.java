@@ -142,7 +142,7 @@ public class Login extends JFrame {
         this.setSize(width/3, height/4);
         this.setTitle("Login Bufete");
         this.setLocationRelativeTo(null);
-        this.setResizable(false);
+        this.setResizable(true);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(true);
     }

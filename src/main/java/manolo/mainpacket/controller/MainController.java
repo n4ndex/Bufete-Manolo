@@ -98,11 +98,32 @@ public class MainController {
             }
         });
         loginView.getButtons().getFirst().addActionListener(e -> {
-            submitLogin();
+            String dni = loginView.getTextFields().get(0).toString(); // getNickname
+            String password = loginView.getPasswordFields().get(0).toString(); // getPassword
+            if (dni != null || dni != "") {
+                if (password != null || password != "") {
+                    submitLogin(dni); // Compare SQL users
+                } else {
+                    System.out.println("La contraseña no puede estar vacia");
+                }
+            } else {
+                System.out.println("El DNI no puede estar vacio");
+            }
         });
     }
 
-    private void submitLogin() {
+    private void submitLogin(String dni) {
+        /*
+        if(dni == rs.getNext()) {
+
+        }
+         */
+        menu.setVisible(true);
+        loginView.setVisible(false);
+        addMenuEventListener();
+    }
+
+    private void addMenuEventListener() {
 
     }
 }
