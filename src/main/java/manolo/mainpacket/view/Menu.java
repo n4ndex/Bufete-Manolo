@@ -1,6 +1,6 @@
 package manolo.mainpacket.view;
 
-import manolo.mainpacket.model.MenuTexts;
+import manolo.mainpacket.model.viewmodels.MenuTexts;
 
 import javax.swing.*;
 import java.awt.*;
