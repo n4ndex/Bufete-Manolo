@@ -5,6 +5,7 @@ import manolo.mainpacket.controller.ftpserver.FtpService;
 import manolo.mainpacket.model.controllermodels.FtpServiceModel;
 import manolo.mainpacket.model.controllermodels.MainConnectionModel;
 import manolo.mainpacket.model.viewmodels.MainViewModel;
+import manolo.mainpacket.view.FTPWindow;
 import manolo.mainpacket.view.Login;
 import manolo.mainpacket.view.Menu;
 import manolo.mainpacket.view.Register;
@@ -27,6 +28,7 @@ public class MainController{
     FtpServiceModel ftpServiceModel;
     FtpService ftpService;
     FTPClient mainClient;
+    FTPWindow ftpWindow;
 
     public MainController() {
         initAttributes();
@@ -134,7 +136,9 @@ public class MainController{
         for (int i = 0; i < menu.getButtons().size(); i++) {
             menu.getButtons().get(i).addActionListener(e -> {
                 switch (((JButton)e.getSource()).getName()){
-                    case "FTP"-> System.out.println("FTP");
+                    case "FTP":
+                        ftpWindow = new FTPWindow();
+                        ftpWindow.setVisible(true);
                 }
             });
         }

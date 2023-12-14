@@ -5,7 +5,6 @@ import lombok.Getter;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeModel;
 import java.awt.*;
 import java.io.File;
 
@@ -19,7 +18,7 @@ public class FTPWindow extends JFrame {
     private JButton downloadButton;
     private JButton exitButton;
     private JButton deleteDirButton;
-    private JTree tree1;
+    private JTree treeDirectories;
     private JPanel mainPanel;
 
     public FTPWindow() {
@@ -28,15 +27,29 @@ public class FTPWindow extends JFrame {
     }
 
     private void initComponents() {
-        textField1 = new JTextField(20);
-        createDirButton = new JButton("Crear carpeta");
-        deleteFileButton = new JButton("Eliminar archivo");
-        uploadButton = new JButton("Subir archivo");
-        downloadButton = new JButton("Descargar archivo");
-        exitButton = new JButton("Salir");
-        deleteDirButton = new JButton("Eliminar Carpeta");
-        tree1 = new JTree();
+        File rootDirectory = new File("C:\\Users\\Usuario\\Pictures");
+        loadDirectory(rootDirectory);
     }
+
+
+    private void loadDirectory(File directory) {
+        DefaultMutableTreeNode rootNode = createNodes(directory);
+        treeDirectories.setModel(new DefaultTreeModel(rootNode));
+    }
+
+    private DefaultMutableTreeNode createNodes(File file) {
+        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(file.getName());
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            if (files != null) {
+                for (File childFile : files) {
+                    rootNode.add(createNodes(childFile));
+                }
+            }
+        }
+        return rootNode;
+    }
+
 
     private void initUI() {
 
