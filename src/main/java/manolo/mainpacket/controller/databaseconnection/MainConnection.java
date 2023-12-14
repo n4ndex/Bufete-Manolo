@@ -13,7 +13,7 @@ import java.sql.SQLException;
 public class MainConnection {
     private Connection connection;
 
-    public MainConnection(Driver driver, String url, String database, String user, String password) {
+    public MainConnection(Driver driver, String url, String database, String user, String password  ) {
         try {
             DriverManager.registerDriver(driver);
             connection = DriverManager.getConnection(url + database, user, password);
