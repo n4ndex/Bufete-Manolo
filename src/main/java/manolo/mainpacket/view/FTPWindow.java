@@ -1,7 +1,15 @@
 package manolo.mainpacket.view;
 
+import lombok.Getter;
+
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeModel;
 import java.awt.*;
+import java.io.File;
+
+@Getter
 
 public class FTPWindow extends JFrame {
     private JTextField textField1;

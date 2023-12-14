@@ -109,7 +109,7 @@ public class Login extends JFrame {
 
     private void createTextField(int max) {
         for (int i = 0; i < max; i++) {
-            JTextField textField = new JTextField(30);
+            JTextField textField = new JTextField(10);
             textFields.add(textField);
         }
     }
