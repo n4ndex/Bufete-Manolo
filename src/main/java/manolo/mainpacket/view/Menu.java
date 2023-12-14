@@ -1,5 +1,7 @@
 package manolo.mainpacket.view;
 
+import lombok.Getter;
+import lombok.Setter;
 import manolo.mainpacket.model.viewmodels.MenuTexts;
 
 import javax.swing.*;
@@ -7,6 +9,8 @@ import java.awt.*;
 import java.net.URL;
 import java.util.ArrayList;
 
+@Getter
+@Setter
 public class Menu extends JFrame {
     private ArrayList<JButton> buttons = new ArrayList<>();
     private ArrayList<JLabel> labels = new ArrayList<>();
@@ -42,6 +46,7 @@ public class Menu extends JFrame {
                 ImageIcon resizedIcon = new ImageIcon(resizedImage);
 
                 JButton button = new JButton(resizedIcon);
+                button.setName(buttonText);
 
                 button.setLayout(new BorderLayout());
 

@@ -12,9 +12,10 @@ import org.apache.commons.net.ftp.FTPClient;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
 
 public class MainController {
     MainConnectionModel mainConnectionModel;
@@ -30,6 +31,11 @@ public class MainController {
     public MainController() {
         initAttributes();
         addEventListeners();
+        menu.setVisible(true);
+    }
+
+    private void showErrorWindow(Component parentComponent, String errorMessage) {
+        JOptionPane.showMessageDialog(parentComponent, errorMessage, mainViewModel.getERROR(), JOptionPane.ERROR_MESSAGE);
     }
 
     private void initAttributes() {
@@ -46,6 +52,49 @@ public class MainController {
     private void addEventListeners() {
         addLoginEventListeners();
         addRegisterEventListeners();
+        addMenuEventListeners();
+    }
+
+
+    private void addLoginEventListeners() {
+        loginView.getLabels().get(3).addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                registerView.setVisible(true);
+                loginView.setVisible(false);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+        loginView.getButtons().getFirst().addActionListener(e -> {
+            submitLogin();
+        });
+    }
+
+    private void submitLogin() {
+        boolean ableToLogin = false;
+        // TODO check the login
+        if (ableToLogin) {
+            loginView.setVisible(false);
+            menu.setVisible(true);
+        } else {
+            showErrorWindow(loginView, "Error al iniciar sesion");
+        }
     }
 
     private void addRegisterEventListeners() {
@@ -72,60 +121,22 @@ public class MainController {
             public void mouseExited(MouseEvent e) {
             }
         });
+        registerView.getButtons().getFirst().addActionListener(e -> {
+            submitRegister();
+        });
 
     }
-    private void submitLogin() {
-        boolean ableToLogin = false;
-        // TODO check the login
-        if (ableToLogin) {
-            loginView.setVisible(false);
-            menu.setVisible(true);
-        } else {
-            //showErrorWindow(loginView, "Error al iniciar sesion");
-        }
-    private void addLoginEventListeners() {
-        loginView.getLabels().get(3).addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                registerView.setVisible(false);
-                loginView.setVisible(true);
-            }
 
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
-        });
-        loginView.getButtons().getFirst().addActionListener(e -> {
-            submitLogin();
-        });
+    private void submitRegister() {
     }
 
-    private void submitLogin() {
-        String dni = loginView.getTextFields().get(0).toString(); // getNickname
-            String password = loginView.getPasswordFields().get(0).toString(); // getPassword
-            if (dni != null || dni != "") {
-                if (password != null || password != "") {
-                    //submitLogin(dni); // Compare SQL users
-                } else {
-                    System.out.println("La contraseña no puede estar vacia");
+    private void addMenuEventListeners() {
+        for (int i = 0; i < menu.getButtons().size(); i++) {
+            menu.getButtons().get(i).addActionListener(e -> {
+                switch (((JButton)e.getSource()).getName()){
+                    case "FTP"-> System.out.println("FTP");
                 }
-            } else {
-                System.out.println("El DNI no puede estar vacio");
-            }
+            });
+        }
     }
-
-}
 }

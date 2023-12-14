@@ -17,6 +17,7 @@ public class Register extends JFrame {
     int amountTextFields = 3;
     int amountPasswordFields = 1;
     int amountButtons = 1;
+    int amountCheckBox = 1;
 
     ArrayList<JPanel> panels = new ArrayList<>();
     ArrayList<JLabel> labels = new ArrayList<>();
@@ -33,6 +34,7 @@ public class Register extends JFrame {
         createTextField(amountTextFields);
         createPasswordField(amountPasswordFields);
         createButtons(amountButtons);
+        createCheckBox(amountCheckBox);
 
         // Visualización de elementos en ventana
         ordenateAll();
@@ -134,6 +136,13 @@ public class Register extends JFrame {
         for (int i = 0; i < max; i++) {
             JButton button = new JButton(model.getTextsList().get(model.getTextsList().size() - 1));
             buttons.add(button);
+        }
+    }
+
+    private void createCheckBox(int max) {
+        for (int i = 0; i < max; i++) {
+            JCheckBox checkBox = new JCheckBox(model.getTextsList().get(5));
+            checks.add(checkBox);
         }
     }
 
