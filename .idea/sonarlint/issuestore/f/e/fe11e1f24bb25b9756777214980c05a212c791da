@@ -1,9 +1,0 @@
-
-W
-java:S1854":Remove this useless assignment to local variable "client".(æÈ“‰8şßÑÆ1
-H
-java:S1481"+Remove this unused "client" local variable.(æÈ“‰8€àÑÆ1
-N
-java:S1068"1Remove this unused "homeDirectory" private field.(Ïâ”Ô8ÒèÆÆ1
-V
-java:S1068"4Remove this unused "currertDirectory" private field.(†°ûÿÿÿÿ8ÓèÆÆ1
