@@ -23,6 +23,7 @@ public class Register extends JFrame {
     ArrayList<JTextField> textFields = new ArrayList<>();
     ArrayList<JPasswordField> passwordFields = new ArrayList<>();
     ArrayList<JButton> buttons = new ArrayList<>();
+    ArrayList<JCheckBox> checks = new ArrayList<>();
     RegisterTexts model = new RegisterTexts();
 
     public Register() {
@@ -45,6 +46,10 @@ public class Register extends JFrame {
         addButtons();
     }
 
+    private void addCheckBox() {
+        panels.get(1).add(checks.get(0));
+    }
+
     private void addTitle() {
         Font titleFont = new Font("Arial", Font.BOLD, 24);
         JLabel titleLabel = labels.get(0);
@@ -53,22 +58,16 @@ public class Register extends JFrame {
     }
 
     private void combinePanels() {
-        // Configurar diseño del panel 1 (GridLayout)
         panels.get(1).setLayout(new BoxLayout(panels.get(1), BoxLayout.Y_AXIS));
 
-        // Configurar diseño del panel final (FlowLayout centrado)
         panels.get(2).setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        // Añadir el panel con GridLayout al panel final
         panels.get(2).add(panels.get(1));
 
-        // Añadir el panel final al JFrame
         this.add(panels.get(2), BorderLayout.CENTER);
 
-        // Configurar diseño del panel 0 (centrado)
         panels.get(0).setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        // Añadir el panel del título al JFrame en la parte superior
         this.add(panels.get(0), BorderLayout.NORTH);
     }
 
@@ -79,6 +78,7 @@ public class Register extends JFrame {
                 panels.get(1).add(textFields.get(i - 1));
             } else {
                 addPassword();
+                addCheckBox();
                 addRegisterLink();
             }
         }
@@ -141,10 +141,10 @@ public class Register extends JFrame {
         Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
         int height = pantalla.height;
         int width = pantalla.width;
-        this.setSize(width/3, height/4);
-        this.setTitle("Login Bufete");
+        this.setSize(width/3, height/3);
+        this.setTitle("Register Bufete");
         this.setLocationRelativeTo(null);
-        this.setResizable(false);
+        this.setResizable(true);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(false);
     }

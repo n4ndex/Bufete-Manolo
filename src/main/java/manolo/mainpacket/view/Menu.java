@@ -9,11 +9,13 @@ import java.util.ArrayList;
 
 public class Menu extends JFrame {
     private ArrayList<JButton> buttons = new ArrayList<>();
+    private ArrayList<JLabel> labels = new ArrayList<>();
     private MenuTexts model = new MenuTexts();
 
     public Menu() {
         createButtons();
         addButtonsToFrame();
+
         settings();
     }
 

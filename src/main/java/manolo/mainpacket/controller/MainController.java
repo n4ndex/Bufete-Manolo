@@ -48,12 +48,12 @@ public class MainController {
         addRegisterEventListeners();
     }
 
-    private void addLoginEventListeners() {
-        loginView.getLabels().get(3).addMouseListener(new MouseListener() {
+    private void addRegisterEventListeners() {
+        registerView.getLabels().get(4).addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                loginView.setVisible(false);
-                registerView.setVisible(true);
+                registerView.setVisible(false);
+                loginView.setVisible(true);
             }
 
             @Override
@@ -72,11 +72,8 @@ public class MainController {
             public void mouseExited(MouseEvent e) {
             }
         });
-        loginView.getButtons().getFirst().addActionListener(e -> {
-            submitLogin();
-        });
-    }
 
+    }
     private void submitLogin() {
         boolean ableToLogin = false;
         // TODO check the login
@@ -84,12 +81,10 @@ public class MainController {
             loginView.setVisible(false);
             menu.setVisible(true);
         } else {
-            showErrorWindow(loginView, "Error al iniciar sesion");
+            //showErrorWindow(loginView, "Error al iniciar sesion");
         }
-    }
-
-    private void addRegisterEventListeners() {
-        registerView.getLabels().get(4).addMouseListener(new MouseListener() {
+    private void addLoginEventListeners() {
+        loginView.getLabels().get(3).addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 registerView.setVisible(false);
@@ -113,24 +108,24 @@ public class MainController {
 
             }
         });
-        registerView.getButtons().getFirst().addActionListener(e -> {
-            submitRegister();
+        loginView.getButtons().getFirst().addActionListener(e -> {
+            submitLogin();
         });
     }
 
-    private void submitRegister() {
+    private void submitLogin() {
+        String dni = loginView.getTextFields().get(0).toString(); // getNickname
+            String password = loginView.getPasswordFields().get(0).toString(); // getPassword
+            if (dni != null || dni != "") {
+                if (password != null || password != "") {
+                    //submitLogin(dni); // Compare SQL users
+                } else {
+                    System.out.println("La contraseña no puede estar vacia");
+                }
+            } else {
+                System.out.println("El DNI no puede estar vacio");
+            }
     }
 
-    private void closeConnections() {
-        mainConnection.closeConnection();
-        try {
-            mainClient.disconnect();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void showErrorWindow(Component parentComponent, String message) {
-        JOptionPane.showMessageDialog(parentComponent, message, mainViewModel.getERROR(), JOptionPane.ERROR_MESSAGE);
-    }
+}
 }
