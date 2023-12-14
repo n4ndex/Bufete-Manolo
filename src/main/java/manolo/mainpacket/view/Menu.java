@@ -50,6 +50,8 @@ public class Menu extends JFrame {
 
                 button.setLayout(new BorderLayout());
 
+                button.setFocusPainted(false);
+
                 JLabel label = new JLabel(buttonText, SwingConstants.CENTER);
                 button.add(label, BorderLayout.SOUTH);
 

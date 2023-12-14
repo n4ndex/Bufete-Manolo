@@ -17,7 +17,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class MainController {
+public class MainController{
     MainConnectionModel mainConnectionModel;
     MainConnection mainConnection;
     MainViewModel mainViewModel;
