@@ -12,7 +12,7 @@ public class MenuTexts {
         textsButtonList.add("FTP");      // 0
         textsButtonList.add("EMAIL");    // 1
         textsButtonList.add("CONFIG");   // 2
-        textsButtonList.add("EXIT");     // 3
+        textsButtonList.add("LOG OUT");     // 3
     }
 
     public ArrayList<String> getTextsButtonList() {
