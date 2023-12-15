@@ -4,12 +4,13 @@ import manolo.mainpacket.controller.databaseconnection.MainConnection;
 import manolo.mainpacket.controller.ftpserver.FtpService;
 import manolo.mainpacket.model.controllermodels.FtpServiceModel;
 import manolo.mainpacket.model.controllermodels.MainConnectionModel;
+import manolo.mainpacket.model.viewmodels.Email;
 import manolo.mainpacket.model.viewmodels.MainViewModel;
+import manolo.mainpacket.view.EmailTexts;
 import manolo.mainpacket.view.Login;
 import manolo.mainpacket.view.Menu;
 import manolo.mainpacket.view.Register;
 import org.apache.commons.net.ftp.FTPClient;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -24,6 +25,7 @@ public class MainController {
     Login loginView;
     Register registerView;
     Menu menu;
+    EmailTexts emailModel;
     FtpServiceModel ftpServiceModel;
     FtpService ftpService;
     FTPClient mainClient;
@@ -135,8 +137,19 @@ public class MainController {
             menu.getButtons().get(i).addActionListener(e -> {
                 switch (((JButton)e.getSource()).getName()){
                     case "FTP"-> System.out.println("FTP");
+                    case "EMAIL"-> openEmail();
                 }
             });
         }
+    }
+
+    private void openEmail() {
+        boolean isCreated= false;
+        if (isCreated==false){
+            emailModel= new EmailTexts();
+            new Email(emailModel);
+            isCreated=true;
+        }
+        else {}
     }
 }
