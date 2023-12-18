@@ -1,4 +1,4 @@
-package manolo.mainpacket.view;
+package manolo.mainpacket.model.viewmodels;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -25,9 +25,10 @@ public class EmailTexts {
 
     public void strings(){
         texts.add("Nuevo correo");      //0- new email button name
-        texts.add("Bandeja de entrada");//1- side panel option 1
-        texts.add("Enviados");          //2- side panel option 2
-        texts.add("Borrados");          //3- side panel option 3
-        texts.add("Notas");             //4- side panel option 4
+        texts.add("BACK");              //1- back button name
+        texts.add("Bandeja de entrada");//2- side panel option 1
+        texts.add("Enviados");          //3- side panel option 2
+        texts.add("Borrados");          //4- side panel option 3
+        texts.add("Notas");             //5- side panel option 4
     }
 }

@@ -1,8 +1,9 @@
-package manolo.mainpacket.model.viewmodels;
+package manolo.mainpacket.view;
 
 import lombok.Getter;
 import lombok.Setter;
-import manolo.mainpacket.view.EmailTexts;
+import manolo.mainpacket.model.viewmodels.EmailTexts;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -33,8 +34,8 @@ public class Email extends JFrame {
 
     public void creation(){
         panelsSettings();
-        buttonSettings();
         labelSettings();
+        buttonSettings();
         emailSettings();
     }
 
@@ -58,19 +59,29 @@ public class Email extends JFrame {
         panels.get(2).setBackground(Color.GRAY);
 
         //PANEL 3
-        panels.get(3).setLayout(new GridLayout(4,1));
+        panels.get(3).setLayout(new GridLayout(5,1));
         panels.get(3).setBackground(Color.DARK_GRAY);
     }
 
     private void buttonSettings() {
         buttons= new ArrayList<>();
 
-        buttons.add(new JButton(model.getTexts().get(0)));
+        for (int i=0; i<2;i++){
+            buttons.add(new JButton(model.getTexts().get(i)));
+        }
+        //BUTTON 0
         buttons.get(0).setBackground(Color.WHITE);
         buttons.get(0).setForeground(Color.BLACK);
         //buttons.get(0).setBorderPainted(false);
         buttons.get(0).setFocusPainted(false);
         panels.get(1).add(buttons.get(0));
+
+        //BUTTON 1
+        buttons.get(1).setBackground(Color.DARK_GRAY);
+        buttons.get(1).setFocusPainted(false);
+        buttons.get(1).setBorderPainted(false);
+        buttons.get(1).setForeground(Color.WHITE);
+        panels.get(3).add(buttons.get(1));
     }
 
     public void labelSettings(){
@@ -78,16 +89,16 @@ public class Email extends JFrame {
 
         for (int i=0; i<4; i++){
             if (i==0){
-            optionLabelName=model.getTexts().get(1);
-            }
-            if (i==1){
             optionLabelName=model.getTexts().get(2);
             }
-            if (i==2){
+            if (i==1){
             optionLabelName=model.getTexts().get(3);
             }
-            if (i==3){
+            if (i==2){
             optionLabelName=model.getTexts().get(4);
+            }
+            if (i==3){
+            optionLabelName=model.getTexts().get(5);
             }
             labels.add(new JLabel(optionLabelName));
             labels.get(i).setForeground(Color.WHITE);

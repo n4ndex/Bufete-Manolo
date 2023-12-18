@@ -4,17 +4,15 @@ import manolo.mainpacket.controller.databaseconnection.MainConnection;
 import manolo.mainpacket.controller.ftpserver.FtpService;
 import manolo.mainpacket.model.controllermodels.FtpServiceModel;
 import manolo.mainpacket.model.controllermodels.MainConnectionModel;
-import manolo.mainpacket.model.viewmodels.Email;
+import manolo.mainpacket.view.Email;
 import manolo.mainpacket.model.viewmodels.MainViewModel;
-import manolo.mainpacket.view.EmailTexts;
+import manolo.mainpacket.model.viewmodels.EmailTexts;
 import manolo.mainpacket.view.Login;
 import manolo.mainpacket.view.Menu;
 import manolo.mainpacket.view.Register;
 import org.apache.commons.net.ftp.FTPClient;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -25,6 +23,7 @@ public class MainController {
     Login loginView;
     Register registerView;
     Menu menu;
+    Email email;
     EmailTexts emailModel;
     FtpServiceModel ftpServiceModel;
     FtpService ftpService;
@@ -144,14 +143,14 @@ public class MainController {
     }
 
     private void openEmail() {
-        boolean isCreated= false;
-        if (isCreated==false){
             emailModel= new EmailTexts();
-            new Email(emailModel);
-            isCreated=true;
-        }
-        else {
-            System.out.println("email no creado");
+            email= new Email(emailModel);
+            addEmailListeners(email);
+    }
+
+    public void addEmailListeners(Email email){
+        for (int i=0; i<email.getButtons().size(); i++){
+            //email.getButtons().get(i).addActionListener(new EmailListeners());
         }
     }
 }
