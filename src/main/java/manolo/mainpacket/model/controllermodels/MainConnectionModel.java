@@ -14,6 +14,7 @@ public class MainConnectionModel {
     private final String MYSQL_DATABASE = "manolodatabase";
     private final String MYSQL_USERNAME = "root";
     private final String PASSWORD = "";
+
     public MainConnectionModel() {
         try {
             DRIVER = new com.mysql.cj.jdbc.Driver();

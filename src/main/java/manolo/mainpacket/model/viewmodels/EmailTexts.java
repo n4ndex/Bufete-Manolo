@@ -1,7 +1,8 @@
-package manolo.mainpacket.view;
+package manolo.mainpacket.model.viewmodels;
 
 import lombok.Getter;
 import lombok.Setter;
+
 import java.util.ArrayList;
 
 @Getter
@@ -11,7 +12,7 @@ public class EmailTexts {
     ArrayList<Integer> numDimensions = new ArrayList<>();
     ArrayList<String> texts = new ArrayList<>();
 
-    public EmailTexts(){
+    public EmailTexts() {
         numbers();
         strings();
     }
@@ -23,7 +24,7 @@ public class EmailTexts {
         numDimensions.add(50);  //3- size y view
     }
 
-    public void strings(){
+    public void strings() {
         texts.add("Nuevo correo");      //0- new email button name
         texts.add("Bandeja de entrada");//1- side panel option 1
         texts.add("Enviados");          //2- side panel option 2

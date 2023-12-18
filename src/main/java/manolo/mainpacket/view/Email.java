@@ -1,8 +1,9 @@
-package manolo.mainpacket.model.viewmodels;
+package manolo.mainpacket.view;
 
 import lombok.Getter;
 import lombok.Setter;
-import manolo.mainpacket.view.EmailTexts;
+import manolo.mainpacket.model.viewmodels.EmailTexts;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;

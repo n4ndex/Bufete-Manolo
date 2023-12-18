@@ -150,7 +150,7 @@ public class Register extends JFrame {
         Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
         int height = pantalla.height;
         int width = pantalla.width;
-        this.setSize(width/3, height/3);
+        this.setSize(width / 3, height / 3);
         this.setTitle("Register Bufete");
         this.setLocationRelativeTo(null);
         this.setResizable(true);

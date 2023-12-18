@@ -139,7 +139,7 @@ public class Login extends JFrame {
         Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
         int height = pantalla.height;
         int width = pantalla.width;
-        this.setSize(width/3, height/4);
+        this.setSize(width / 3, height / 4);
         this.setTitle("Login Bufete");
         this.setLocationRelativeTo(null);
         this.setResizable(true);

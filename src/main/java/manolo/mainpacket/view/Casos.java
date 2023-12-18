@@ -4,6 +4,7 @@ import lombok.Getter;
 
 import javax.swing.*;
 import java.awt.*;
+
 @Getter
 public class Casos extends JFrame {
     private JPanel mainPanel;

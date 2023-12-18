@@ -6,7 +6,8 @@ import manolo.mainpacket.controller.databaseconnection.MainConnection;
 import manolo.mainpacket.controller.ftpserver.FtpService;
 import manolo.mainpacket.model.controllermodels.FtpServiceModel;
 import manolo.mainpacket.model.controllermodels.MainConnectionModel;
-import manolo.mainpacket.model.viewmodels.Email;
+import manolo.mainpacket.view.Email;
+import manolo.mainpacket.model.viewmodels.EmailTexts;
 import manolo.mainpacket.model.viewmodels.MainViewModel;
 import manolo.mainpacket.view.Menu;
 import manolo.mainpacket.view.*;
@@ -18,19 +19,19 @@ import java.awt.*;
 @Getter
 @Setter
 public class MainController {
-    MainConnectionModel mainConnectionModel;
-    MainConnection mainConnection;
-    MainViewModel mainViewModel;
-    Login loginView;
-    Register registerView;
-    Menu menu;
-    FTPWindow ftpWindow;
-    Casos casosView;
-    EmailTexts emailModel;
-    Email emailView;
-    FtpServiceModel ftpServiceModel;
-    FtpService ftpService;
-    FTPClient mainClient;
+    private MainConnectionModel mainConnectionModel;
+    private MainConnection mainConnection;
+    private MainViewModel mainViewModel;
+    private Login loginView;
+    private Register registerView;
+    private Menu menu;
+    private FTPWindow ftpWindow;
+    private Casos casosView;
+    private EmailTexts emailModel;
+    private Email emailView;
+    private FtpServiceModel ftpServiceModel;
+    private FtpService ftpService;
+    private FTPClient mainClient;
 
     public MainController() {
         initAttributes();
@@ -43,7 +44,7 @@ public class MainController {
 
     private void initAttributes() {
         mainConnectionModel = new MainConnectionModel();
-        // mainConnection = new MainConnection(mainConnectionModel.getDRIVER(), mainConnectionModel.getMYSQL_URL(), mainConnectionModel.getMYSQL_DATABASE(), mainConnectionModel.getMYSQL_USERNAME(), mainConnectionModel.getPASSWORD());
+        mainConnection = new MainConnection(mainConnectionModel.getDRIVER());
         mainViewModel = new MainViewModel();
         loginView = new Login();
         ftpServiceModel = new FtpServiceModel();
@@ -55,7 +56,6 @@ public class MainController {
     private void addEventListeners() {
         addLoginEventListeners();
     }
-
 
     public void addLoginEventListeners() {
         loginView.getLabels().get(3).addMouseListener(new manolo.mainpacket.controller.listeners.login.LabelsListener(this));

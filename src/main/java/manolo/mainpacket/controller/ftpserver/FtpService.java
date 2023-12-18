@@ -1,11 +1,16 @@
 package manolo.mainpacket.controller.ftpserver;
 
 import manolo.mainpacket.view.FTPWindow;
-import org.apache.commons.net.*;
-import org.apache.commons.net.ftp.*;
+import org.apache.commons.net.ProtocolCommandEvent;
+import org.apache.commons.net.ProtocolCommandListener;
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
 
 import javax.swing.*;
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 public class FtpService {
 
@@ -88,7 +93,7 @@ public class FtpService {
     }
 
     public void createDirectory(String directory, String newDirectoryName, FTPClient ftpClient, FTPWindow ftpWindow) {
-        String newDirectoryPath =  newDirectoryName;
+        String newDirectoryPath = newDirectoryName;
         System.out.println(newDirectoryPath);
         try {
             if (ftpClient.makeDirectory(newDirectoryPath)) {

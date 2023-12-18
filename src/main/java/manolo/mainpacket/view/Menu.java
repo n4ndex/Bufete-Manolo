@@ -72,7 +72,7 @@ public class Menu extends JFrame {
         int width = pantalla.width;
 
         this.setTitle("Menu Bufete");
-        this.setSize(width/2, height/3);
+        this.setSize(width / 2, height / 3);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);

@@ -21,7 +21,6 @@ public class LabelsListener implements MouseListener {
      */
     @Override
     public void mouseClicked(MouseEvent e) {
-
     }
 
     /**
@@ -43,7 +42,6 @@ public class LabelsListener implements MouseListener {
      */
     @Override
     public void mouseReleased(MouseEvent e) {
-
     }
 
     /**
@@ -53,7 +51,6 @@ public class LabelsListener implements MouseListener {
      */
     @Override
     public void mouseEntered(MouseEvent e) {
-
     }
 
     /**
@@ -63,6 +60,5 @@ public class LabelsListener implements MouseListener {
      */
     @Override
     public void mouseExited(MouseEvent e) {
-
     }
 }

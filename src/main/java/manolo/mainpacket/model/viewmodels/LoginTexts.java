@@ -3,7 +3,8 @@ package manolo.mainpacket.model.viewmodels;
 import java.util.ArrayList;
 
 public class LoginTexts {
-    ArrayList<String>textsList = new ArrayList(); // Textos del Login
+    ArrayList<String> textsList = new ArrayList(); // Textos del Login
+
     public LoginTexts() {
         fillTexts();
     }

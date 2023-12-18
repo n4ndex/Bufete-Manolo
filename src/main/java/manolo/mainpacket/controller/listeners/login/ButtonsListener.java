@@ -11,6 +11,7 @@ public class ButtonsListener implements ActionListener {
     public ButtonsListener(MainController mainController) {
         this.mainController = mainController;
     }
+
     /**
      * Invoked when an action occurs.
      *

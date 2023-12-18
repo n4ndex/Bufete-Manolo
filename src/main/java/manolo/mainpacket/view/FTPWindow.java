@@ -11,10 +11,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -144,7 +141,7 @@ public class FTPWindow extends JFrame {
         return false;
     }
 
-        public void save(File selectedFile) {
+    public void save(File selectedFile) {
         File downloadsFolder = new File(System.getProperty("user.home"), "Downloads");
         Path destinationPath = downloadsFolder.toPath().resolve(selectedFile.getName());
 

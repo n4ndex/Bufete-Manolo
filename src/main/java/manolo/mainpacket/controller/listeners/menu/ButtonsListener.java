@@ -1,8 +1,8 @@
 package manolo.mainpacket.controller.listeners.menu;
 
 import manolo.mainpacket.controller.MainController;
-import manolo.mainpacket.model.viewmodels.Email;
-import manolo.mainpacket.view.EmailTexts;
+import manolo.mainpacket.view.Email;
+import manolo.mainpacket.model.viewmodels.EmailTexts;
 import manolo.mainpacket.view.FTPWindow;
 
 import javax.swing.*;

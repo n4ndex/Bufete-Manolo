@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class MenuTexts {
     ArrayList<String> textsButtonList = new ArrayList(); // Textos del Menu
+
     public MenuTexts() {
         fillTexts();
     }
