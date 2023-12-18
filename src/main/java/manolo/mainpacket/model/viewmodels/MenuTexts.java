@@ -11,8 +11,9 @@ public class MenuTexts {
     private void fillTexts() {
         textsButtonList.add("FTP");      // 0
         textsButtonList.add("EMAIL");    // 1
-        textsButtonList.add("CONFIG");   // 2
-        textsButtonList.add("LOG OUT");     // 3
+        textsButtonList.add("CASOS");    // 2
+        textsButtonList.add("CONFIG");   // 3
+        textsButtonList.add("LOG OUT");  // 4
     }
 
     public ArrayList<String> getTextsButtonList() {

@@ -48,7 +48,7 @@ public class FTPWindow extends JFrame {
         int height = (int) (pantalla.getHeight() + 200);
         int width = pantalla.width;
 
-        this.setTitle("Menu Bufete");
+        this.setTitle("Gestión de Ficheros del Bufete");
         this.setSize(width / 2, height / 3);
         this.setLocationRelativeTo(null);
         this.setResizable(false);

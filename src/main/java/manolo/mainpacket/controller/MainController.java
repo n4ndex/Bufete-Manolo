@@ -5,10 +5,8 @@ import manolo.mainpacket.controller.ftpserver.FtpService;
 import manolo.mainpacket.model.controllermodels.FtpServiceModel;
 import manolo.mainpacket.model.controllermodels.MainConnectionModel;
 import manolo.mainpacket.model.viewmodels.MainViewModel;
-import manolo.mainpacket.view.FTPWindow;
-import manolo.mainpacket.view.Login;
+import manolo.mainpacket.view.*;
 import manolo.mainpacket.view.Menu;
-import manolo.mainpacket.view.Register;
 import org.apache.commons.net.ftp.FTPClient;
 
 import javax.swing.*;
@@ -26,6 +24,7 @@ public class MainController{
     MainViewModel mainViewModel;
     Login loginView;
     Register registerView;
+    Casos casosView;
     Menu menu;
     FtpServiceModel ftpServiceModel;
     FtpService ftpService;
@@ -48,6 +47,7 @@ public class MainController{
         mainViewModel = new MainViewModel();
         loginView = new Login();
         registerView = new Register();
+        casosView = new Casos();
         menu = new Menu();
         ftpServiceModel = new FtpServiceModel();
         ftpService = new FtpService();
