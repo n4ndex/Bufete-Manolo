@@ -23,6 +23,7 @@ public class ButtonsListener implements ActionListener {
         switch (((JButton) e.getSource()).getName()) {
                     case "FTP" -> System.out.println("FTP");
                     case "EMAIL" -> mainController.openEmail();
+
                 }
     }
 }

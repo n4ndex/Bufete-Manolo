@@ -31,13 +31,13 @@ public class MainController {
     MainViewModel mainViewModel;
     Login loginView;
     Register registerView;
-    Casos casosView;
     Menu menu;
+    FTPWindow ftpWindow;
+    Casos casosView;
     EmailTexts emailModel;
     FtpServiceModel ftpServiceModel;
     FtpService ftpService;
     FTPClient mainClient;
-    FTPWindow ftpWindow;
 
     public MainController() {
         initAttributes();
@@ -55,6 +55,7 @@ public class MainController {
         loginView = new Login();
         ftpServiceModel = new FtpServiceModel();
         ftpService = new FtpService();
+        // TODO traer de modelo
         mainClient = ftpService.loginFtp("127.0.0.1", 21, "root", "");
         ftpWindow = new FTPWindow(mainClient, ftpService);
 
@@ -105,37 +106,9 @@ public class MainController {
         }
     }
 
-    private void addRegisterEventListeners() {
-        registerView.getLabels().get(4).addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                registerView.setVisible(false);
-                loginView.setVisible(true);
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
-        });
-        registerView.getButtons().getFirst().addActionListener(e -> {
-            submitRegister();
-        });
-
-    }
-
-    private void submitRegister() {
+    public void openFTP(){
+        ftpWindow.setVisible(true);
+        menu.setVisible(false);
     }
 
     public void openEmail() {
@@ -146,16 +119,6 @@ public class MainController {
             isCreated = true;
         } else {
             System.out.println("Ya esta creado");
-        }
-    }
-
-    private void addMenuEventListeners() {
-        for (int i = 0; i < menu.getButtons().size(); i++) {
-            menu.getButtons().get(i).addActionListener(e -> {
-                switch (((JButton)e.getSource()).getName()){
-                    case "FTP"-> System.out.println("FTP");
-                }
-            });
         }
     }
 
