@@ -1,5 +1,7 @@
 package manolo.mainpacket.controller;
 
+import lombok.Getter;
+import lombok.Setter;
 import manolo.mainpacket.controller.databaseconnection.MainConnection;
 import manolo.mainpacket.controller.ftpserver.FtpService;
 import manolo.mainpacket.model.controllermodels.FtpServiceModel;
@@ -14,9 +16,9 @@ import org.apache.commons.net.ftp.FTPClient;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
+@Getter
+@Setter
 public class MainController {
     MainConnectionModel mainConnectionModel;
     MainConnection mainConnection;
@@ -52,38 +54,12 @@ public class MainController {
     }
 
 
-    private void addLoginEventListeners() {
-        loginView.getLabels().get(3).addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                loginView.dispose();
-                registerView = new Register();
-                addRegisterEventListeners();
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
-        });
-        loginView.getButtons().getFirst().addActionListener(e -> {
-            submitLogin();
-        });
+    public void addLoginEventListeners() {
+        loginView.getLabels().get(3).addMouseListener(new manolo.mainpacket.controller.listeners.login.LabelsListener(this));
+        loginView.getButtons().getFirst().addActionListener(new manolo.mainpacket.controller.listeners.login.ButtonsListener(this));
     }
 
-    private void submitLogin() {
+    public void submitLogin() {
         boolean ableToLogin = true;
         // TODO check the login
         if (ableToLogin) {
@@ -95,37 +71,12 @@ public class MainController {
         }
     }
 
-    private void addRegisterEventListeners() {
-        registerView.getLabels().get(4).addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                registerView.dispose();
-                loginView = new Login();
-                addLoginEventListeners();
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
-        });
-        registerView.getButtons().getFirst().addActionListener(e -> {
-            submitRegister();
-        });
+    public void addRegisterEventListeners() {
+        registerView.getLabels().get(4).addMouseListener(new manolo.mainpacket.controller.listeners.register.LabelsListener(this));
+        registerView.getButtons().getFirst().addActionListener(new manolo.mainpacket.controller.listeners.register.ButtonsListener(this));
     }
 
-    private void submitRegister() {
+    public void submitRegister() {
         boolean ableToRegister = true;
         // TODO check the register
         if (ableToRegister) {
@@ -155,6 +106,7 @@ public class MainController {
             new Email(emailModel);
             isCreated = true;
         } else {
+            System.out.println("Ya esta creado");
         }
     }
 }
