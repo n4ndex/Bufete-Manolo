@@ -1,21 +1,24 @@
 package manolo.mainpacket.controller;
 
+import lombok.Getter;
+import lombok.Setter;
 import manolo.mainpacket.controller.databaseconnection.MainConnection;
 import manolo.mainpacket.controller.ftpserver.FtpService;
+import manolo.mainpacket.controller.listeners.EmailListeners;
 import manolo.mainpacket.model.controllermodels.FtpServiceModel;
 import manolo.mainpacket.model.controllermodels.MainConnectionModel;
-import manolo.mainpacket.view.Email;
+import manolo.mainpacket.view.*;
 import manolo.mainpacket.model.viewmodels.MainViewModel;
 import manolo.mainpacket.model.viewmodels.EmailTexts;
-import manolo.mainpacket.view.Login;
 import manolo.mainpacket.view.Menu;
-import manolo.mainpacket.view.Register;
 import org.apache.commons.net.ftp.FTPClient;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+@Getter
+@Setter
 public class MainController {
     MainConnectionModel mainConnectionModel;
     MainConnection mainConnection;
@@ -25,6 +28,7 @@ public class MainController {
     Menu menu;
     Email email;
     EmailTexts emailModel;
+    NewEmail newEmail;
     FtpServiceModel ftpServiceModel;
     FtpService ftpService;
     FTPClient mainClient;
@@ -131,7 +135,7 @@ public class MainController {
     private void submitRegister() {
     }
 
-    private void addMenuEventListeners() {
+    public void addMenuEventListeners() {
         for (int i = 0; i < menu.getButtons().size(); i++) {
             menu.getButtons().get(i).addActionListener(e -> {
                 switch (((JButton)e.getSource()).getName()){
@@ -143,14 +147,15 @@ public class MainController {
     }
 
     private void openEmail() {
-            emailModel= new EmailTexts();
-            email= new Email(emailModel);
-            addEmailListeners(email);
+        menu.dispose();
+        emailModel= new EmailTexts();
+        email= new Email(emailModel);
+        addEmailListeners(email);
     }
 
     public void addEmailListeners(Email email){
         for (int i=0; i<email.getButtons().size(); i++){
-            //email.getButtons().get(i).addActionListener(new EmailListeners());
+            email.getButtons().get(i).addActionListener(new EmailListeners(this));
         }
     }
 }
