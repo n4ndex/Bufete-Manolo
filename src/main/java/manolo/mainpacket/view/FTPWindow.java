@@ -1,6 +1,10 @@
 package manolo.mainpacket.view;
 
 import lombok.Getter;
+import lombok.Setter;
+import manolo.mainpacket.controller.ftpserver.FtpService;
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -10,12 +14,13 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
 @Getter
-
+@Setter
 public class FTPWindow extends JFrame {
     private JTextField renameField;
     private JButton createDirButton;
@@ -28,9 +33,13 @@ public class FTPWindow extends JFrame {
     private JPanel mainPanel;
     private JLabel rutaLabel;
     private JLabel DNILabel;
-    private String directory = "C:\\Users\\Usuario\\Pictures";
+    private String directory = "C:\\Users\\Usuario\\Documents\\FTPDocs";
+    private FTPClient ftpClient;
+    private FtpService ftpService;
 
-    public FTPWindow() {
+    public FTPWindow(FTPClient ftpClient, FtpService ftpService) {
+        this.ftpClient = ftpClient;
+        this.ftpService = ftpService;
         initComponents();
         initUI();
     }
@@ -38,7 +47,7 @@ public class FTPWindow extends JFrame {
     private void initComponents() {
         rutaLabel.setText("Ruta actual: " + directory);
         File rootDirectory = new File(directory);
-        loadDirectory(rootDirectory);
+        loadDirectory(ftpClient);
     }
 
     private void initUI() {
@@ -55,22 +64,29 @@ public class FTPWindow extends JFrame {
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
-    public void loadDirectory(File directory) {
-        DefaultMutableTreeNode rootNode = createNodes(directory);
-        treeDirectories.setModel(new DefaultTreeModel(rootNode));
-    }
-
-    private DefaultMutableTreeNode createNodes(File file) {
-        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(file.getName());
-        if (file.isDirectory()) {
-            File[] files = file.listFiles();
-            if (files != null) {
-                for (File childFile : files) {
-                    rootNode.add(createNodes(childFile));
-                }
+    private DefaultMutableTreeNode createNodes(String path) {
+        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(path);
+        FTPFile[] ftpFiles = ftpService.listFiles(path, ftpClient);
+        if (ftpFiles != null) {
+            for (FTPFile ftpFile : ftpFiles) {
+                rootNode.add(createNodes(path + "/" + ftpFile.getName()));
             }
         }
         return rootNode;
+    }
+
+    public void loadDirectory(FTPClient ftpClient) {
+        try {
+            String currentDirectory = ftpClient.printWorkingDirectory();
+
+            DefaultMutableTreeNode rootNode = createNodes(currentDirectory);
+
+            treeDirectories.setModel(new DefaultTreeModel(rootNode));
+
+            rutaLabel.setText("Ruta actual: " + currentDirectory);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public String getFullPath(DefaultMutableTreeNode node) {

@@ -23,6 +23,8 @@ public class FtpService {
                         System.currentTimeMillis(), protocolCommandEvent.getMessage());
             }
         });
+
+
         try {
             ftpClient.connect(host, port);
             ftpClient.login(username, password);
@@ -45,6 +47,14 @@ public class FtpService {
             System.out.printf("[printFtpClientInfo][%d] Get control encoding : %s %n", System.currentTimeMillis(), ftpClient.getControlEncoding());
             System.out.printf("[printFtpClientInfo][%d] Get data timeout : %s %n", System.currentTimeMillis(), ftpClient.getDataTimeout().toString());
             System.out.printf("[printFtpClientInfo][%d] Get buffer size : %d %n", System.currentTimeMillis(), ftpClient.getBufferSize());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public FTPFile[] listFiles(String path, FTPClient ftpClient) {
+        try {
+            return ftpClient.listFiles(path);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
