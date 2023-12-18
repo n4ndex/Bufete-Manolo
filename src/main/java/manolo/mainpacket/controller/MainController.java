@@ -59,6 +59,17 @@ public class MainController {
         loginView.getButtons().getFirst().addActionListener(new manolo.mainpacket.controller.listeners.login.ButtonsListener(this));
     }
 
+    public void addRegisterEventListeners() {
+        registerView.getLabels().get(4).addMouseListener(new manolo.mainpacket.controller.listeners.register.LabelsListener(this));
+        registerView.getButtons().getFirst().addActionListener(new manolo.mainpacket.controller.listeners.register.ButtonsListener(this));
+    }
+
+    private void addMenuEventListeners() {
+        for (int i = 0; i < menu.getButtons().size(); i++) {
+            menu.getButtons().get(i).addActionListener(new manolo.mainpacket.controller.listeners.menu.ButtonsListener(this));
+        }
+    }
+
     public void submitLogin() {
         boolean ableToLogin = true;
         // TODO check the login
@@ -69,11 +80,6 @@ public class MainController {
         } else {
             showErrorWindow(loginView, "Error al iniciar sesion");
         }
-    }
-
-    public void addRegisterEventListeners() {
-        registerView.getLabels().get(4).addMouseListener(new manolo.mainpacket.controller.listeners.register.LabelsListener(this));
-        registerView.getButtons().getFirst().addActionListener(new manolo.mainpacket.controller.listeners.register.ButtonsListener(this));
     }
 
     public void submitRegister() {
@@ -88,18 +94,7 @@ public class MainController {
         }
     }
 
-    private void addMenuEventListeners() {
-        for (int i = 0; i < menu.getButtons().size(); i++) {
-            menu.getButtons().get(i).addActionListener(e -> {
-                switch (((JButton) e.getSource()).getName()) {
-                    case "FTP" -> System.out.println("FTP");
-                    case "EMAIL" -> openEmail();
-                }
-            });
-        }
-    }
-
-    private void openEmail() {
+    public void openEmail() {
         boolean isCreated = false;
         if (isCreated == false) {
             emailModel = new EmailTexts();
