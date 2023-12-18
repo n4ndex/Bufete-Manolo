@@ -47,7 +47,6 @@ public class MainController{
         mainViewModel = new MainViewModel();
         loginView = new Login();
         registerView = new Register();
-        casosView = new Casos();
         menu = new Menu();
         ftpServiceModel = new FtpServiceModel();
         ftpService = new FtpService();
@@ -143,9 +142,18 @@ public class MainController{
                         ftpWindow.setVisible(true);
                         menu.setVisible(false);
                         addFTPEventListeners();
+
+                    case "CASOS":
+                        casosView = new Casos();
+                        casosView.setVisible(true);
+                        menu.setVisible(false);
+                        addCasosEventListeners();
                 }
             });
         }
+    }
+
+    private void addCasosEventListeners() {
     }
 
     private void addFTPEventListeners() {
