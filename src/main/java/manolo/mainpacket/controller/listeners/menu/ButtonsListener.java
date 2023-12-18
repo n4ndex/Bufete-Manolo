@@ -31,7 +31,7 @@ public class ButtonsListener implements ActionListener {
             }
             case "EMAIL" -> {
                 mainController.setEmailModel(new EmailTexts());
-                mainController.setEmailView(new Email(mainController.getEmailModel()));
+                mainController.setEmail(new Email(mainController.getEmailModel()));
             }
         }
     }

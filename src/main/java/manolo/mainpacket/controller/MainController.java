@@ -7,20 +7,13 @@ import manolo.mainpacket.controller.ftpserver.FtpService;
 import manolo.mainpacket.controller.listeners.EmailListeners;
 import manolo.mainpacket.model.controllermodels.FtpServiceModel;
 import manolo.mainpacket.model.controllermodels.MainConnectionModel;
-import manolo.mainpacket.view.Email;
 import manolo.mainpacket.model.viewmodels.EmailTexts;
-import manolo.mainpacket.view.*;
 import manolo.mainpacket.model.viewmodels.MainViewModel;
-import manolo.mainpacket.model.viewmodels.EmailTexts;
 import manolo.mainpacket.view.Menu;
 import manolo.mainpacket.view.*;
 import org.apache.commons.net.ftp.FTPClient;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 @Getter
 @Setter
@@ -34,7 +27,7 @@ public class MainController {
     private FTPWindow ftpWindow;
     private Casos casosView;
     private EmailTexts emailModel;
-    private Email emailView;
+    private Email email;
     private NewEmail newEmail;
     private FtpServiceModel ftpServiceModel;
     private FtpService ftpService;
@@ -74,7 +67,7 @@ public class MainController {
         registerView.getButtons().getFirst().addActionListener(new manolo.mainpacket.controller.listeners.register.ButtonsListener(this));
     }
 
-    private void addMenuEventListeners() {
+    public void addMenuEventListeners() {
         for (int i = 0; i < menu.getButtons().size(); i++) {
             menu.getButtons().get(i).addActionListener(new manolo.mainpacket.controller.listeners.menu.ButtonsListener(this));
         }
