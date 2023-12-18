@@ -4,17 +4,23 @@ import lombok.Getter;
 import lombok.Setter;
 import manolo.mainpacket.controller.databaseconnection.MainConnection;
 import manolo.mainpacket.controller.ftpserver.FtpService;
+import manolo.mainpacket.controller.listeners.EmailListeners;
 import manolo.mainpacket.model.controllermodels.FtpServiceModel;
 import manolo.mainpacket.model.controllermodels.MainConnectionModel;
 import manolo.mainpacket.view.Email;
 import manolo.mainpacket.model.viewmodels.EmailTexts;
+import manolo.mainpacket.view.*;
 import manolo.mainpacket.model.viewmodels.MainViewModel;
+import manolo.mainpacket.model.viewmodels.EmailTexts;
 import manolo.mainpacket.view.Menu;
 import manolo.mainpacket.view.*;
 import org.apache.commons.net.ftp.FTPClient;
-
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 @Getter
 @Setter
@@ -29,6 +35,7 @@ public class MainController {
     private Casos casosView;
     private EmailTexts emailModel;
     private Email emailView;
+    private NewEmail newEmail;
     private FtpServiceModel ftpServiceModel;
     private FtpService ftpService;
     private FTPClient mainClient;
@@ -116,6 +123,19 @@ public class MainController {
         }
     }
 
+    private void openEmail() {
+        menu.dispose();
+        emailModel= new EmailTexts();
+        email= new Email(emailModel);
+        addEmailListeners(email);
+    }
+
+    public void addEmailListeners(Email email){
+        for (int i=0; i<email.getButtons().size(); i++){
+            email.getButtons().get(i).addActionListener(new EmailListeners(this));
+        }
+    }
+}
 //
 //        ftpWindow.getDeleteDirButton().addActionListener(e -> {
 //            DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) ftpWindow.getTreeDirectories().getLastSelectedPathComponent();
@@ -184,4 +204,4 @@ public class MainController {
 //                ftpWindow.uploadFile(selectedFile);
 //            }
 //        });
-}
+
