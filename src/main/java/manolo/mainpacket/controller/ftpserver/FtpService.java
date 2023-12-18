@@ -1,9 +1,10 @@
 package manolo.mainpacket.controller.ftpserver;
 
-import manolo.mainpacket.controller.databaseconnection.MainConnection;
+import manolo.mainpacket.view.FTPWindow;
 import org.apache.commons.net.*;
 import org.apache.commons.net.ftp.*;
 
+import javax.swing.*;
 import java.io.*;
 
 public class FtpService {
@@ -24,6 +25,8 @@ public class FtpService {
                         System.currentTimeMillis(), protocolCommandEvent.getMessage());
             }
         });
+
+
         try {
             ftpClient.connect(host, port);
             ftpClient.login(username, password);
@@ -46,6 +49,14 @@ public class FtpService {
             System.out.printf("[printFtpClientInfo][%d] Get control encoding : %s %n", System.currentTimeMillis(), ftpClient.getControlEncoding());
             System.out.printf("[printFtpClientInfo][%d] Get data timeout : %s %n", System.currentTimeMillis(), ftpClient.getDataTimeout().toString());
             System.out.printf("[printFtpClientInfo][%d] Get buffer size : %d %n", System.currentTimeMillis(), ftpClient.getBufferSize());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public FTPFile[] listFiles(String path, FTPClient ftpClient) {
+        try {
+            return ftpClient.listFiles(path);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -76,24 +87,21 @@ public class FtpService {
         }
     }
 
-    public File getTreeFromDirectory(String path, FTPClient ftpClient) {
-        File file = new File(path);
+    public void createDirectory(String directory, String newDirectoryName, FTPClient ftpClient, FTPWindow ftpWindow) {
+        String newDirectoryPath =  newDirectoryName;
+        System.out.println(newDirectoryPath);
         try {
-            for (FTPFile ftpFile : ftpClient.listFiles(path)) {
-                if (ftpFile.isDirectory()) {
-                    getTreeFromDirectory(path + File.separator + ftpFile.getName(), ftpClient);
-                } else {
-                    FileOutputStream fileOutputStream = new FileOutputStream(path + File.separator + ftpFile.getName());
-                    ftpClient.retrieveFile(path + File.separator + ftpFile.getName(), fileOutputStream);
-                }
+            if (ftpClient.makeDirectory(newDirectoryPath)) {
+                JOptionPane.showMessageDialog(ftpWindow, "Carpeta creada exitosamente: " + newDirectoryPath);
+            } else {
+                System.out.println("Failed to create directory: " + newDirectoryPath);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return file;
     }
 
-    public void createDirectory(String path, FTPClient ftpClient) {
+    public void crearDirectory(String path, FTPClient ftpClient) {
         System.out.println();
         try {
             System.out.printf("[createDirectory][%d] Is success to create directory : %s -> %b",

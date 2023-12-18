@@ -19,12 +19,11 @@ public class Menu extends JFrame {
     public Menu() {
         createButtons();
         addButtonsToFrame();
-
         settings();
     }
 
     private void addButtonsToFrame() {
-        setLayout(new GridLayout(1, model.getTextsButtonList().size())); // Una columna, tantas filas como botones
+        setLayout(new GridLayout(1, model.getTextsButtonList().size()));
 
         for (JButton button : buttons) {
             add(button);
@@ -49,6 +48,8 @@ public class Menu extends JFrame {
                 button.setName(buttonText);
 
                 button.setLayout(new BorderLayout());
+
+                button.setFocusPainted(false);
 
                 JLabel label = new JLabel(buttonText, SwingConstants.CENTER);
                 button.add(label, BorderLayout.SOUTH);
