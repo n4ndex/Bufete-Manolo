@@ -60,6 +60,7 @@ public class FTPWindow extends JFrame {
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        this.setVisible(true);
     }
 
     private DefaultMutableTreeNode createNodes(String path) {

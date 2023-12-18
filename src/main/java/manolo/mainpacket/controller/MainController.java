@@ -8,20 +8,12 @@ import manolo.mainpacket.model.controllermodels.FtpServiceModel;
 import manolo.mainpacket.model.controllermodels.MainConnectionModel;
 import manolo.mainpacket.model.viewmodels.Email;
 import manolo.mainpacket.model.viewmodels.MainViewModel;
-import manolo.mainpacket.view.EmailTexts;
-import manolo.mainpacket.view.Login;
-import manolo.mainpacket.view.*;
 import manolo.mainpacket.view.Menu;
+import manolo.mainpacket.view.*;
 import org.apache.commons.net.ftp.FTPClient;
 
 import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.io.File;
 
 @Getter
 @Setter
@@ -35,6 +27,7 @@ public class MainController {
     FTPWindow ftpWindow;
     Casos casosView;
     EmailTexts emailModel;
+    Email emailView;
     FtpServiceModel ftpServiceModel;
     FtpService ftpService;
     FTPClient mainClient;
@@ -50,15 +43,13 @@ public class MainController {
 
     private void initAttributes() {
         mainConnectionModel = new MainConnectionModel();
-//        mainConnection = new MainConnection(mainConnectionModel.getDRIVER(), mainConnectionModel.getMYSQL_URL(), mainConnectionModel.getMYSQL_DATABASE(), mainConnectionModel.getMYSQL_USERNAME(), mainConnectionModel.getPASSWORD());
+        // mainConnection = new MainConnection(mainConnectionModel.getDRIVER(), mainConnectionModel.getMYSQL_URL(), mainConnectionModel.getMYSQL_DATABASE(), mainConnectionModel.getMYSQL_USERNAME(), mainConnectionModel.getPASSWORD());
         mainViewModel = new MainViewModel();
         loginView = new Login();
         ftpServiceModel = new FtpServiceModel();
         ftpService = new FtpService();
         // TODO traer de modelo
         mainClient = ftpService.loginFtp("127.0.0.1", 21, "root", "");
-        ftpWindow = new FTPWindow(mainClient, ftpService);
-
     }
 
     private void addEventListeners() {
@@ -80,6 +71,25 @@ public class MainController {
         for (int i = 0; i < menu.getButtons().size(); i++) {
             menu.getButtons().get(i).addActionListener(new manolo.mainpacket.controller.listeners.menu.ButtonsListener(this));
         }
+    }
+
+    public void addFtpEventListeners() {
+        ftpWindow.getExitButton().addActionListener(e -> {
+            ftpWindow.dispose();
+            menu.setVisible(true);
+        });
+
+        ftpWindow.getCreateDirButton().addActionListener(e -> {
+            String folderName = JOptionPane.showInputDialog(ftpWindow, "Ingrese el nombre de la carpeta:");
+
+            if (folderName != null && !folderName.isEmpty()) {
+                String currentDirectoryPath = ftpWindow.getDirectory();
+                ftpService.createDirectory(currentDirectoryPath, folderName, mainClient, ftpWindow);
+                ftpWindow.loadDirectory(mainClient);
+            } else {
+                JOptionPane.showMessageDialog(ftpWindow, "Error al crear la carpeta.");
+            }
+        });
     }
 
     public void submitLogin() {
@@ -105,44 +115,6 @@ public class MainController {
             showErrorWindow(registerView, "Error al registrarse");
         }
     }
-
-    public void openFTP(){
-        ftpWindow.setVisible(true);
-        menu.setVisible(false);
-    }
-
-    public void openEmail() {
-        boolean isCreated = false;
-        if (isCreated == false) {
-            emailModel = new EmailTexts();
-            new Email(emailModel);
-            isCreated = true;
-        } else {
-            System.out.println("Ya esta creado");
-        }
-    }
-
-    private void addCasosEventListeners() {
-    }
-
-    private void addFTPEventListeners() {
-        ftpWindow.getExitButton().addActionListener(e -> {
-            ftpWindow.dispose();
-            menu.setVisible(true);
-        });
-
-        ftpWindow.getCreateDirButton().addActionListener(e -> {
-            String folderName = JOptionPane.showInputDialog(ftpWindow, "Ingrese el nombre de la carpeta:");
-
-            if (folderName != null && !folderName.isEmpty()) {
-                String currentDirectoryPath = ftpWindow.getDirectory();
-                ftpService.createDirectory(currentDirectoryPath, folderName, mainClient, ftpWindow);
-                ftpWindow.loadDirectory(mainClient);
-            } else {
-                JOptionPane.showMessageDialog(ftpWindow, "Error al crear la carpeta.");
-            }
-        });
-
 
 //
 //        ftpWindow.getDeleteDirButton().addActionListener(e -> {
@@ -212,6 +184,4 @@ public class MainController {
 //                ftpWindow.uploadFile(selectedFile);
 //            }
 //        });
-    }
-
 }

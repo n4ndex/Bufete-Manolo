@@ -1,6 +1,9 @@
 package manolo.mainpacket.controller.listeners.menu;
 
 import manolo.mainpacket.controller.MainController;
+import manolo.mainpacket.model.viewmodels.Email;
+import manolo.mainpacket.view.EmailTexts;
+import manolo.mainpacket.view.FTPWindow;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -20,10 +23,16 @@ public class ButtonsListener implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
+        mainController.getMenu().dispose();
         switch (((JButton) e.getSource()).getName()) {
-                    case "FTP" -> System.out.println("FTP");
-                    case "EMAIL" -> mainController.openEmail();
-
-                }
+            case "FTP" -> {
+                mainController.setFtpWindow(new FTPWindow(mainController.getMainClient(), mainController.getFtpService()));
+                mainController.addFtpEventListeners();
+            }
+            case "EMAIL" -> {
+                mainController.setEmailModel(new EmailTexts());
+                mainController.setEmailView(new Email(mainController.getEmailModel()));
+            }
+        }
     }
 }
