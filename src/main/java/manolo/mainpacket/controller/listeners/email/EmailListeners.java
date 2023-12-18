@@ -1,4 +1,4 @@
-package manolo.mainpacket.controller.listeners;
+package manolo.mainpacket.controller.listeners.email;
 
 import manolo.mainpacket.controller.MainController;
 import manolo.mainpacket.view.Menu;
