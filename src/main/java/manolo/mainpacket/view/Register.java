@@ -155,6 +155,6 @@ public class Register extends JFrame {
         this.setLocationRelativeTo(null);
         this.setResizable(true);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setVisible(false);
+        this.setVisible(true);
     }
 }

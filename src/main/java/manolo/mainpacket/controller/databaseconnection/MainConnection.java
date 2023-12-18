@@ -13,9 +13,16 @@ import java.sql.SQLException;
 public class MainConnection {
     private Connection connection;
 
-    public MainConnection(Driver driver, String url, String database, String user, String password  ) {
+    public MainConnection(Driver driver) {
         try {
             DriverManager.registerDriver(driver);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void openConnection(String url, String database, String user, String password) {
+        try {
             connection = DriverManager.getConnection(url + database, user, password);
         } catch (SQLException e) {
             throw new RuntimeException(e);

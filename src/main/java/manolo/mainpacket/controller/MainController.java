@@ -11,10 +11,9 @@ import manolo.mainpacket.view.Login;
 import manolo.mainpacket.view.Menu;
 import manolo.mainpacket.view.Register;
 import org.apache.commons.net.ftp.FTPClient;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -33,7 +32,6 @@ public class MainController {
     public MainController() {
         initAttributes();
         addEventListeners();
-        menu.setVisible(true);
     }
 
     private void showErrorWindow(Component parentComponent, String errorMessage) {
@@ -45,16 +43,12 @@ public class MainController {
 //        mainConnection = new MainConnection(mainConnectionModel.getDRIVER(), mainConnectionModel.getMYSQL_URL(), mainConnectionModel.getMYSQL_DATABASE(), mainConnectionModel.getMYSQL_USERNAME(), mainConnectionModel.getPASSWORD());
         mainViewModel = new MainViewModel();
         loginView = new Login();
-        registerView = new Register();
-        menu = new Menu();
         ftpServiceModel = new FtpServiceModel();
         ftpService = new FtpService();
     }
 
     private void addEventListeners() {
         addLoginEventListeners();
-        addRegisterEventListeners();
-        addMenuEventListeners();
     }
 
 
@@ -62,8 +56,9 @@ public class MainController {
         loginView.getLabels().get(3).addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                registerView.setVisible(true);
-                loginView.setVisible(false);
+                loginView.dispose();
+                registerView = new Register();
+                addRegisterEventListeners();
             }
 
             @Override
@@ -89,11 +84,12 @@ public class MainController {
     }
 
     private void submitLogin() {
-        boolean ableToLogin = false;
+        boolean ableToLogin = true;
         // TODO check the login
         if (ableToLogin) {
-            loginView.setVisible(false);
-            menu.setVisible(true);
+            loginView.dispose();
+            menu = new Menu();
+            addMenuEventListeners();
         } else {
             showErrorWindow(loginView, "Error al iniciar sesion");
         }
@@ -103,8 +99,9 @@ public class MainController {
         registerView.getLabels().get(4).addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                registerView.setVisible(false);
-                loginView.setVisible(true);
+                registerView.dispose();
+                loginView = new Login();
+                addLoginEventListeners();
             }
 
             @Override
@@ -126,30 +123,38 @@ public class MainController {
         registerView.getButtons().getFirst().addActionListener(e -> {
             submitRegister();
         });
-
     }
 
     private void submitRegister() {
+        boolean ableToRegister = true;
+        // TODO check the register
+        if (ableToRegister) {
+            registerView.dispose();
+            menu = new Menu();
+            addMenuEventListeners();
+        } else {
+            showErrorWindow(registerView, "Error al registrarse");
+        }
     }
 
     private void addMenuEventListeners() {
         for (int i = 0; i < menu.getButtons().size(); i++) {
             menu.getButtons().get(i).addActionListener(e -> {
-                switch (((JButton)e.getSource()).getName()){
-                    case "FTP"-> System.out.println("FTP");
-                    case "EMAIL"-> openEmail();
+                switch (((JButton) e.getSource()).getName()) {
+                    case "FTP" -> System.out.println("FTP");
+                    case "EMAIL" -> openEmail();
                 }
             });
         }
     }
 
     private void openEmail() {
-        boolean isCreated= false;
-        if (isCreated==false){
-            emailModel= new EmailTexts();
+        boolean isCreated = false;
+        if (isCreated == false) {
+            emailModel = new EmailTexts();
             new Email(emailModel);
-            isCreated=true;
+            isCreated = true;
+        } else {
         }
-        else {}
     }
 }

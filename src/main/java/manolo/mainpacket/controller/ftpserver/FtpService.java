@@ -1,5 +1,6 @@
 package manolo.mainpacket.controller.ftpserver;
 
+import manolo.mainpacket.controller.databaseconnection.MainConnection;
 import org.apache.commons.net.*;
 import org.apache.commons.net.ftp.*;
 
@@ -73,6 +74,23 @@ public class FtpService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public File getTreeFromDirectory(String path, FTPClient ftpClient) {
+        File file = new File(path);
+        try {
+            for (FTPFile ftpFile : ftpClient.listFiles(path)) {
+                if (ftpFile.isDirectory()) {
+                    getTreeFromDirectory(path + File.separator + ftpFile.getName(), ftpClient);
+                } else {
+                    FileOutputStream fileOutputStream = new FileOutputStream(path + File.separator + ftpFile.getName());
+                    ftpClient.retrieveFile(path + File.separator + ftpFile.getName(), fileOutputStream);
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return file;
     }
 
     public void createDirectory(String path, FTPClient ftpClient) {
