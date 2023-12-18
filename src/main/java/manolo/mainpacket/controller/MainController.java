@@ -51,7 +51,8 @@ public class MainController{
         ftpServiceModel = new FtpServiceModel();
         ftpService = new FtpService();
         mainClient = ftpService.loginFtp("127.0.0.1", 21, "root", "");
-        ftpService.printTree("", mainClient);
+        ftpWindow = new FTPWindow(mainClient, ftpService);
+
     }
 
     private void addEventListeners() {
@@ -140,16 +141,17 @@ public class MainController{
             menu.getButtons().get(i).addActionListener(e -> {
                 switch (((JButton)e.getSource()).getName()){
                     case "FTP":
-                        ftpWindow = new FTPWindow(mainClient, ftpService);
                         ftpWindow.setVisible(true);
                         menu.setVisible(false);
-//                        addFTPEventListeners();
+                        addFTPEventListeners();
+                        break;
 
                     case "CASOS":
                         casosView = new Casos();
                         casosView.setVisible(true);
                         menu.setVisible(false);
                         addCasosEventListeners();
+                        break;
                 }
             });
         }
@@ -164,23 +166,19 @@ public class MainController{
             menu.setVisible(true);
         });
 
-//        ftpWindow.getCreateDirButton().addActionListener(e -> {
-//            String folderName = JOptionPane.showInputDialog(ftpWindow, "Ingrese el nombre de la carpeta:");
-//
-//            if (folderName != null && !folderName.isEmpty()) {
-//                String currentDirectoryPath = ftpWindow.getDirectory();
-//
-//                String newDirectoryPath = currentDirectoryPath + File.separator + folderName;
-//
-//                File currentDirectory = new File(currentDirectoryPath);
-//                File newDirectory = new File(newDirectoryPath);
-//                if (newDirectory.mkdirs()) {
-//                    ftpWindow.loadDirectory(mainClient);
-//                } else {
-//                    JOptionPane.showMessageDialog(ftpWindow, "Error al crear la carpeta.");
-//                }
-//            }
-//        });
+        ftpWindow.getCreateDirButton().addActionListener(e -> {
+            String folderName = JOptionPane.showInputDialog(ftpWindow, "Ingrese el nombre de la carpeta:");
+
+            if (folderName != null && !folderName.isEmpty()) {
+                String currentDirectoryPath = ftpWindow.getDirectory();
+                ftpService.createDirectory(currentDirectoryPath, folderName, mainClient, ftpWindow);
+                ftpWindow.loadDirectory(mainClient);
+            } else {
+                JOptionPane.showMessageDialog(ftpWindow, "Error al crear la carpeta.");
+            }
+        });
+
+
 //
 //        ftpWindow.getDeleteDirButton().addActionListener(e -> {
 //            DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) ftpWindow.getTreeDirectories().getLastSelectedPathComponent();

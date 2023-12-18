@@ -33,7 +33,7 @@ public class FTPWindow extends JFrame {
     private JPanel mainPanel;
     private JLabel rutaLabel;
     private JLabel DNILabel;
-    private String directory = "C:\\Users\\Usuario\\Documents\\FTPDocs";
+    private String directory = "";
     private FTPClient ftpClient;
     private FtpService ftpService;
 
@@ -45,8 +45,6 @@ public class FTPWindow extends JFrame {
     }
 
     private void initComponents() {
-        rutaLabel.setText("Ruta actual: " + directory);
-        File rootDirectory = new File(directory);
         loadDirectory(ftpClient);
     }
 
@@ -77,13 +75,13 @@ public class FTPWindow extends JFrame {
 
     public void loadDirectory(FTPClient ftpClient) {
         try {
-            String currentDirectory = ftpClient.printWorkingDirectory();
+            directory = ftpClient.printWorkingDirectory();
 
-            DefaultMutableTreeNode rootNode = createNodes(currentDirectory);
+            DefaultMutableTreeNode rootNode = createNodes(directory);
 
             treeDirectories.setModel(new DefaultTreeModel(rootNode));
 
-            rutaLabel.setText("Ruta actual: " + currentDirectory);
+            rutaLabel.setText("Ruta actual: " + directory);
         } catch (Exception e) {
             e.printStackTrace();
         }

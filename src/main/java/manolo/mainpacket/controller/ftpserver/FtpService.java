@@ -1,8 +1,10 @@
 package manolo.mainpacket.controller.ftpserver;
 
+import manolo.mainpacket.view.FTPWindow;
 import org.apache.commons.net.*;
 import org.apache.commons.net.ftp.*;
 
+import javax.swing.*;
 import java.io.*;
 
 public class FtpService {
@@ -85,7 +87,21 @@ public class FtpService {
         }
     }
 
-    public void createDirectory(String path, FTPClient ftpClient) {
+    public void createDirectory(String directory, String newDirectoryName, FTPClient ftpClient, FTPWindow ftpWindow) {
+        String newDirectoryPath =  newDirectoryName;
+        System.out.println(newDirectoryPath);
+        try {
+            if (ftpClient.makeDirectory(newDirectoryPath)) {
+                JOptionPane.showMessageDialog(ftpWindow, "Carpeta creada exitosamente: " + newDirectoryPath);
+            } else {
+                System.out.println("Failed to create directory: " + newDirectoryPath);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void crearDirectory(String path, FTPClient ftpClient) {
         System.out.println();
         try {
             System.out.printf("[createDirectory][%d] Is success to create directory : %s -> %b",
