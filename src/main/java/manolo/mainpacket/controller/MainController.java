@@ -150,6 +150,8 @@ public class MainController {
             new Email(emailModel);
             isCreated=true;
         }
-        else {}
+        else {
+            System.out.println("email no creado");
+        }
     }
 }
