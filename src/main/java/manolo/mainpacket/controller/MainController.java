@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import manolo.mainpacket.controller.databaseconnection.MainConnection;
 import manolo.mainpacket.controller.ftpserver.FtpService;
-import manolo.mainpacket.controller.listeners.email.EmailListeners;
+import manolo.mainpacket.controller.listeners.email.EmailButtonsListener;
 import manolo.mainpacket.model.controllermodels.FtpServiceModel;
 import manolo.mainpacket.model.controllermodels.MainConnectionModel;
 import manolo.mainpacket.model.viewmodels.EmailTexts;
@@ -92,6 +92,12 @@ public class MainController {
         });
     }
 
+    public void addEmailListeners(){
+        for (int i=0; i<email.getButtons().size(); i++){
+            email.getButtons().get(i).addActionListener(new EmailButtonsListener(this));
+        }
+    }
+
     public void submitLogin() {
         boolean ableToLogin = true;
         // TODO check the login
@@ -113,13 +119,6 @@ public class MainController {
             addMenuEventListeners();
         } else {
             showErrorWindow(registerView, "Error al registrarse");
-        }
-    }
-
-
-    public void addEmailListeners(){
-        for (int i=0; i<email.getButtons().size(); i++){
-            email.getButtons().get(i).addActionListener(new EmailListeners(this));
         }
     }
 }

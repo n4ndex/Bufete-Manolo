@@ -7,11 +7,11 @@ import manolo.mainpacket.view.NewEmail;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class EmailListeners implements ActionListener {
+public class EmailButtonsListener implements ActionListener {
 
     MainController controller;
 
-    public  EmailListeners(MainController controller){
+    public EmailButtonsListener(MainController controller){
         this.controller=controller;
     }
     @Override
