@@ -127,7 +127,35 @@ public class ButtonsListener implements ActionListener {
                 JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Ningún archivo seleccionado para descargar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             }
         } else if (e.getSource() == mainController.getFtpWindow().getUploadButton()) {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Selecciona un archivo a subir");
 
+            int userSelection = fileChooser.showOpenDialog(mainController.getFtpWindow());
+
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+
+                // Get the selected directory node in the tree
+                DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) mainController.getFtpWindow().getTreeDirectories().getLastSelectedPathComponent();
+
+                if (selectedNode != null) {
+
+                    String selectedDirectory = mainController.getFtpWindow().getSelectedDirectoryPath(selectedNode);
+
+                    // Build the remote path for the new file
+                    String remotePath = selectedDirectory + File.separator + selectedFile.getName();
+
+                    try {
+                        // Upload the file to the server
+                        mainController.getFtpService().uploadFile(selectedFile.getAbsolutePath(), remotePath, mainController.getMainClient());
+                        mainController.getFtpWindow().loadDirectory(mainController.getMainClient());
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Error subiendo archivo: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Selecciona un directorio antes de subir el archivo.");
+                }
+            }
         } else if (e.getSource() == mainController.getFtpWindow().getRefreshButton()) {
             mainController.getFtpWindow().loadDirectory(mainController.getMainClient());
         }
