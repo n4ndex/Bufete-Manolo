@@ -19,15 +19,8 @@ public class Menu extends JFrame {
     public Menu() {
         createButtons();
         addButtonsToFrame();
+        buttons.get(2).setEnabled(false);
         settings();
-    }
-
-    private void addButtonsToFrame() {
-        setLayout(new GridLayout(1, model.getTextsButtonList().size()));
-
-        for (JButton button : buttons) {
-            add(button);
-        }
     }
 
     private void createButtons() {
@@ -66,12 +59,20 @@ public class Menu extends JFrame {
         }
     }
 
+    private void addButtonsToFrame() {
+        setLayout(new GridLayout(1, model.getTextsButtonList().size()));
+
+        for (JButton button : buttons) {
+            add(button);
+        }
+    }
+
     private void settings() {
         Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
         int height = pantalla.height;
         int width = pantalla.width;
 
-        this.setTitle("Menu Bufete");
+        this.setTitle(model.getTitle());
         this.setSize(width/2, height/3);
         this.setLocationRelativeTo(null);
         this.setResizable(false);

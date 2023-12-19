@@ -5,7 +5,9 @@ import manolo.mainpacket.controller.MainController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import javax.swing.JOptionPane;
+import java.nio.file.Files;
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
@@ -33,12 +35,10 @@ public class ButtonsListener implements ActionListener {
             if (selectedPath != null) {
                 DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) selectedPath.getLastPathComponent();
                 String selectedDirectory = mainController.getFtpWindow().getSelectedDirectoryPath(selectedNode);
-                System.out.println("DIREC SELEC. "+selectedDirectory);
 
                 String folderName = JOptionPane.showInputDialog(mainController.getFtpWindow(), "Ingrese el nombre de la carpeta:");
 
                 if (folderName != null && !folderName.isEmpty()) {
-                    // Asegurarse de que la nueva carpeta se cree dentro de la carpeta seleccionada
                     String newDirectoryPath = selectedDirectory + File.separator + folderName;
 
                     mainController.getFtpService().createDirectory(newDirectoryPath, mainController.getMainClient(), mainController.getFtpWindow());
@@ -63,7 +63,7 @@ public class ButtonsListener implements ActionListener {
                     if (mainController.getFtpService().deleteDirectory(selectedDirectoryPath, mainController.getMainClient(), mainController.getFtpWindow())) {
                         mainController.getFtpWindow().loadDirectory(mainController.getMainClient());
                     } else {
-                        JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Error al eliminar el directorio.");
+                        JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Error al eliminar el directorio.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             } else {
@@ -87,14 +87,45 @@ public class ButtonsListener implements ActionListener {
                     if (mainController.getFtpService().deleteFile(selectedFilePath, mainController.getMainClient())) {
                         mainController.getFtpWindow().loadDirectory(mainController.getMainClient());
                     } else {
-                        JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Error al eliminar el archivo.");
+                        JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Error al eliminar el archivo.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             } else {
                 JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Selecciona un archivo para eliminar.");
             }
         } else if (e.getSource() == mainController.getFtpWindow().getDownloadButton()) {
+            DefaultMutableTreeNode selectedNode = mainController.getFtpWindow().getSelectedNode();
+            if (selectedNode != null) {
+                String fileName = mainController.getFtpWindow().getSelectedDirectoryPath(selectedNode);
+                String filePath = mainController.getFtpWindow().getDirectory() + "/" + fileName;
 
+                try {
+                    if (!mainController.getFtpService().isDirectory(filePath, mainController.getMainClient())) {
+                        byte[] fileBytes = mainController.getFtpService().downloadFile(filePath, mainController.getMainClient());
+
+                        JFileChooser fileChooser = new JFileChooser();
+                        fileChooser.setDialogTitle("Guardar archivo");
+                        fileChooser.setSelectedFile(new File(fileName));
+                        fileChooser.setFileFilter(new FileNameExtensionFilter("Archivos", ".*"));
+
+                        int userSelection = fileChooser.showSaveDialog(mainController.getFtpWindow());
+
+                        if (userSelection == JFileChooser.APPROVE_OPTION) {
+                            File selectedFile = fileChooser.getSelectedFile();
+
+                            Files.write(selectedFile.toPath(), fileBytes);
+
+                            JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Archivo descargado exitosamente en la ruta seleccionada.");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(mainController.getFtpWindow(), "No se puede descargar un directorio. Por favor, seleccione un archivo.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Error al descargar el archivo: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Ningún archivo seleccionado para descargar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            }
         } else if (e.getSource() == mainController.getFtpWindow().getUploadButton()) {
 
         } else if (e.getSource() == mainController.getFtpWindow().getRefreshButton()) {
