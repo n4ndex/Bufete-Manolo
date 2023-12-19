@@ -18,7 +18,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 
-public class MainController{
+public class MainController {
     MainConnectionModel mainConnectionModel;
     MainConnection mainConnection;
     MainViewModel mainViewModel;
@@ -139,7 +139,7 @@ public class MainController{
     private void addMenuEventListeners() {
         for (int i = 0; i < menu.getButtons().size(); i++) {
             menu.getButtons().get(i).addActionListener(e -> {
-                switch (((JButton)e.getSource()).getName()){
+                switch (((JButton) e.getSource()).getName()) {
                     case "FTP":
                         ftpWindow.setVisible(true);
                         menu.setVisible(false);
@@ -152,12 +152,19 @@ public class MainController{
                         menu.setVisible(false);
                         addCasosEventListeners();
                         break;
+                    case "LOG OUT":
+                        menu.dispose();
+                        loginView.setVisible(true);
+                        break;
                 }
             });
         }
     }
 
     private void addCasosEventListeners() {
+        //String cliente = casosView.getComboClient().toString();
+        //String caso = casosView.getTextFieldCaso().toString();
+
     }
 
     private void addFTPEventListeners() {
@@ -178,8 +185,11 @@ public class MainController{
             }
         });
 
+        ftpWindow.getRefreshButton().addActionListener(e -> {
+            ftpWindow.repaint();
+        });
 
-//
+
 //        ftpWindow.getDeleteDirButton().addActionListener(e -> {
 //            DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) ftpWindow.getTreeDirectories().getLastSelectedPathComponent();
 //
@@ -219,34 +229,34 @@ public class MainController{
 //                JOptionPane.showMessageDialog(ftpWindow, "Selecciona un archivo para eliminar.");
 //            }
 //        });
-//
-//        ftpWindow.getDownloadButton().addActionListener(e -> {
-//            DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) ftpWindow.getTreeDirectories().getLastSelectedPathComponent();
-//
-//            if (selectedNode != null) {
-//                File selectedFile = new File(ftpWindow.getDirectory() + File.separator + ftpWindow.getFullPath(selectedNode));
-//
-//                if (selectedFile.exists() && selectedFile.isFile()) {
-//                    ftpWindow.saveAs(selectedFile);
-//                } else {
-//                    JOptionPane.showMessageDialog(ftpWindow, "Selecciona un archivo válido para descargar.");
-//                }
-//            } else {
-//                JOptionPane.showMessageDialog(ftpWindow, "Selecciona un archivo para descargar.");
-//            }
-//        });
-//
-//        ftpWindow.getUploadButton().addActionListener(e -> {
-//            JFileChooser fileChooser = new JFileChooser();
-//            fileChooser.setDialogTitle("Seleccionar Archivo para Subir");
-//
-//            int userSelection = fileChooser.showOpenDialog(ftpWindow);
-//
-//            if (userSelection == JFileChooser.APPROVE_OPTION) {
-//                File selectedFile = fileChooser.getSelectedFile();
-//                ftpWindow.uploadFile(selectedFile);
-//            }
-//        });
+
+        ftpWindow.getDownloadButton().addActionListener(e -> {
+            DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) ftpWindow.getTreeDirectories().getLastSelectedPathComponent();
+
+            if (selectedNode != null) {
+                File selectedFile = new File(ftpWindow.getDirectory() + File.separator + ftpWindow.getFullPath(selectedNode));
+
+                if (selectedFile.exists() && selectedFile.isFile()) {
+                    ftpWindow.saveAs(selectedFile);
+                } else {
+                    JOptionPane.showMessageDialog(ftpWindow, "Selecciona un archivo válido para descargar.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(ftpWindow, "Selecciona un archivo para descargar.");
+            }
+        });
+
+        ftpWindow.getUploadButton().addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Seleccionar Archivo para Subir");
+
+            int userSelection = fileChooser.showOpenDialog(ftpWindow);
+
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                ftpWindow.uploadFile(selectedFile);
+            }
+        });
     }
 
 }
