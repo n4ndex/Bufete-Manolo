@@ -1,9 +1,14 @@
 package manolo.mainpacket.model.viewmodels;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 
+@Getter
 public class MenuTexts {
     ArrayList<String> textsButtonList = new ArrayList(); // Textos del Menu
+
+    String title = "Menu Bufete";
     public MenuTexts() {
         fillTexts();
     }
@@ -15,13 +20,4 @@ public class MenuTexts {
         textsButtonList.add("CONFIG");   // 3
         textsButtonList.add("LOG OUT");  // 4
     }
-
-    public ArrayList<String> getTextsButtonList() {
-        return textsButtonList;
-    }
-
-    public void setTextsButtonList(ArrayList<String> textsButtonList) {
-        this.textsButtonList = textsButtonList;
-    }
-
 }

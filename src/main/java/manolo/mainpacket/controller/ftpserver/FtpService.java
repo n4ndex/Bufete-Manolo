@@ -36,24 +36,6 @@ public class FtpService {
         return ftpClient;
     }
 
-    public void printFtpClientInfo(FTPClient ftpClient) {
-        System.out.println();
-        try {
-            System.out.printf("[printFtpClientInfo][%d] Get system type : %s %n", System.currentTimeMillis(), ftpClient.getSystemType());
-            System.out.printf("[printFtpClientInfo][%d] Get reply code : %d %n", System.currentTimeMillis(), ftpClient.getReplyCode());
-            System.out.printf("[printFtpClientInfo][%d] Get reply string : %s %n", System.currentTimeMillis(), ftpClient.getReplyString());
-            System.out.printf("[printFtpClientInfo][%d] Get remote address : %s %n", System.currentTimeMillis(), ftpClient.getRemoteAddress());
-            System.out.printf("[printFtpClientInfo][%d] Get remote port : %d %n", System.currentTimeMillis(), ftpClient.getRemotePort());
-            System.out.printf("[printFtpClientInfo][%d] Get local address : %s %n", System.currentTimeMillis(), ftpClient.getLocalAddress());
-            System.out.printf("[printFtpClientInfo][%d] Get local port : %d %n", System.currentTimeMillis(), ftpClient.getLocalPort());
-            System.out.printf("[printFtpClientInfo][%d] Get control encoding : %s %n", System.currentTimeMillis(), ftpClient.getControlEncoding());
-            System.out.printf("[printFtpClientInfo][%d] Get data timeout : %s %n", System.currentTimeMillis(), ftpClient.getDataTimeout().toString());
-            System.out.printf("[printFtpClientInfo][%d] Get buffer size : %d %n", System.currentTimeMillis(), ftpClient.getBufferSize());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public FTPFile[] listFiles(String path, FTPClient ftpClient) {
         try {
             return ftpClient.listFiles(path);
@@ -62,26 +44,10 @@ public class FtpService {
         }
     }
 
-    public void printTree(String path, FTPClient ftpClient) {
+    public boolean isDirectory(String path, FTPClient ftpClient) {
         try {
-            for (FTPFile ftpFile : ftpClient.listFiles(path)) {
-                System.out.println();
-                System.out.printf("[printTree][%d]%n", System.currentTimeMillis());
-                System.out.printf("[printTree][%d] Get name : %s %n", System.currentTimeMillis(), ftpFile.getName());
-                System.out.printf("[printTree][%d] Get timestamp : %s %n", System.currentTimeMillis(), ftpFile.getTimestamp().getTimeInMillis());
-                System.out.printf("[printTree][%d] Get group : %s %n", System.currentTimeMillis(), ftpFile.getGroup());
-                System.out.printf("[printTree][%d] Get link : %s %n", System.currentTimeMillis(), ftpFile.getLink());
-                System.out.printf("[printTree][%d] Get user : %s %n", System.currentTimeMillis(), ftpFile.getUser());
-                System.out.printf("[printTree][%d] Get type : %s %n", System.currentTimeMillis(), ftpFile.getType());
-                System.out.printf("[printTree][%d] Is file : %s %n", System.currentTimeMillis(), ftpFile.isFile());
-                System.out.printf("[printTree][%d] Is directory : %s %n", System.currentTimeMillis(), ftpFile.isDirectory());
-                System.out.printf("[printTree][%d] Formatted string : %s %n", System.currentTimeMillis(), ftpFile.toFormattedString());
-                System.out.println();
-
-                if (ftpFile.isDirectory()) {
-                    printTree(path + ftpFile.getName(), ftpClient);
-                }
-            }
+            FTPFile[] files = ftpClient.listFiles(path);
+            return files != null && files.length > 0 && files[0].isDirectory();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -93,7 +59,7 @@ public class FtpService {
             if (ftpClient.makeDirectory(newDirectoryPath)) {
                 JOptionPane.showMessageDialog(ftpWindow, "Directorio creado exitosamente: " + newDirectoryPath);
             } else {
-                JOptionPane.showMessageDialog(ftpWindow, "Fallo al crear: " + newDirectoryPath);
+                JOptionPane.showMessageDialog(ftpWindow, "Fallo al crear: " + newDirectoryPath, "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -121,7 +87,7 @@ public class FtpService {
                 JOptionPane.showMessageDialog(ftpWindow, "Directorio eliminado exitosamente: " + path);
                 return true;
             } else {
-                JOptionPane.showMessageDialog(ftpWindow, "Fallo al eliminar: " + path);
+                JOptionPane.showMessageDialog(ftpWindow, "Fallo al eliminar: " + path, "Error", JOptionPane.ERROR_MESSAGE);
                 return false;
             }
         } catch (IOException e) {

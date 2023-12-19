@@ -84,7 +84,7 @@ public class Login extends JFrame {
     }
 
     private void addPassword() {
-        panels.get(1).add(new JLabel("Contraseña:"));
+        panels.get(1).add(new JLabel(model.getTextsList().get(2)));
         panels.get(1).add(passwordFields.get(0));
     }
 
@@ -140,7 +140,7 @@ public class Login extends JFrame {
         int height = pantalla.height;
         int width = pantalla.width;
         this.setSize(width/3, height/4);
-        this.setTitle("Login Bufete");
+        this.setTitle(model.getTitle());
         this.setLocationRelativeTo(null);
         this.setResizable(true);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);

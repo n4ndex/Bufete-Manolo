@@ -1,9 +1,14 @@
 package manolo.mainpacket.model.viewmodels;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 
+@Getter
 public class LoginTexts {
     ArrayList<String>textsList = new ArrayList(); // Textos del Login
+
+    String title = "Login Bufete";
     public LoginTexts() {
         fillTexts();
     }
@@ -14,13 +19,5 @@ public class LoginTexts {
         textsList.add("Contraseña");  // 2
         textsList.add("¿No tienes una cuenta? Regístrate aquí"); // 3
         textsList.add("Acceder");     // 4
-    }
-
-    public ArrayList<String> getTextsList() {
-        return textsList;
-    }
-
-    public void setTextsList(ArrayList<String> textsList) {
-        this.textsList = textsList;
     }
 }
