@@ -165,15 +165,18 @@ public class FtpService {
         return byteArrayOutputStream.toByteArray();
     }
 
-    public void deleteFile(String path, FTPClient ftpClient) {
-        System.out.println();
+    public boolean deleteFile(String path, FTPClient ftpClient) {
         try {
-            System.out.printf("[deleteFile][%d] Is success to delete file : %s -> %b",
-                    System.currentTimeMillis(), path, ftpClient.deleteFile(path));
+            boolean success = ftpClient.deleteFile(path);
+            System.out.printf("[deleteFile][%d] Is success to delete file : %s -> %b%n",
+                    System.currentTimeMillis(), path, success);
+            return success;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.printf("[deleteFile][%d] Error deleting file : %s%n",
+                    System.currentTimeMillis(), path);
+            e.printStackTrace();
+            return false;
         }
-        System.out.println();
     }
 
 }

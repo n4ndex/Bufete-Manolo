@@ -69,8 +69,30 @@ public class ButtonsListener implements ActionListener {
             } else {
                 JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Selecciona un directorio para eliminar.");
             }
-        } else if (e.getSource() == mainController.getFtpWindow().getDeleteFileButton()) {
+        } else if (e.getSource() == mainController.getFtpWindow().getDeleteFileButton()) {  // delete file button
+            DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) mainController.getFtpWindow().getTreeDirectories().getLastSelectedPathComponent();
 
+            if (selectedNode != null) {
+                String selectedFileName = (String) selectedNode.getUserObject();
+                String selectedFilePath = mainController.getFtpWindow().getDirectory() + File.separator + selectedFileName;
+
+                int option = JOptionPane.showConfirmDialog(
+                        mainController.getFtpWindow(),
+                        "¿Seguro que deseas eliminar el archivo '" + selectedFileName + "'?",
+                        "Confirmar eliminación",
+                        JOptionPane.YES_NO_OPTION
+                );
+
+                if (option == JOptionPane.YES_OPTION) {
+                    if (mainController.getFtpService().deleteFile(selectedFilePath, mainController.getMainClient())) {
+                        mainController.getFtpWindow().loadDirectory(mainController.getMainClient());
+                    } else {
+                        JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Error al eliminar el archivo.");
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Selecciona un archivo para eliminar.");
+            }
         } else if (e.getSource() == mainController.getFtpWindow().getDownloadButton()) {
 
         } else if (e.getSource() == mainController.getFtpWindow().getUploadButton()) {

@@ -29,18 +29,26 @@ public class TreeListener implements TreeSelectionListener {
 
         if (selectedPath != null) {
             DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) selectedPath.getLastPathComponent();
-            String nodeName = selectedNode.getUserObject().toString();
 
-            mainController.getFtpWindow().getRenameField().setText(nodeName);
+            // Verifica si el nodo seleccionado es una hoja (archivo)
+            if (selectedNode.isLeaf()) {
+                String nodeName = selectedNode.getUserObject().toString();
+                mainController.getFtpWindow().getRenameField().setText(nodeName);
 
-            StringBuilder selectedDirectory = new StringBuilder();
-            for (Object pathComponent : selectedPath.getPath()) {
-                selectedDirectory.append(pathComponent.toString());
+                String selectedDirectory = getSelectedDirectoryPath(selectedNode);
+
+                mainController.getFtpWindow().setDirectory(selectedDirectory);
+                mainController.getFtpWindow().getRutaLabel().setText("Ruta actual: " + mainController.getFtpWindow().getDirectory());
             }
-
-            mainController.getFtpWindow().setDirectory(selectedDirectory.toString());
-            mainController.getFtpWindow().getRutaLabel().setText("Ruta actual: " + mainController.getFtpWindow().getDirectory());
         }
+    }
+
+    public String getSelectedDirectoryPath(DefaultMutableTreeNode selectedNode) {
+        TreePath path = new TreePath(selectedNode.getPath());
+        int pathCount = path.getPathCount();
+
+        Object penultimatePathComponent = path.getPathComponent(pathCount - 2);
+        return penultimatePathComponent.toString();
     }
 
     private void renameSelectedNode(String newFileName) {
