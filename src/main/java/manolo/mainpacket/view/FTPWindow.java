@@ -108,14 +108,29 @@ public class FTPWindow extends JFrame {
     public void loadDirectory(FTPClient ftpClient) {
         try {
             directory = ftpClient.printWorkingDirectory();
+            loadDirectoryInternal(ftpClient, directory);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-            DefaultMutableTreeNode rootNode = createNodes(directory);
+    public void loadDirectory(FTPClient ftpClient, String path) {
+        try {
+            loadDirectoryInternal(ftpClient, path);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadDirectoryInternal(FTPClient ftpClient, String path) {
+        try {
+            DefaultMutableTreeNode rootNode = createNodes(path);
 
             treeDirectories.setModel(new DefaultTreeModel(rootNode));
 
-            rutaLabel.setText("Ruta actual: " + directory);
+            rutaLabel.setText("Ruta actual: " + path);
         } catch (Exception e) {
-            System.err.println("Error: Servidor FTP no iniciado.");
+            e.printStackTrace();
         }
     }
 
