@@ -74,22 +74,14 @@ public class MainController {
     }
 
     public void addFtpEventListeners() {
-        ftpWindow.getExitButton().addActionListener(e -> {
-            ftpWindow.dispose();
-            menu.setVisible(true);
-        });
-
-        ftpWindow.getCreateDirButton().addActionListener(e -> {
-            String folderName = JOptionPane.showInputDialog(ftpWindow, "Ingrese el nombre de la carpeta:");
-
-            if (folderName != null && !folderName.isEmpty()) {
-                String currentDirectoryPath = ftpWindow.getDirectory();
-                ftpService.createDirectory(currentDirectoryPath, folderName, mainClient, ftpWindow);
-                ftpWindow.loadDirectory(mainClient);
-            } else {
-                JOptionPane.showMessageDialog(ftpWindow, "Error al crear la carpeta.");
-            }
-        });
+        ftpWindow.getTreeDirectories().addTreeSelectionListener(new manolo.mainpacket.controller.listeners.ftp.TreeListener(this));
+        ftpWindow.getExitButton().addActionListener(new manolo.mainpacket.controller.listeners.ftp.ButtonsListener(this));
+        ftpWindow.getCreateDirButton().addActionListener(new manolo.mainpacket.controller.listeners.ftp.ButtonsListener(this));
+        ftpWindow.getDeleteDirButton().addActionListener(new manolo.mainpacket.controller.listeners.ftp.ButtonsListener(this));
+        ftpWindow.getDeleteFileButton().addActionListener(new manolo.mainpacket.controller.listeners.ftp.ButtonsListener(this));
+        ftpWindow.getDownloadButton().addActionListener(new manolo.mainpacket.controller.listeners.ftp.ButtonsListener(this));
+        ftpWindow.getUploadButton().addActionListener(new manolo.mainpacket.controller.listeners.ftp.ButtonsListener(this));
+        ftpWindow.getRefreshButton().addActionListener(new manolo.mainpacket.controller.listeners.ftp.ButtonsListener(this));
     }
 
     public void submitLogin() {
@@ -116,26 +108,6 @@ public class MainController {
         }
     }
 
-//
-//        ftpWindow.getDeleteDirButton().addActionListener(e -> {
-//            DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) ftpWindow.getTreeDirectories().getLastSelectedPathComponent();
-//
-//            if (selectedNode != null) {
-//                File selectedDirectory = new File(ftpWindow.getDirectory() + File.separator + selectedNode.getUserObject());
-//
-//                if (selectedDirectory.exists() && selectedDirectory.isDirectory()) {
-//                    if (ftpWindow.deleteDirectory(selectedDirectory)) {
-//                        ftpWindow.loadDirectory(new File(ftpWindow.getDirectory()));
-//                    } else {
-//                        JOptionPane.showMessageDialog(ftpWindow, "Error al eliminar la carpeta.");
-//                    }
-//                } else {
-//                    JOptionPane.showMessageDialog(ftpWindow, "Selecciona una carpeta válida para eliminar.");
-//                }
-//            } else {
-//                JOptionPane.showMessageDialog(ftpWindow, "Selecciona una carpeta para eliminar.");
-//            }
-//        });
 //
 //        ftpWindow.getDeleteFileButton().addActionListener(e -> {
 //            DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) ftpWindow.getTreeDirectories().getLastSelectedPathComponent();

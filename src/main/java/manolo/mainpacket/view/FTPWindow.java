@@ -10,6 +10,7 @@ import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -18,6 +19,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.Collections;
 
 @Getter
 @Setter
@@ -29,10 +32,12 @@ public class FTPWindow extends JFrame {
     private JButton downloadButton;
     private JButton exitButton;
     private JButton deleteDirButton;
+    private JButton refreshButton;
     private JTree treeDirectories;
     private JPanel mainPanel;
     private JLabel rutaLabel;
     private JLabel DNILabel;
+    private JLabel serverLabel;
     private String directory = "";
     private FTPClient ftpClient;
     private FtpService ftpService;
@@ -52,25 +57,50 @@ public class FTPWindow extends JFrame {
 
         this.setContentPane(mainPanel);
         Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
-        int height = (int) (pantalla.getHeight() + 200);
-        int width = pantalla.width;
+        int height = (int) (pantalla.getHeight() + 300);
+        int width = (int) (pantalla.width + 200);
 
         this.setTitle("Gestión de Ficheros del Bufete");
         this.setSize(width / 2, height / 3);
         this.setLocationRelativeTo(null);
-        this.setResizable(false);
+        this.setResizable(true);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setVisible(true);
+    }
+
+    public DefaultMutableTreeNode getSelectedNode() {
+        TreePath selectedPath = treeDirectories.getSelectionPath();
+        if (selectedPath != null) {
+            return (DefaultMutableTreeNode) selectedPath.getLastPathComponent();
+        }
+        return null;
+    }
+
+    public String getSelectedDirectoryPath(DefaultMutableTreeNode selectedNode) {
+        while (selectedNode != null) {
+            if (selectedNode.getUserObject() != null) {
+                return selectedNode.getUserObject().toString();
+            }
+            selectedNode = (DefaultMutableTreeNode) selectedNode.getParent();
+        }
+
+        return "";
     }
 
     private DefaultMutableTreeNode createNodes(String path) {
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(path);
         FTPFile[] ftpFiles = ftpService.listFiles(path, ftpClient);
+
         if (ftpFiles != null) {
             for (FTPFile ftpFile : ftpFiles) {
-                rootNode.add(createNodes(path + "/" + ftpFile.getName()));
+                if (ftpFile.isDirectory()) {
+                    rootNode.add(createNodes(path + "/" + ftpFile.getName()));
+                } else {
+                    rootNode.add(new DefaultMutableTreeNode(ftpFile.getName()));
+                }
             }
         }
+
         return rootNode;
     }
 
@@ -84,49 +114,8 @@ public class FTPWindow extends JFrame {
 
             rutaLabel.setText("Ruta actual: " + directory);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Error: Servidor FTP no iniciado.");
         }
-    }
-
-    public String getFullPath(DefaultMutableTreeNode node) {
-        StringBuilder fullPath = new StringBuilder();
-        TreeNode[] path = node.getPath();
-
-        for (int i = 1; i < path.length; i++) {
-            fullPath.append(path[i].toString());
-            if (i < path.length - 1) {
-                fullPath.append(File.separator);
-            }
-        }
-        return fullPath.toString();
-    }
-
-
-    public boolean deleteDirectory(File directoryToDelete) {
-        int result = JOptionPane.showConfirmDialog(
-                null,
-                "¿Estás seguro de que deseas eliminar la carpeta y su contenido?",
-                "Confirmar eliminación de " + directoryToDelete,
-                JOptionPane.YES_NO_OPTION
-        );
-
-        if (result == JOptionPane.YES_OPTION) {
-            if (directoryToDelete.isDirectory()) {
-                File[] files = directoryToDelete.listFiles();
-                if (files != null) {
-                    for (File file : files) {
-                        if (file.isDirectory()) {
-                            deleteDirectory(file);
-                        } else {
-                            file.delete();
-                        }
-                    }
-                }
-            }
-            return directoryToDelete.delete();
-        }
-
-        return false;
     }
 
     public boolean deleteFile(File fileToDelete) {
@@ -144,7 +133,7 @@ public class FTPWindow extends JFrame {
         return false;
     }
 
-        public void save(File selectedFile) {
+    public void save(File selectedFile) {
         File downloadsFolder = new File(System.getProperty("user.home"), "Downloads");
         Path destinationPath = downloadsFolder.toPath().resolve(selectedFile.getName());
 

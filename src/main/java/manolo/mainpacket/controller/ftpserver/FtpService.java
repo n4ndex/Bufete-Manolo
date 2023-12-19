@@ -31,7 +31,7 @@ public class FtpService {
             ftpClient.connect(host, port);
             ftpClient.login(username, password);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("Error: Servidor FTP no iniciado.");
         }
         return ftpClient;
     }
@@ -79,7 +79,7 @@ public class FtpService {
                 System.out.println();
 
                 if (ftpFile.isDirectory()) {
-                    printTree(path + File.separator + ftpFile.getName(), ftpClient);
+                    printTree(path + ftpFile.getName(), ftpClient);
                 }
             }
         } catch (IOException e) {
@@ -87,29 +87,46 @@ public class FtpService {
         }
     }
 
-    public void createDirectory(String directory, String newDirectoryName, FTPClient ftpClient, FTPWindow ftpWindow) {
-        String newDirectoryPath =  newDirectoryName;
-        System.out.println(newDirectoryPath);
+    public void createDirectory(String newDirectoryPath, FTPClient ftpClient, FTPWindow ftpWindow) {
+        System.out.println("Directorio a crear: " + newDirectoryPath);
         try {
             if (ftpClient.makeDirectory(newDirectoryPath)) {
-                JOptionPane.showMessageDialog(ftpWindow, "Carpeta creada exitosamente: " + newDirectoryPath);
+                JOptionPane.showMessageDialog(ftpWindow, "Directorio creado exitosamente: " + newDirectoryPath);
             } else {
-                System.out.println("Failed to create directory: " + newDirectoryPath);
+                JOptionPane.showMessageDialog(ftpWindow, "Fallo al crear: " + newDirectoryPath);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void crearDirectory(String path, FTPClient ftpClient) {
-        System.out.println();
+    public boolean deleteDirectory(String path, FTPClient ftpClient, FTPWindow ftpWindow) {
+        System.out.println("Directorio a eliminar: " + path);
         try {
-            System.out.printf("[createDirectory][%d] Is success to create directory : %s -> %b",
-                    System.currentTimeMillis(), path, ftpClient.makeDirectory(path));
+            FTPFile[] files = ftpClient.listFiles(path);
+
+            if (files != null) {
+                for (FTPFile file : files) {
+                    String filePath = path + "/" + file.getName();
+
+                    if (file.isDirectory()) {
+                        deleteDirectory(filePath, ftpClient, ftpWindow);
+                    } else {
+                        ftpClient.deleteFile(filePath);
+                    }
+                }
+            }
+
+            if (ftpClient.removeDirectory(path)) {
+                JOptionPane.showMessageDialog(ftpWindow, "Directorio eliminado exitosamente: " + path);
+                return true;
+            } else {
+                JOptionPane.showMessageDialog(ftpWindow, "Fallo al eliminar: " + path);
+                return false;
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        System.out.println();
     }
 
     public void uploadFile(String localPath, String remotePath, FTPClient ftpClient) {
@@ -159,14 +176,4 @@ public class FtpService {
         System.out.println();
     }
 
-    public void deleteDirectory(String path, FTPClient ftpClient) {
-        System.out.println();
-        try {
-            System.out.printf("[deleteDirectory][%d] Is success to delete directory : %s -> %b",
-                    System.currentTimeMillis(), path, ftpClient.removeDirectory(path));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println();
-    }
 }

@@ -27,6 +27,7 @@ public class ButtonsListener implements ActionListener {
         switch (((JButton) e.getSource()).getName()) {
             case "FTP" -> {
                 mainController.setFtpWindow(new FTPWindow(mainController.getMainClient(), mainController.getFtpService()));
+                mainController.getFtpWindow().getServerLabel().setText("Servidor: " + mainController.getMainClient().getLocalAddress());
                 mainController.addFtpEventListeners();
             }
             case "EMAIL" -> {

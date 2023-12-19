@@ -8,8 +8,8 @@ import java.awt.*;
 public class Casos extends JFrame {
     private JPanel mainPanel;
     private JLabel labelTitle;
-    private JComboBox comboBox1;
-    private JTextField textField1;
+    private JComboBox comboClient;
+    private JTextField textFieldCaso;
     private JButton crearButton;
     private JLabel labelClient;
     private JLabel labelCase;
