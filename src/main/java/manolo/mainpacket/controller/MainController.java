@@ -97,24 +97,29 @@ public class MainController {
 
     public void submitLogin() {
         mainConnection.openConnection(mainConnectionModel.getMYSQL_URL(), mainConnectionModel.getMYSQL_DATABASE(), mainConnectionModel.getMYSQL_USERNAME(), mainConnectionModel.getPASSWORD());
-        boolean loginLawyer = mainConnection.loginLawyer(loginView.getTextFields().get(0).getText(), loginView.getPasswordFields().get(0).getText());
-        boolean loginClient = mainConnection.loginClient(loginView.getTextFields().get(0).getText(), loginView.getPasswordFields().get(0).getText());
 
-        if (loginLawyer) {
+        String dni = loginView.getTextFields().get(0).getText();
+        String password = loginView.getPasswordFields().get(0).getText();
+        User userData = mainConnection.getUserData(dni, password);
+
+        if (userData != null) {
+            currentUser = userData;
             loginView.dispose();
             menu = new Menu();
-            menu.setTitle(menu.getModel().getTitleLawyer());
-            menu.getButtons().get(2).setEnabled(true);
-            addMenuEventListeners();
-        } else if (loginClient) {
-            loginView.dispose();
-            menu = new Menu();
-            menu.setTitle(menu.getModel().getTitleClient());
-            menu.getButtons().get(2).setEnabled(false);
+
+            if (currentUser.getUserType().getType().equalsIgnoreCase("abogado")) {
+                menu.setTitle("¡Bienvenido " + currentUser.getName() + "! - ABOGADO");
+                menu.getButtons().get(2).setEnabled(true);
+            } else {
+                menu.setTitle("¡Bienvenido " + currentUser.getName() + "! - CLIENTE");
+                menu.getButtons().get(2).setEnabled(false);
+            }
+
             addMenuEventListeners();
         } else {
             showErrorWindow(loginView, "Error al iniciar sesión. DNI o contraseña incorrecto.");
         }
+
         mainConnection.closeConnection();
     }
 

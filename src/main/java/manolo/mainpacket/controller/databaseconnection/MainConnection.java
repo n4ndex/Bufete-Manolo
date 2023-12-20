@@ -3,6 +3,7 @@ package manolo.mainpacket.controller.databaseconnection;
 import lombok.Getter;
 import lombok.Setter;
 import manolo.mainpacket.model.User;
+import manolo.mainpacket.model.UserType;
 
 import java.sql.*;
 
@@ -71,6 +72,35 @@ public class MainConnection {
         } catch (SQLException e) {
             return false;
         }
+    }
+
+    public User getUserData(String dni, String password) {
+        String query = """
+            SELECT users.*, user_types.*
+            FROM users
+            INNER JOIN user_types ON users.user_type_id = user_types.id_type
+            WHERE users.dni = ? AND users.password = ?""";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, dni);
+            preparedStatement.setString(2, password);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    String name = resultSet.getString("name");
+                    String email = resultSet.getString("email");
+                    String userType = resultSet.getString("type_name");
+                    int privilegeLevel = resultSet.getInt("privilege_level");
+
+                    UserType userTypeEnum = new UserType(userType, privilegeLevel);
+                    return new User(dni, name, password, email, userTypeEnum);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return null;
     }
 
     public boolean checkIfUserExists(String username) {
