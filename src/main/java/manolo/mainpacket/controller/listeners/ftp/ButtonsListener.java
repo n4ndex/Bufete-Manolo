@@ -44,10 +44,10 @@ public class ButtonsListener implements ActionListener {
                     mainController.getFtpService().createDirectory(newDirectoryPath, mainController.getMainClient(), mainController.getFtpWindow());
                     mainController.getFtpWindow().loadDirectory(mainController.getMainClient());
                 } else {
-                    JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Error al crear la carpeta.");
+                    mainController.showErrorWindow(mainController.getFtpWindow(), "Error al crear la carpeta.");
                 }
             } else {
-                JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Seleccione una carpeta origen antes de crear una nueva.");
+                mainController.showWarningWindow(mainController.getFtpWindow(), "Seleccione una carpeta origen antes de crear una nueva.");
             }
         } else if (e.getSource() == mainController.getFtpWindow().getDeleteDirButton()) {   // delete dir button
             DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) mainController.getFtpWindow().getTreeDirectories().getLastSelectedPathComponent();
@@ -63,11 +63,11 @@ public class ButtonsListener implements ActionListener {
                     if (mainController.getFtpService().deleteDirectory(selectedDirectoryPath, mainController.getMainClient(), mainController.getFtpWindow())) {
                         mainController.getFtpWindow().loadDirectory(mainController.getMainClient());
                     } else {
-                        JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Error al eliminar el directorio.", "Error", JOptionPane.ERROR_MESSAGE);
+                        mainController.showErrorWindow(mainController.getFtpWindow(), "Error al eliminar el directorio.");
                     }
                 }
             } else {
-                JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Selecciona un directorio para eliminar.");
+                mainController.showWarningWindow(mainController.getFtpWindow(), "Selecciona un directorio para eliminar.");
             }
         } else if (e.getSource() == mainController.getFtpWindow().getDeleteFileButton()) {  // delete file button
             DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) mainController.getFtpWindow().getTreeDirectories().getLastSelectedPathComponent();
@@ -87,11 +87,11 @@ public class ButtonsListener implements ActionListener {
                     if (mainController.getFtpService().deleteFile(selectedFilePath, mainController.getMainClient())) {
                         mainController.getFtpWindow().loadDirectory(mainController.getMainClient());
                     } else {
-                        JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Error al eliminar el archivo.", "Error", JOptionPane.ERROR_MESSAGE);
+                        mainController.showErrorWindow(mainController.getFtpWindow(), "Error al eliminar el archivo.");
                     }
                 }
             } else {
-                JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Selecciona un archivo para eliminar.");
+                mainController.showWarningWindow(mainController.getFtpWindow(), "Selecciona un archivo para eliminar.");
             }
         } else if (e.getSource() == mainController.getFtpWindow().getDownloadButton()) {    // download file button
             DefaultMutableTreeNode selectedNode = mainController.getFtpWindow().getSelectedNode();
@@ -115,16 +115,16 @@ public class ButtonsListener implements ActionListener {
 
                             Files.write(selectedFile.toPath(), fileBytes);
 
-                            JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Archivo descargado exitosamente en la ruta seleccionada.");
+                            mainController.showInfoWindow(mainController.getFtpWindow(), "Archivo descargado exitosamente en la ruta seleccionada.");
                         }
                     } else {
-                        JOptionPane.showMessageDialog(mainController.getFtpWindow(), "No se puede descargar un directorio. Por favor, seleccione un archivo.", "Error", JOptionPane.ERROR_MESSAGE);
+                        mainController.showErrorWindow(mainController.getFtpWindow(), "No se puede descargar un directorio. Por favor, seleccione un archivo.");
                     }
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Error al descargar el archivo: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    mainController.showErrorWindow(mainController.getFtpWindow(), "Error al descargar el archivo: " + ex.getMessage());
                 }
             } else {
-                JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Ningún archivo seleccionado para descargar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                mainController.showWarningWindow(mainController.getFtpWindow(), "Ningún archivo seleccionado para descargar.");
             }
         } else if (e.getSource() == mainController.getFtpWindow().getUploadButton()) {  // upload file button
             JFileChooser fileChooser = new JFileChooser();
@@ -150,10 +150,10 @@ public class ButtonsListener implements ActionListener {
                         mainController.getFtpService().uploadFile(selectedFile.getAbsolutePath(), remotePath, mainController.getMainClient());
                         mainController.getFtpWindow().loadDirectory(mainController.getMainClient());
                     } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Error subiendo archivo: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        mainController.showErrorWindow(mainController.getFtpWindow(), "Error subiendo archivo: " + ex.getMessage());
                     }
                 } else {
-                    JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Selecciona un directorio antes de subir el archivo.");
+                    mainController.showWarningWindow(mainController.getFtpWindow(), "Selecciona un directorio antes de subir el archivo.");
                 }
             }
         } else if (e.getSource() == mainController.getFtpWindow().getRefreshButton()) {

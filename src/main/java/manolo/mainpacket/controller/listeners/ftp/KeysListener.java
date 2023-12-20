@@ -45,12 +45,12 @@ public class KeysListener implements KeyListener {
             try {
                 mainController.getFtpService().renameFile(currentPath, newPath, mainController.getMainClient());
                 mainController.getFtpWindow().loadDirectory(mainController.getMainClient());
-                JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Archivo renombrado exitosamente.");
+                mainController.showInfoWindow(mainController.getFtpWindow(), "Archivo renombrado exitosamente.");
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Error al renombrar el archivo: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                mainController.showErrorWindow(mainController.getFtpWindow(), "Error al renombrar el archivo: " + e.getMessage());
             }
         } else {
-            JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Ningún archivo seleccionado para renombrar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            mainController.showWarningWindow(mainController.getFtpWindow(), "Ningún archivo seleccionado para renombrar.");
         }
     }
 

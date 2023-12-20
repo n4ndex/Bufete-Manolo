@@ -1,5 +1,6 @@
 package manolo.mainpacket.controller.ftpserver;
 
+import manolo.mainpacket.controller.MainController;
 import manolo.mainpacket.view.FTPWindow;
 import org.apache.commons.net.*;
 import org.apache.commons.net.ftp.*;
@@ -8,6 +9,11 @@ import javax.swing.*;
 import java.io.*;
 
 public class FtpService {
+
+    private final MainController mainController;
+    public FtpService(MainController mainController) {
+        this.mainController = mainController;
+    }
 
     public FTPClient loginFtp(String host, int port, String username, String password) {
         FTPClient ftpClient = new FTPClient();
@@ -31,7 +37,7 @@ public class FtpService {
             ftpClient.connect(host, port);
             ftpClient.login(username, password);
         } catch (IOException e) {
-            System.err.println("Error: Servidor FTP no iniciado.");
+            mainController.showErrorWindow(mainController.getLoginView(), "Error: Servidor FTP no iniciado.");
         }
         return ftpClient;
     }
@@ -54,12 +60,11 @@ public class FtpService {
     }
 
     public void createDirectory(String newDirectoryPath, FTPClient ftpClient, FTPWindow ftpWindow) {
-        System.out.println("Directorio a crear: " + newDirectoryPath);
         try {
             if (ftpClient.makeDirectory(newDirectoryPath)) {
-                JOptionPane.showMessageDialog(ftpWindow, "Directorio creado exitosamente: " + newDirectoryPath);
+                mainController.showInfoWindow(ftpWindow, "Directorio creado exitosamente: " + newDirectoryPath);
             } else {
-                JOptionPane.showMessageDialog(ftpWindow, "Fallo al crear: " + newDirectoryPath, "Error", JOptionPane.ERROR_MESSAGE);
+                mainController.showErrorWindow(ftpWindow, "Error al crear: " + newDirectoryPath);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -67,7 +72,6 @@ public class FtpService {
     }
 
     public boolean deleteDirectory(String path, FTPClient ftpClient, FTPWindow ftpWindow) {
-        System.out.println("Directorio a eliminar: " + path);
         try {
             FTPFile[] files = ftpClient.listFiles(path);
 
@@ -84,10 +88,10 @@ public class FtpService {
             }
 
             if (ftpClient.removeDirectory(path)) {
-                JOptionPane.showMessageDialog(ftpWindow, "Directorio eliminado exitosamente: " + path);
+                mainController.showInfoWindow(ftpWindow, "Directorio eliminado exitosamente: " + path);
                 return true;
             } else {
-                JOptionPane.showMessageDialog(ftpWindow, "Fallo al eliminar: " + path, "Error", JOptionPane.ERROR_MESSAGE);
+                mainController.showErrorWindow(ftpWindow, "Error al eliminar: " + path);
                 return false;
             }
         } catch (IOException e) {

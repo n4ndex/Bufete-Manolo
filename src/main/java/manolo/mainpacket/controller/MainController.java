@@ -38,11 +38,19 @@ public class MainController {
 
     public MainController() {
         initAttributes();
-        addEventListeners();
+        addLoginEventListeners();
     }
 
-    private void showErrorWindow(Component parentComponent, String errorMessage) {
+    public void showErrorWindow(Component parentComponent, String errorMessage) {
         JOptionPane.showMessageDialog(parentComponent, errorMessage, mainViewModel.getERROR(), JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void showWarningWindow(Component parentComponent, String warningMessage) {
+        JOptionPane.showMessageDialog(parentComponent, warningMessage, mainViewModel.getWARNING(), JOptionPane.WARNING_MESSAGE);
+    }
+
+    public void showInfoWindow(Component parentComponent, String infoMessage) {
+        JOptionPane.showMessageDialog(parentComponent, infoMessage, mainViewModel.getINFO(), JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void initAttributes() {
@@ -51,14 +59,9 @@ public class MainController {
         mainViewModel = new MainViewModel();
         loginView = new Login();
         ftpServiceModel = new FtpServiceModel();
-        ftpService = new FtpService();
+        ftpService = new FtpService(this);
         mainClient = ftpService.loginFtp(ftpServiceModel.getHost(), ftpServiceModel.getPort(), ftpServiceModel.getUsernameLawyer(), ftpServiceModel.getPassword());
     }
-
-    private void addEventListeners() {
-        addLoginEventListeners();
-    }
-
 
     public void addLoginEventListeners() {
         loginView.getLabels().get(3).addMouseListener(new manolo.mainpacket.controller.listeners.login.LabelsListener(this));
@@ -161,10 +164,10 @@ public class MainController {
             mainConnection.insertNewUser(currentUser);
             addMenuEventListeners();
 
-            JOptionPane.showMessageDialog(null, "Usuario creado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            showInfoWindow(registerView, "Usuario creado correctamente.");
         } else {
             if (!userExists) {
-                showErrorWindow(registerView, "Por favor, complete todos los campos antes de registrar.");
+                showWarningWindow(registerView, "Por favor, complete todos los campos antes de registrar.");
             } else {
                 showErrorWindow(registerView, "El usuario ya existe, por favor ingrese otro o inicie sesión");
             }
@@ -174,17 +177,11 @@ public class MainController {
     }
 
     private boolean areFieldsFilled() {
-        for (JTextField textField : registerView.getTextFields()) {
-            if (textField.getText().isEmpty()) {
-                return false;
-            }
-        }
+        for (JTextField textField : registerView.getTextFields())
+            if (textField.getText().isEmpty()) return false;
 
-        for (JPasswordField passwordField : registerView.getPasswordFields()) {
-            if (new String(passwordField.getPassword()).isEmpty()) {
-                return false;
-            }
-        }
+        for (JPasswordField passwordField : registerView.getPasswordFields())
+            if (new String(passwordField.getPassword()).isEmpty()) return false;
 
         // Comprobar si se ha seleccionado un elemento en el JComboBox
         JComboBox combo = registerView.getCombos().getFirst();
