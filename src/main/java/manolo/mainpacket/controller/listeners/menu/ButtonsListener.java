@@ -3,9 +3,7 @@ package manolo.mainpacket.controller.listeners.menu;
 import manolo.mainpacket.controller.MainController;
 import manolo.mainpacket.view.Email;
 import manolo.mainpacket.model.viewmodels.EmailTexts;
-import manolo.mainpacket.model.viewmodels.Email;
 import manolo.mainpacket.view.Casos;
-import manolo.mainpacket.view.EmailTexts;
 import manolo.mainpacket.view.FTPWindow;
 
 import javax.swing.*;
@@ -35,7 +33,7 @@ public class ButtonsListener implements ActionListener {
             }
             case "EMAIL" -> {
                 mainController.setEmailModel(new EmailTexts());
-                mainController.setEmail(new Email(mainController.getEmailModel()));
+                mainController.setEmailView(new Email(mainController.getEmailModel()));
                 mainController.addEmailListeners();
             }
             case "CASOS" -> {

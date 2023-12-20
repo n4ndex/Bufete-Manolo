@@ -1,31 +1,31 @@
 package manolo.mainpacket.controller.listeners.email;
 
 import manolo.mainpacket.controller.MainController;
+import manolo.mainpacket.view.Email;
 import manolo.mainpacket.view.Menu;
-import manolo.mainpacket.view.NewEmail;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class EmailButtonsListener implements ActionListener {
 
-    MainController controller;
+    MainController mainController;
 
     public EmailButtonsListener(MainController controller){
-        this.controller=controller;
+        this.mainController =controller;
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource()== controller.getEmail().getButtons().get(0)){
-            controller.getEmail().dispose();
-            controller.setNewEmail(new NewEmail());
+        if (e.getSource()== mainController.getEmailView().getButtons().get(0)){
+            mainController.getEmailView().dispose();
+            mainController.setEmailView(new Email(mainController.getEmailModel()));
         }
 
-        if (e.getSource()== controller.getEmail().getButtons().get(1)){
-            controller.getEmail().dispose();
-            controller.setMenu(new Menu());
-            controller.getMenu().setVisible(true);
-            controller.addMenuEventListeners();
+        if (e.getSource()== mainController.getEmailView().getButtons().get(1)){
+            mainController.getEmailView().dispose();
+            mainController.setMenu(new Menu());
+            mainController.getMenu().setVisible(true);
+            mainController.addMenuEventListeners();
         }
     }
 }

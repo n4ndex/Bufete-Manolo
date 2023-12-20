@@ -4,9 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 import manolo.mainpacket.controller.databaseconnection.MainConnection;
 import manolo.mainpacket.controller.ftpserver.FtpService;
+import manolo.mainpacket.controller.listeners.email.EmailButtonsListener;
 import manolo.mainpacket.model.controllermodels.FtpServiceModel;
 import manolo.mainpacket.model.controllermodels.MainConnectionModel;
-import manolo.mainpacket.model.viewmodels.Email;
+import manolo.mainpacket.model.viewmodels.EmailTexts;
 import manolo.mainpacket.model.viewmodels.MainViewModel;
 import manolo.mainpacket.view.Menu;
 import manolo.mainpacket.view.*;
@@ -67,7 +68,7 @@ public class MainController {
         registerView.getButtons().getFirst().addActionListener(new manolo.mainpacket.controller.listeners.register.ButtonsListener(this));
     }
 
-    private void addMenuEventListeners() {
+    public void addMenuEventListeners() {
         for (int i = 0; i < menu.getButtons().size(); i++) {
             menu.getButtons().get(i).addActionListener(new manolo.mainpacket.controller.listeners.menu.ButtonsListener(this));
         }
@@ -83,6 +84,12 @@ public class MainController {
         ftpWindow.getUploadButton().addActionListener(new manolo.mainpacket.controller.listeners.ftp.ButtonsListener(this));
         ftpWindow.getRefreshButton().addActionListener(new manolo.mainpacket.controller.listeners.ftp.ButtonsListener(this));
         ftpWindow.getRenameField().addKeyListener(new manolo.mainpacket.controller.listeners.ftp.KeysListener(this));
+    }
+
+    public void addEmailListeners(){
+        for (int i=0; i<emailView.getButtons().size(); i++){
+            emailView.getButtons().get(i).addActionListener(new EmailButtonsListener(this));
+        }
     }
 
     public void submitLogin() {
