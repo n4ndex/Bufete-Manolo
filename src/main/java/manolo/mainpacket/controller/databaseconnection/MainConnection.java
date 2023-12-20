@@ -34,6 +34,7 @@ public class MainConnection {
             throw new RuntimeException(e);
         }
     }
+
     public boolean loginLawyer(String dni, String password) {
 
         String query = """

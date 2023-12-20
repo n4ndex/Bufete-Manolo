@@ -17,7 +17,6 @@ import org.apache.commons.net.ftp.FTPClient;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
 
 @Getter
 @Setter
@@ -122,17 +121,20 @@ public class MainController {
         mainConnection.openConnection(mainConnectionModel.getMYSQL_URL(), mainConnectionModel.getMYSQL_DATABASE(), mainConnectionModel.getMYSQL_USERNAME(), mainConnectionModel.getPASSWORD());
         boolean userExists = mainConnection.checkIfUserExists(registerView.getTextFields().get(0).getText());
         if (!userExists) {
+            registerView.dispose();
+            menu = new Menu();
             if (registerView.getChecks().getFirst().isSelected()) {
                 // the user is a lawyer, not a basic user
                 currentUser = new User(registerView.getTextFields().get(0).getText(), registerView.getTextFields().get(1).getText(), new String(registerView.getPasswordFields().get(0).getPassword()), "tes@test.com", new UserType("lawyer", 1));
                 mainConnection.insertNewUser(currentUser);
+                menu.setTitle("Menu " + currentUser.getName());
             } else {
                 // the user is a basic user
-                currentUser = new User(registerView.getTextFields().get(0).getText(), registerView.getTextFields().get(1).getText(), new String(registerView.getPasswordFields().get(0).getPassword()), "test@test.com", new UserType("user", 0));
+                currentUser = new User(registerView.getTextFields().get(0).getText(), registerView.getTextFields().get(1).getText(), new String(registerView.getPasswordFields().get(0).getPassword()), "test@test.com", new UserType("client", 0));
                 mainConnection.insertNewUser(currentUser);
+                menu.setTitle("Menu " + currentUser.getName());
+                menu.getButtons().get(2).setEnabled(false);
             }
-            registerView.dispose();
-            menu = new Menu();
             addMenuEventListeners();
         } else {
             showErrorWindow(registerView, "El usuario ya existe, por favor ingrese otro o inicie sesion");
