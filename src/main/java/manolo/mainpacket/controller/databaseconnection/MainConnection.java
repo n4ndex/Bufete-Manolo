@@ -2,6 +2,7 @@ package manolo.mainpacket.controller.databaseconnection;
 
 import lombok.Getter;
 import lombok.Setter;
+import manolo.mainpacket.model.User;
 
 import java.sql.*;
 
