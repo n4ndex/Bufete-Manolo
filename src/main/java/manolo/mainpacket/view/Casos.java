@@ -2,6 +2,7 @@ package manolo.mainpacket.view;
 
 import lombok.Getter;
 import manolo.mainpacket.controller.MainController;
+import manolo.mainpacket.model.viewmodels.CasosTexts;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,14 +15,32 @@ public class Casos extends JFrame {
     private JLabel labelTitle;
     private JComboBox comboClient;
     private JTextField textFieldCaso;
-    private JButton crearButton;
+    private JButton buttonCrear;
     private JLabel labelClient;
     private JLabel labelCase;
     private MainController mainController;
+    private CasosTexts model = new CasosTexts();
 
     public Casos(MainController mainController) {
         this.mainController = mainController;
         initUI();
+        initComponents();
+    }
+
+    private void initComponents() {
+        setLabelTexts();
+        setButtonTexts();
+    }
+
+    private void setButtonTexts() {
+        buttonCrear.setText(model.getTextsList().get(3));
+    }
+
+    private void setLabelTexts() {
+        labelTitle.setText(model.getTextsList().get(0));
+        labelClient.setText(model.getTextsList().get(1));
+        labelCase.setText(model.getTextsList().get(2));
+
     }
 
     private void initUI() {
@@ -30,7 +49,7 @@ public class Casos extends JFrame {
         int height = pantalla.height;
         int width = pantalla.width;
 
-        this.setTitle("Casos del Bufete");
+        this.setTitle(model.getTitle());
         this.setSize(width / 3, height / 3);
         this.setLocationRelativeTo(null);
         this.setResizable(false);

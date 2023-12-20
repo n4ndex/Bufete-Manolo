@@ -97,15 +97,25 @@ public class MainController {
     }
 
     public void submitLogin() {
-        boolean ableToLogin = true;
-        // TODO check the login
-        if (ableToLogin) {
+        mainConnection.openConnection(mainConnectionModel.getMYSQL_URL(), mainConnectionModel.getMYSQL_DATABASE(), mainConnectionModel.getMYSQL_USERNAME(), mainConnectionModel.getPASSWORD());
+        boolean loginLawyer = mainConnection.loginLawyer(loginView.getTextFields().get(0).getText(), loginView.getPasswordFields().get(0).getText());
+        boolean loginClient = mainConnection.loginClient(loginView.getTextFields().get(0).getText(), loginView.getPasswordFields().get(0).getText());
+        if (loginLawyer) {
             loginView.dispose();
             menu = new Menu();
+            menu.setTitle(menu.getModel().getTitleLawyer());
+            menu.getButtons().get(2).setEnabled(true);
+            addMenuEventListeners();
+        } else if (loginClient) {
+            loginView.dispose();
+            menu = new Menu();
+            menu.setTitle(menu.getModel().getTitleClient());
+            menu.getButtons().get(2).setEnabled(false);
             addMenuEventListeners();
         } else {
-            showErrorWindow(loginView, "Error al iniciar sesion");
+            showErrorWindow(loginView, "Error al iniciar sesión. DNI o contraseña incorrecto.");
         }
+        mainConnection.closeConnection();
     }
 
     public void submitRegister() {

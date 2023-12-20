@@ -2,7 +2,6 @@ package manolo.mainpacket.controller.databaseconnection;
 
 import lombok.Getter;
 import lombok.Setter;
-import manolo.mainpacket.model.User;
 
 import java.sql.*;
 
@@ -32,6 +31,43 @@ public class MainConnection {
             connection.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+    public boolean loginLawyer(String dni, String password) {
+
+        String query = """
+                SELECT * FROM users 
+                WHERE dni = ? AND password = ? AND user_type_id = ?""";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, dni);
+            preparedStatement.setString(2, password);
+            preparedStatement.setInt(3, 1);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                return resultSet.next();
+            }
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    public boolean loginClient(String dni, String password) {
+
+        String query = """
+                SELECT * FROM users 
+                WHERE dni = ? AND password = ? AND user_type_id = ?""";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, dni);
+            preparedStatement.setString(2, password);
+            preparedStatement.setInt(3, 2);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                return resultSet.next();
+            }
+        } catch (SQLException e) {
+            return false;
         }
     }
 

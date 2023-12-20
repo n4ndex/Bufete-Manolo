@@ -8,7 +8,10 @@ import java.util.ArrayList;
 public class MenuTexts {
     ArrayList<String> textsButtonList = new ArrayList(); // Textos del Menu
 
-    String title = "Menu Bufete";
+    String titleLawyer = "Menu Bufete - Abogado";
+
+    String titleClient = "Menu Bufete - Cliente";
+
     public MenuTexts() {
         fillTexts();
     }

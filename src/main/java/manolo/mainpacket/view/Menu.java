@@ -19,7 +19,6 @@ public class Menu extends JFrame {
     public Menu() {
         createButtons();
         addButtonsToFrame();
-        buttons.get(2).setEnabled(false);
         settings();
     }
 
@@ -72,7 +71,6 @@ public class Menu extends JFrame {
         int height = pantalla.height;
         int width = pantalla.width;
 
-        this.setTitle(model.getTitle());
         this.setSize(width/2, height/3);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
