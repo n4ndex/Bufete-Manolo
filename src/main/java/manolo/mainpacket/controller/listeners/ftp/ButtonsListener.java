@@ -93,7 +93,7 @@ public class ButtonsListener implements ActionListener {
             } else {
                 JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Selecciona un archivo para eliminar.");
             }
-        } else if (e.getSource() == mainController.getFtpWindow().getDownloadButton()) {
+        } else if (e.getSource() == mainController.getFtpWindow().getDownloadButton()) {    // download file button
             DefaultMutableTreeNode selectedNode = mainController.getFtpWindow().getSelectedNode();
             if (selectedNode != null) {
                 String fileName = mainController.getFtpWindow().getSelectedDirectoryPath(selectedNode);
@@ -126,7 +126,7 @@ public class ButtonsListener implements ActionListener {
             } else {
                 JOptionPane.showMessageDialog(mainController.getFtpWindow(), "Ningún archivo seleccionado para descargar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             }
-        } else if (e.getSource() == mainController.getFtpWindow().getUploadButton()) {
+        } else if (e.getSource() == mainController.getFtpWindow().getUploadButton()) {  // upload file button
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setDialogTitle("Selecciona un archivo a subir");
 
