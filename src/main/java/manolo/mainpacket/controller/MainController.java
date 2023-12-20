@@ -118,7 +118,8 @@ public class MainController {
                 mainConnection.insertNewUser(currentUser);
             } else {
                 // the user is a basic user
-                showErrorWindow(registerView, "No implementa nuevo usuario");
+                currentUser = new User(registerView.getTextFields().get(0).getText(), registerView.getTextFields().get(1).getText(), new String(registerView.getPasswordFields().get(0).getPassword()), "test@test.com", new UserType("user", 0));
+                mainConnection.insertNewUser(currentUser);
             }
             registerView.dispose();
             menu = new Menu();
