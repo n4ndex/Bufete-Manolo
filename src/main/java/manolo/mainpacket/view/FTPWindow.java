@@ -2,6 +2,7 @@ package manolo.mainpacket.view;
 
 import lombok.Getter;
 import lombok.Setter;
+import manolo.mainpacket.controller.MainController;
 import manolo.mainpacket.controller.ftpserver.FtpService;
 import manolo.mainpacket.model.viewmodels.FTPTexts;
 import org.apache.commons.net.ftp.FTPClient;
@@ -35,9 +36,9 @@ public class FTPWindow extends JFrame {
     private FtpService ftpService;
     private FTPTexts model = new FTPTexts();
 
-    public FTPWindow(FTPClient ftpClient, FtpService ftpService) {
-        this.ftpClient = ftpClient;
-        this.ftpService = ftpService;
+    public FTPWindow(MainController mainController) {
+        this.ftpClient = mainController.getMainClient();
+        this.ftpService = mainController.getFtpService();
         initComponents();
         initUI();
     }

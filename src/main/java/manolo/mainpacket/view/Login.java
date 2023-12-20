@@ -53,21 +53,16 @@ public class Login extends JFrame {
     }
 
     private void combinePanels() {
-        // Configurar diseño del panel 1 (GridLayout)
-        panels.get(1).setLayout(new BoxLayout(panels.get(1), BoxLayout.Y_AXIS));
-        // Configurar diseño del panel final (FlowLayout centrado)
+        panels.get(1).setLayout(new GridLayout(0, 1, 5, 5));
+
         panels.get(2).setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        // Añadir el panel con GridLayout al panel final
         panels.get(2).add(panels.get(1));
 
-        // Añadir el panel final al JFrame
         this.add(panels.get(2), BorderLayout.CENTER);
 
-        // Configurar diseño del panel 0 (centrado)
         panels.get(0).setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        // Añadir el panel del título al JFrame en la parte superior
         this.add(panels.get(0), BorderLayout.NORTH);
     }
 
@@ -139,7 +134,7 @@ public class Login extends JFrame {
         Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
         int height = pantalla.height;
         int width = pantalla.width;
-        this.setSize(width/3, height/4);
+        this.setSize(width/3, height - 450);
         this.setTitle(model.getTitle());
         this.setLocationRelativeTo(null);
         this.setResizable(true);

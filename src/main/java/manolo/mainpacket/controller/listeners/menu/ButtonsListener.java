@@ -5,13 +5,14 @@ import manolo.mainpacket.view.Email;
 import manolo.mainpacket.model.viewmodels.EmailTexts;
 import manolo.mainpacket.view.Casos;
 import manolo.mainpacket.view.FTPWindow;
+import manolo.mainpacket.view.Login;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ButtonsListener implements ActionListener {
-    private MainController mainController;
+    private final MainController mainController;
 
     public ButtonsListener(MainController mainController) {
         this.mainController = mainController;
@@ -27,7 +28,7 @@ public class ButtonsListener implements ActionListener {
         mainController.getMenu().dispose();
         switch (((JButton) e.getSource()).getName()) {
             case "FTP" -> {
-                mainController.setFtpWindow(new FTPWindow(mainController.getMainClient(), mainController.getFtpService()));
+                mainController.setFtpWindow(new FTPWindow(mainController));
                 mainController.getFtpWindow().getServerLabel().setText(mainController.getFtpWindow().getModel().getTextsList().get(2) + mainController.getMainClient().getLocalAddress());
                 mainController.addFtpEventListeners();
             }
@@ -38,6 +39,10 @@ public class ButtonsListener implements ActionListener {
             }
             case "CASOS" -> {
                 mainController.setCasosView(new Casos(mainController));
+            }
+            case "LOG OUT" -> {
+                mainController.setLoginView(new Login());
+                mainController.addLoginEventListeners();
             }
         }
     }

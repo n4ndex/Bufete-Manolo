@@ -2,6 +2,7 @@ package manolo.mainpacket.view;
 
 import lombok.Getter;
 import lombok.Setter;
+import manolo.mainpacket.controller.MainController;
 import manolo.mainpacket.model.viewmodels.RegisterTexts;
 
 import javax.swing.*;
@@ -12,22 +13,26 @@ import java.util.ArrayList;
 @Setter
 public class Register extends JFrame {
 
-    int amountPanels = 3;
-    int amountLabels = 5;
-    int amountTextFields = 4;
-    int amountPasswordFields = 1;
-    int amountButtons = 1;
-    int amountCheckBox = 1;
+    private int amountPanels = 3;
+    private int amountLabels = 5;
+    private int amountTextFields = 3;
+    private int amountPasswordFields = 1;
+    private int amountButtons = 1;
+    private int amountCheckBox = 1;
+    private int amountCombos = 1;
 
-    ArrayList<JPanel> panels = new ArrayList<>();
-    ArrayList<JLabel> labels = new ArrayList<>();
-    ArrayList<JTextField> textFields = new ArrayList<>();
-    ArrayList<JPasswordField> passwordFields = new ArrayList<>();
-    ArrayList<JButton> buttons = new ArrayList<>();
-    ArrayList<JCheckBox> checks = new ArrayList<>();
-    RegisterTexts model = new RegisterTexts();
+    private ArrayList<JPanel> panels = new ArrayList<>();
+    private ArrayList<JLabel> labels = new ArrayList<>();
+    private ArrayList<JTextField> textFields = new ArrayList<>();
+    private ArrayList<JPasswordField> passwordFields = new ArrayList<>();
+    private ArrayList<JButton> buttons = new ArrayList<>();
+    private ArrayList<JCheckBox> checks = new ArrayList<>();
+    private ArrayList<JComboBox> combos = new ArrayList<>();
+    private RegisterTexts model = new RegisterTexts();
+    private MainController mainController;
 
-    public Register() {
+    public Register(MainController mainController) {
+        this.mainController = mainController;
         // Creación de elementos de la ventana
         createPanels(amountPanels);
         createLabels(amountLabels);
@@ -81,6 +86,7 @@ public class Register extends JFrame {
             } else {
                 addPassword();
                 addCheckBox();
+                addCombo();
                 addRegisterLink();
             }
         }

@@ -11,12 +11,14 @@ public class User {
     private String password;
     private String email;
     private UserType userType;
+    private int id_lawyer;
 
-    public User(String dni, String name, String password, String email, UserType userType) {
+    public User(String dni, String name, String password, String email, UserType userType, int id_lawyer) {
         this.dni = dni;
         this.name = name;
         this.password = password;
         this.email = email;
         this.userType = userType;
+        this.id_lawyer = id_lawyer;
     }
 }

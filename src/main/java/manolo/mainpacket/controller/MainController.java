@@ -52,8 +52,7 @@ public class MainController {
         loginView = new Login();
         ftpServiceModel = new FtpServiceModel();
         ftpService = new FtpService();
-        // TODO traer de modelo
-        mainClient = ftpService.loginFtp("127.0.0.1", 21, "root", "");
+        mainClient = ftpService.loginFtp(ftpServiceModel.getHost(), ftpServiceModel.getPort(), ftpServiceModel.getUsernameLawyer(), ftpServiceModel.getPassword());
     }
 
     private void addEventListeners() {
@@ -67,7 +66,7 @@ public class MainController {
     }
 
     public void addRegisterEventListeners() {
-        registerView.getLabels().get(4).addMouseListener(new manolo.mainpacket.controller.listeners.register.LabelsListener(this));
+        registerView.getLabels().get(5).addMouseListener(new manolo.mainpacket.controller.listeners.register.LabelsListener(this));
         registerView.getButtons().getFirst().addActionListener(new manolo.mainpacket.controller.listeners.register.ButtonsListener(this));
     }
 
@@ -98,20 +97,19 @@ public class MainController {
     public void submitLogin() {
         mainConnection.openConnection(mainConnectionModel.getMYSQL_URL(), mainConnectionModel.getMYSQL_DATABASE(), mainConnectionModel.getMYSQL_USERNAME(), mainConnectionModel.getPASSWORD());
 
-        String dni = loginView.getTextFields().get(0).getText();
-        String password = loginView.getPasswordFields().get(0).getText();
+        String dni = loginView.getTextFields().getFirst().getText();
+        String password = loginView.getPasswordFields().getFirst().getText();
         User userData = mainConnection.getUserData(dni, password);
 
         if (userData != null) {
             currentUser = userData;
             loginView.dispose();
             menu = new Menu();
+            menu.setTitle("¡Bienvenido " + currentUser.getName() + "! - " + currentUser.getUserType().getType().toUpperCase());
 
-            if (currentUser.getUserType().getType().equalsIgnoreCase("abogado")) {
-                menu.setTitle("¡Bienvenido " + currentUser.getName() + "! - ABOGADO");
+            if (currentUser.getUserType().getType().equalsIgnoreCase("lawyer")) {
                 menu.getButtons().get(2).setEnabled(true);
             } else {
-                menu.setTitle("¡Bienvenido " + currentUser.getName() + "! - CLIENTE");
                 menu.getButtons().get(2).setEnabled(false);
             }
 
@@ -124,27 +122,75 @@ public class MainController {
     }
 
     public void submitRegister() {
-        mainConnection.openConnection(mainConnectionModel.getMYSQL_URL(), mainConnectionModel.getMYSQL_DATABASE(), mainConnectionModel.getMYSQL_USERNAME(), mainConnectionModel.getPASSWORD());
-        boolean userExists = mainConnection.checkIfUserExists(registerView.getTextFields().get(0).getText());
-        if (!userExists) {
+        mainConnection.openConnection(
+                mainConnectionModel.getMYSQL_URL(),
+                mainConnectionModel.getMYSQL_DATABASE(),
+                mainConnectionModel.getMYSQL_USERNAME(),
+                mainConnectionModel.getPASSWORD()
+        );
+
+        String username = registerView.getTextFields().get(0).getText();
+        boolean userExists = mainConnection.checkIfUserExists(username);
+
+        if (areFieldsFilled() && !userExists) {
             registerView.dispose();
             menu = new Menu();
-            if (registerView.getChecks().getFirst().isSelected()) {
-                // the user is a lawyer, not a basic user
-                currentUser = new User(registerView.getTextFields().get(0).getText(), registerView.getTextFields().get(1).getText(), new String(registerView.getPasswordFields().get(0).getPassword()), "tes@test.com", new UserType("lawyer", 1));
-                mainConnection.insertNewUser(currentUser);
-                menu.setTitle("Menu " + currentUser.getName());
+
+            String name = registerView.getTextFields().get(1).getText();
+            String password = new String(registerView.getPasswordFields().getFirst().getPassword());
+            String email = registerView.getTextFields().get(2).getText();
+
+            String selectedLawyerName = registerView.getCombos().getFirst().getSelectedItem().toString();
+            int idLawyer = mainConnection.getLawyerIdFromName(selectedLawyerName);
+
+            boolean isLawyer = registerView.getChecks().getFirst().isSelected();
+            UserType userType;
+
+            if (isLawyer) {
+                userType = new UserType(registerView.getModel().getUser_types().getFirst(), 0);
+                menu.getButtons().get(2).setEnabled(true);
+                mainClient = ftpService.loginFtp(ftpServiceModel.getHost(), ftpServiceModel.getPort(), ftpServiceModel.getUsernameLawyer(), ftpServiceModel.getPassword());
             } else {
-                // the user is a basic user
-                currentUser = new User(registerView.getTextFields().get(0).getText(), registerView.getTextFields().get(1).getText(), new String(registerView.getPasswordFields().get(0).getPassword()), "test@test.com", new UserType("user", 0));
-                mainConnection.insertNewUser(currentUser);
-                menu.setTitle("Menu " + currentUser.getName());
+                userType = new UserType(registerView.getModel().getUser_types().get(1), 1);
                 menu.getButtons().get(2).setEnabled(false);
+                mainClient = ftpService.loginFtp(ftpServiceModel.getHost(), ftpServiceModel.getPort(), ftpServiceModel.getUsernameClient(), ftpServiceModel.getPassword());
             }
+
+            currentUser = new User(username, name, password, email, userType, idLawyer);
+            menu.setTitle("¡Bienvenido " + currentUser.getName() + "! - " + currentUser.getUserType().getType().toUpperCase());
+            mainConnection.insertNewUser(currentUser);
             addMenuEventListeners();
+
+            JOptionPane.showMessageDialog(null, "Usuario creado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            showErrorWindow(registerView, "El usuario ya existe, por favor ingrese otro o inicie sesion");
+            if (!userExists) {
+                showErrorWindow(registerView, "Por favor, complete todos los campos antes de registrar.");
+            } else {
+                showErrorWindow(registerView, "El usuario ya existe, por favor ingrese otro o inicie sesión");
+            }
         }
+
         mainConnection.closeConnection();
     }
+
+    private boolean areFieldsFilled() {
+        for (JTextField textField : registerView.getTextFields()) {
+            if (textField.getText().isEmpty()) {
+                return false;
+            }
+        }
+
+        for (JPasswordField passwordField : registerView.getPasswordFields()) {
+            if (new String(passwordField.getPassword()).isEmpty()) {
+                return false;
+            }
+        }
+
+        // Comprobar si se ha seleccionado un elemento en el JComboBox
+        JComboBox combo = registerView.getCombos().getFirst();
+        return combo.getSelectedIndex() != -1;
+    }
+
+
+
 }
