@@ -130,7 +130,7 @@ public class MainController {
                 menu.setTitle("Menu " + currentUser.getName());
             } else {
                 // the user is a basic user
-                currentUser = new User(registerView.getTextFields().get(0).getText(), registerView.getTextFields().get(1).getText(), new String(registerView.getPasswordFields().get(0).getPassword()), "test@test.com", new UserType("client", 0));
+                currentUser = new User(registerView.getTextFields().get(0).getText(), registerView.getTextFields().get(1).getText(), new String(registerView.getPasswordFields().get(0).getPassword()), "test@test.com", new UserType("user", 0));
                 mainConnection.insertNewUser(currentUser);
                 menu.setTitle("Menu " + currentUser.getName());
                 menu.getButtons().get(2).setEnabled(false);
