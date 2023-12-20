@@ -13,9 +13,10 @@ public class RegisterTexts {
         textsList.add("REGISTER");    // 0
         textsList.add("DNI");    // 1
         textsList.add("Nombre");      // 2
-        textsList.add("Contraseña");  // 3
-        textsList.add("¿Ya tienes cuenta? Inicia sesión aquí"); // 4
-        textsList.add("¿Eres abogado?");    // 5
+        textsList.add("Correo electrónico");    // 3
+        textsList.add("Contraseña");  // 4
+        textsList.add("¿Ya tienes cuenta? Inicia sesión aquí"); // 5
+        textsList.add("¿Eres abogado?");    // 6
         textsList.add("Registrarse");     // 0
     }
 

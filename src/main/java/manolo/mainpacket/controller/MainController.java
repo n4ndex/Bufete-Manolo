@@ -99,6 +99,7 @@ public class MainController {
         mainConnection.openConnection(mainConnectionModel.getMYSQL_URL(), mainConnectionModel.getMYSQL_DATABASE(), mainConnectionModel.getMYSQL_USERNAME(), mainConnectionModel.getPASSWORD());
         boolean loginLawyer = mainConnection.loginLawyer(loginView.getTextFields().get(0).getText(), loginView.getPasswordFields().get(0).getText());
         boolean loginClient = mainConnection.loginClient(loginView.getTextFields().get(0).getText(), loginView.getPasswordFields().get(0).getText());
+
         if (loginLawyer) {
             loginView.dispose();
             menu = new Menu();

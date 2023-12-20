@@ -13,8 +13,8 @@ import java.util.ArrayList;
 public class Register extends JFrame {
 
     int amountPanels = 3;
-    int amountLabels = 4;
-    int amountTextFields = 3;
+    int amountLabels = 5;
+    int amountTextFields = 4;
     int amountPasswordFields = 1;
     int amountButtons = 1;
     int amountCheckBox = 1;
@@ -87,13 +87,13 @@ public class Register extends JFrame {
     }
 
     private void addPassword() {
-        panels.get(1).add(new JLabel("Contraseña:"));
+        panels.get(1).add(new JLabel(model.getTextsList().get(4)));
         panels.get(1).add(passwordFields.get(0));
 
     }
 
     private void addRegisterLink() {
-        JLabel loginLabel = new JLabel(model.getTextsList().get(4));
+        JLabel loginLabel = new JLabel(model.getTextsList().get(5));
         loginLabel.setForeground(Color.BLUE);
         loginLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         labels.add(loginLabel);
@@ -141,14 +141,14 @@ public class Register extends JFrame {
 
     private void createCheckBox(int max) {
         for (int i = 0; i < max; i++) {
-            JCheckBox checkBox = new JCheckBox(model.getTextsList().get(5));
+            JCheckBox checkBox = new JCheckBox(model.getTextsList().get(6));
             checks.add(checkBox);
         }
     }
 
     private void settings() {
         Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
-        int height = pantalla.height;
+        int height = pantalla.height + 200;
         int width = pantalla.width;
         this.setSize(width / 3, height / 3);
         this.setTitle("Register Bufete");
