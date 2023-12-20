@@ -11,7 +11,7 @@ public class RegisterTexts {
 
     private void fillTexts() {
         textsList.add("REGISTER");    // 0
-        textsList.add("NickName");    // 1
+        textsList.add("DNI");    // 1
         textsList.add("Nombre");      // 2
         textsList.add("Contraseña");  // 3
         textsList.add("¿Ya tienes cuenta? Inicia sesión aquí"); // 4

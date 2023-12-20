@@ -5,6 +5,8 @@ import lombok.Setter;
 import manolo.mainpacket.controller.databaseconnection.MainConnection;
 import manolo.mainpacket.controller.ftpserver.FtpService;
 import manolo.mainpacket.controller.listeners.email.EmailButtonsListener;
+import manolo.mainpacket.model.User;
+import manolo.mainpacket.model.UserType;
 import manolo.mainpacket.model.controllermodels.FtpServiceModel;
 import manolo.mainpacket.model.controllermodels.MainConnectionModel;
 import manolo.mainpacket.model.viewmodels.EmailTexts;
@@ -15,10 +17,12 @@ import org.apache.commons.net.ftp.FTPClient;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 
 @Getter
 @Setter
 public class MainController {
+    private User currentUser;
     MainConnectionModel mainConnectionModel;
     MainConnection mainConnection;
     MainViewModel mainViewModel;
@@ -44,7 +48,7 @@ public class MainController {
 
     private void initAttributes() {
         mainConnectionModel = new MainConnectionModel();
-        // mainConnection = new MainConnection(mainConnectionModel.getDRIVER(), mainConnectionModel.getMYSQL_URL(), mainConnectionModel.getMYSQL_DATABASE(), mainConnectionModel.getMYSQL_USERNAME(), mainConnectionModel.getPASSWORD());
+        mainConnection = new MainConnection(mainConnectionModel.getDRIVER());
         mainViewModel = new MainViewModel();
         loginView = new Login();
         ftpServiceModel = new FtpServiceModel();
@@ -86,8 +90,8 @@ public class MainController {
         ftpWindow.getRenameField().addKeyListener(new manolo.mainpacket.controller.listeners.ftp.KeysListener(this));
     }
 
-    public void addEmailListeners(){
-        for (int i=0; i<emailView.getButtons().size(); i++){
+    public void addEmailListeners() {
+        for (int i = 0; i < emailView.getButtons().size(); i++) {
             emailView.getButtons().get(i).addActionListener(new EmailButtonsListener(this));
         }
     }
@@ -105,14 +109,23 @@ public class MainController {
     }
 
     public void submitRegister() {
-        boolean ableToRegister = true;
-        // TODO check the register
-        if (ableToRegister) {
+        mainConnection.openConnection(mainConnectionModel.getMYSQL_URL(), mainConnectionModel.getMYSQL_DATABASE(), mainConnectionModel.getMYSQL_USERNAME(), mainConnectionModel.getPASSWORD());
+        boolean userExists = mainConnection.checkIfUserExists(registerView.getTextFields().get(0).getText());
+        if (!userExists) {
+            if (registerView.getChecks().getFirst().isSelected()) {
+                // the user is a lawyer, not a basic user
+                currentUser = new User(registerView.getTextFields().get(0).getText(), registerView.getTextFields().get(1).getText(), new String(registerView.getPasswordFields().get(0).getPassword()), "tes@test.com", new UserType("lawyer", 1));
+                mainConnection.insertNewUser(currentUser);
+            } else {
+                // the user is a basic user
+                showErrorWindow(registerView, "No implementa nuevo usuario");
+            }
             registerView.dispose();
             menu = new Menu();
             addMenuEventListeners();
         } else {
-            showErrorWindow(registerView, "Error al registrarse");
+            showErrorWindow(registerView, "El usuario ya existe, por favor ingrese otro o inicie sesion");
         }
+        mainConnection.closeConnection();
     }
 }

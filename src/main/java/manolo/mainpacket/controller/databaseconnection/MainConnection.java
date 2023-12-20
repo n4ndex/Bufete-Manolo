@@ -2,11 +2,9 @@ package manolo.mainpacket.controller.databaseconnection;
 
 import lombok.Getter;
 import lombok.Setter;
+import manolo.mainpacket.model.User;
 
-import java.sql.Connection;
-import java.sql.Driver;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 @Getter
 @Setter
@@ -35,5 +33,67 @@ public class MainConnection {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public boolean checkIfUserExists(String username) {
+        boolean exists = false;
+        try {
+            String query = """
+                    SELECT *
+                    FROM users
+                    WHERE dni = ?;
+                    """;
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                exists = true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return exists;
+    }
+
+    public int insertNewUser(User currentUser) {
+        int rowsAffected = 0;
+        String query = """
+                INSERT INTO users (dni, name, password, email, user_type_id)
+                VALUES (?, ?, ?, ?, ?)
+                ;
+                """;
+        int user_type_id = getUserTypeIdFromTypeName(currentUser.getUserType().getType());
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, currentUser.getDni());
+            preparedStatement.setString(2, currentUser.getName());
+            preparedStatement.setString(3, currentUser.getPassword());
+            preparedStatement.setString(4, currentUser.getEmail());
+            preparedStatement.setInt(5, user_type_id);
+            rowsAffected = preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return rowsAffected;
+    }
+
+    private int getUserTypeIdFromTypeName(String type) {
+        int user_type_id = 0;
+        try {
+            String query = """
+                    SELECT id_type
+                    FROM user_types
+                    WHERE type_name = ?;
+                    """;
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, type);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                user_type_id = resultSet.getInt("id_type");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return user_type_id;
     }
 }
