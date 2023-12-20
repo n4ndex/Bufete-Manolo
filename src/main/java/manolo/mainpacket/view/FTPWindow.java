@@ -3,18 +3,15 @@ package manolo.mainpacket.view;
 import lombok.Getter;
 import lombok.Setter;
 import manolo.mainpacket.controller.ftpserver.FtpService;
+import manolo.mainpacket.model.viewmodels.FTPTexts;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 import java.awt.*;
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 
 @Getter
 @Setter
@@ -26,13 +23,17 @@ public class FTPWindow extends JFrame {
     private JButton downloadButton;
     private JButton exitButton;
     private JButton deleteDirButton;
+    private JButton refreshButton;
     private JTree treeDirectories;
     private JPanel mainPanel;
     private JLabel rutaLabel;
     private JLabel DNILabel;
+    private JLabel serverLabel;
+    private JLabel renameLabel;
     private String directory = "";
     private FTPClient ftpClient;
     private FtpService ftpService;
+    private FTPTexts model = new FTPTexts();
 
     public FTPWindow(FTPClient ftpClient, FtpService ftpService) {
         this.ftpClient = ftpClient;
@@ -43,138 +44,104 @@ public class FTPWindow extends JFrame {
 
     private void initComponents() {
         loadDirectory(ftpClient);
+        setLabelTexts();
+        setButtonTexts();
+    }
+
+    private void setLabelTexts() {
+        DNILabel.setText(model.getTextsList().get(0));
+        rutaLabel.setText(model.getTextsList().get(1));
+        serverLabel.setText(model.getTextsList().get(2));
+        renameLabel.setText(model.getTextsList().get(10));
+    }
+
+    private void setButtonTexts() {
+        createDirButton.setText(model.getTextsList().get(3));
+        deleteDirButton.setText(model.getTextsList().get(4));
+        uploadButton.setText(model.getTextsList().get(5));
+        deleteFileButton.setText(model.getTextsList().get(6));
+        downloadButton.setText(model.getTextsList().get(7));
+        exitButton.setText(model.getTextsList().get(8));
+        refreshButton.setText(model.getTextsList().get(9));
     }
 
     private void initUI() {
-
         this.setContentPane(mainPanel);
         Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
-        int height = (int) (pantalla.getHeight() + 200);
-        int width = pantalla.width;
+        int height = (int) (pantalla.getHeight() + 300);
+        int width = (int) (pantalla.width + 200);
 
-        this.setTitle("Gestión de Ficheros del Bufete");
+        this.setTitle(model.getTitle());
         this.setSize(width / 2, height / 3);
         this.setLocationRelativeTo(null);
-        this.setResizable(false);
+        this.setResizable(true);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setVisible(true);
     }
 
+    public DefaultMutableTreeNode getSelectedNode() {
+        TreePath selectedPath = treeDirectories.getSelectionPath();
+        if (selectedPath != null) {
+            return (DefaultMutableTreeNode) selectedPath.getLastPathComponent();
+        }
+        return null;
+    }
+
+    public String getSelectedDirectoryPath(DefaultMutableTreeNode selectedNode) {
+        while (selectedNode != null) {
+            if (selectedNode.getUserObject() != null) {
+                return selectedNode.getUserObject().toString();
+            }
+            selectedNode = (DefaultMutableTreeNode) selectedNode.getParent();
+        }
+
+        return "";
+    }
+
+
     private DefaultMutableTreeNode createNodes(String path) {
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(path);
         FTPFile[] ftpFiles = ftpService.listFiles(path, ftpClient);
+
         if (ftpFiles != null) {
             for (FTPFile ftpFile : ftpFiles) {
-                rootNode.add(createNodes(path + "/" + ftpFile.getName()));
+                if (ftpFile.isDirectory()) {
+                    rootNode.add(createNodes(path + "/" + ftpFile.getName()));
+                } else {
+                    rootNode.add(new DefaultMutableTreeNode(ftpFile.getName()));
+                }
             }
         }
+
         return rootNode;
     }
 
     public void loadDirectory(FTPClient ftpClient) {
         try {
             directory = ftpClient.printWorkingDirectory();
-
-            DefaultMutableTreeNode rootNode = createNodes(directory);
-
-            treeDirectories.setModel(new DefaultTreeModel(rootNode));
-
-            rutaLabel.setText("Ruta actual: " + directory);
+            loadDirectoryInternal(ftpClient, directory);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public String getFullPath(DefaultMutableTreeNode node) {
-        StringBuilder fullPath = new StringBuilder();
-        TreeNode[] path = node.getPath();
-
-        for (int i = 1; i < path.length; i++) {
-            fullPath.append(path[i].toString());
-            if (i < path.length - 1) {
-                fullPath.append(File.separator);
-            }
-        }
-        return fullPath.toString();
-    }
-
-
-    public boolean deleteDirectory(File directoryToDelete) {
-        int result = JOptionPane.showConfirmDialog(
-                null,
-                "¿Estás seguro de que deseas eliminar la carpeta y su contenido?",
-                "Confirmar eliminación de " + directoryToDelete,
-                JOptionPane.YES_NO_OPTION
-        );
-
-        if (result == JOptionPane.YES_OPTION) {
-            if (directoryToDelete.isDirectory()) {
-                File[] files = directoryToDelete.listFiles();
-                if (files != null) {
-                    for (File file : files) {
-                        if (file.isDirectory()) {
-                            deleteDirectory(file);
-                        } else {
-                            file.delete();
-                        }
-                    }
-                }
-            }
-            return directoryToDelete.delete();
-        }
-
-        return false;
-    }
-
-    public boolean deleteFile(File fileToDelete) {
-        int result = JOptionPane.showConfirmDialog(
-                null,
-                "¿Estás seguro de que deseas eliminar el archivo?",
-                "Confirmar eliminación",
-                JOptionPane.YES_NO_OPTION
-        );
-
-        if (result == JOptionPane.YES_OPTION) {
-            return fileToDelete.delete();
-        }
-
-        return false;
-    }
-
-    public void save(File selectedFile) {
-        File downloadsFolder = new File(System.getProperty("user.home"), "Downloads");
-        Path destinationPath = downloadsFolder.toPath().resolve(selectedFile.getName());
-
+    public void loadDirectory(FTPClient ftpClient, String path) {
         try {
-            Files.copy(selectedFile.toPath(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
-            JOptionPane.showMessageDialog(this, "Descarga completada en: " + destinationPath.toString());
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error al guardar el archivo en Descargas.");
+            loadDirectoryInternal(ftpClient, path);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    public void saveAs(File selectedFile) {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Guardar Archivo");
-        fileChooser.setSelectedFile(new File(selectedFile.getName()));
+    private void loadDirectoryInternal(FTPClient ftpClient, String path) {
+        try {
+            DefaultMutableTreeNode rootNode = createNodes(path);
 
-        int userSelection = fileChooser.showSaveDialog(this);
+            treeDirectories.setModel(new DefaultTreeModel(rootNode));
 
-        if (userSelection == JFileChooser.APPROVE_OPTION) {
-            File destinationFile = fileChooser.getSelectedFile();
-
-            try {
-                Files.copy(selectedFile.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                JOptionPane.showMessageDialog(this, "Descarga completada en: " + destinationFile.getAbsolutePath());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Error al guardar el archivo.");
-            }
+            rutaLabel.setText("Ruta actual: " + path);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    }
-
-
-    public void uploadFile(File selectedFile) {
-
     }
 }

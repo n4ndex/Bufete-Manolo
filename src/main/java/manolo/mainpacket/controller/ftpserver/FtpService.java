@@ -1,16 +1,11 @@
 package manolo.mainpacket.controller.ftpserver;
 
 import manolo.mainpacket.view.FTPWindow;
-import org.apache.commons.net.ProtocolCommandEvent;
-import org.apache.commons.net.ProtocolCommandListener;
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPFile;
+import org.apache.commons.net.*;
+import org.apache.commons.net.ftp.*;
 
 import javax.swing.*;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 
 public class FtpService {
 
@@ -36,27 +31,9 @@ public class FtpService {
             ftpClient.connect(host, port);
             ftpClient.login(username, password);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("Error: Servidor FTP no iniciado.");
         }
         return ftpClient;
-    }
-
-    public void printFtpClientInfo(FTPClient ftpClient) {
-        System.out.println();
-        try {
-            System.out.printf("[printFtpClientInfo][%d] Get system type : %s %n", System.currentTimeMillis(), ftpClient.getSystemType());
-            System.out.printf("[printFtpClientInfo][%d] Get reply code : %d %n", System.currentTimeMillis(), ftpClient.getReplyCode());
-            System.out.printf("[printFtpClientInfo][%d] Get reply string : %s %n", System.currentTimeMillis(), ftpClient.getReplyString());
-            System.out.printf("[printFtpClientInfo][%d] Get remote address : %s %n", System.currentTimeMillis(), ftpClient.getRemoteAddress());
-            System.out.printf("[printFtpClientInfo][%d] Get remote port : %d %n", System.currentTimeMillis(), ftpClient.getRemotePort());
-            System.out.printf("[printFtpClientInfo][%d] Get local address : %s %n", System.currentTimeMillis(), ftpClient.getLocalAddress());
-            System.out.printf("[printFtpClientInfo][%d] Get local port : %d %n", System.currentTimeMillis(), ftpClient.getLocalPort());
-            System.out.printf("[printFtpClientInfo][%d] Get control encoding : %s %n", System.currentTimeMillis(), ftpClient.getControlEncoding());
-            System.out.printf("[printFtpClientInfo][%d] Get data timeout : %s %n", System.currentTimeMillis(), ftpClient.getDataTimeout().toString());
-            System.out.printf("[printFtpClientInfo][%d] Get buffer size : %d %n", System.currentTimeMillis(), ftpClient.getBufferSize());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public FTPFile[] listFiles(String path, FTPClient ftpClient) {
@@ -67,54 +44,55 @@ public class FtpService {
         }
     }
 
-    public void printTree(String path, FTPClient ftpClient) {
+    public boolean isDirectory(String path, FTPClient ftpClient) {
         try {
-            for (FTPFile ftpFile : ftpClient.listFiles(path)) {
-                System.out.println();
-                System.out.printf("[printTree][%d]%n", System.currentTimeMillis());
-                System.out.printf("[printTree][%d] Get name : %s %n", System.currentTimeMillis(), ftpFile.getName());
-                System.out.printf("[printTree][%d] Get timestamp : %s %n", System.currentTimeMillis(), ftpFile.getTimestamp().getTimeInMillis());
-                System.out.printf("[printTree][%d] Get group : %s %n", System.currentTimeMillis(), ftpFile.getGroup());
-                System.out.printf("[printTree][%d] Get link : %s %n", System.currentTimeMillis(), ftpFile.getLink());
-                System.out.printf("[printTree][%d] Get user : %s %n", System.currentTimeMillis(), ftpFile.getUser());
-                System.out.printf("[printTree][%d] Get type : %s %n", System.currentTimeMillis(), ftpFile.getType());
-                System.out.printf("[printTree][%d] Is file : %s %n", System.currentTimeMillis(), ftpFile.isFile());
-                System.out.printf("[printTree][%d] Is directory : %s %n", System.currentTimeMillis(), ftpFile.isDirectory());
-                System.out.printf("[printTree][%d] Formatted string : %s %n", System.currentTimeMillis(), ftpFile.toFormattedString());
-                System.out.println();
-
-                if (ftpFile.isDirectory()) {
-                    printTree(path + File.separator + ftpFile.getName(), ftpClient);
-                }
-            }
+            FTPFile[] files = ftpClient.listFiles(path);
+            return files != null && files.length > 0 && files[0].isDirectory();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void createDirectory(String directory, String newDirectoryName, FTPClient ftpClient, FTPWindow ftpWindow) {
-        String newDirectoryPath = newDirectoryName;
-        System.out.println(newDirectoryPath);
+    public void createDirectory(String newDirectoryPath, FTPClient ftpClient, FTPWindow ftpWindow) {
+        System.out.println("Directorio a crear: " + newDirectoryPath);
         try {
             if (ftpClient.makeDirectory(newDirectoryPath)) {
-                JOptionPane.showMessageDialog(ftpWindow, "Carpeta creada exitosamente: " + newDirectoryPath);
+                JOptionPane.showMessageDialog(ftpWindow, "Directorio creado exitosamente: " + newDirectoryPath);
             } else {
-                System.out.println("Failed to create directory: " + newDirectoryPath);
+                JOptionPane.showMessageDialog(ftpWindow, "Fallo al crear: " + newDirectoryPath, "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void crearDirectory(String path, FTPClient ftpClient) {
-        System.out.println();
+    public boolean deleteDirectory(String path, FTPClient ftpClient, FTPWindow ftpWindow) {
+        System.out.println("Directorio a eliminar: " + path);
         try {
-            System.out.printf("[createDirectory][%d] Is success to create directory : %s -> %b",
-                    System.currentTimeMillis(), path, ftpClient.makeDirectory(path));
+            FTPFile[] files = ftpClient.listFiles(path);
+
+            if (files != null) {
+                for (FTPFile file : files) {
+                    String filePath = path + "/" + file.getName();
+
+                    if (file.isDirectory()) {
+                        deleteDirectory(filePath, ftpClient, ftpWindow);
+                    } else {
+                        ftpClient.deleteFile(filePath);
+                    }
+                }
+            }
+
+            if (ftpClient.removeDirectory(path)) {
+                JOptionPane.showMessageDialog(ftpWindow, "Directorio eliminado exitosamente: " + path);
+                return true;
+            } else {
+                JOptionPane.showMessageDialog(ftpWindow, "Fallo al eliminar: " + path, "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        System.out.println();
     }
 
     public void uploadFile(String localPath, String remotePath, FTPClient ftpClient) {
@@ -153,25 +131,18 @@ public class FtpService {
         return byteArrayOutputStream.toByteArray();
     }
 
-    public void deleteFile(String path, FTPClient ftpClient) {
-        System.out.println();
+    public boolean deleteFile(String path, FTPClient ftpClient) {
         try {
-            System.out.printf("[deleteFile][%d] Is success to delete file : %s -> %b",
-                    System.currentTimeMillis(), path, ftpClient.deleteFile(path));
+            boolean success = ftpClient.deleteFile(path);
+            System.out.printf("[deleteFile][%d] Is success to delete file : %s -> %b%n",
+                    System.currentTimeMillis(), path, success);
+            return success;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.printf("[deleteFile][%d] Error deleting file : %s%n",
+                    System.currentTimeMillis(), path);
+            e.printStackTrace();
+            return false;
         }
-        System.out.println();
     }
 
-    public void deleteDirectory(String path, FTPClient ftpClient) {
-        System.out.println();
-        try {
-            System.out.printf("[deleteDirectory][%d] Is success to delete directory : %s -> %b",
-                    System.currentTimeMillis(), path, ftpClient.removeDirectory(path));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println();
-    }
 }
