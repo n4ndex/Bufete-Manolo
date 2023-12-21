@@ -9,12 +9,12 @@ import java.awt.*;
 @Getter
 @Setter
 public class NewEmail extends JFrame{
-    private JButton enviarButton;
-    private JButton cancelarButton;
-    private JTextField textField1;
-    private JTextArea textArea1;
+    private JButton sendButton;
+    private JButton cancelButton;
+    private JTextField toTextfield;
+    private JTextArea subjetTextfield;
     private JPanel mainPanel;
-    private JButton backButton;
+    private JTextField messageTextfield;
 
     public NewEmail(){
         initUI();

@@ -3,6 +3,7 @@ package manolo.mainpacket.controller.listeners.email;
 import manolo.mainpacket.controller.MainController;
 import manolo.mainpacket.view.Email;
 import manolo.mainpacket.view.Menu;
+import manolo.mainpacket.view.NewEmail;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,7 +19,8 @@ public class EmailButtonsListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource()== mainController.getEmailView().getButtons().get(0)){
             mainController.getEmailView().dispose();
-            mainController.setEmailView(new Email(mainController.getEmailModel()));
+            mainController.setNewEmail(new NewEmail());
+            mainController.addNewEmailListeners();
         }
 
         if (e.getSource()== mainController.getEmailView().getButtons().get(1)){
