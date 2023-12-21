@@ -44,7 +44,7 @@ public class KeysListener implements KeyListener {
 
             try {
                 mainController.getFtpService().renameFile(currentPath, newPath, mainController.getMainClient());
-                mainController.getFtpWindow().loadDirectory(mainController.getMainClient());
+                mainController.getFtpWindow().loadDirectory(mainController.getMainClient(), mainController.getFtpWindow().getLawyerDni());
                 mainController.showInfoWindow(mainController.getFtpWindow(), "Archivo renombrado exitosamente.");
             } catch (Exception e) {
                 mainController.showErrorWindow(mainController.getFtpWindow(), "Error al renombrar el archivo: " + e.getMessage());

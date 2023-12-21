@@ -34,6 +34,15 @@ public class TreeListener implements TreeSelectionListener {
 
                 String selectedDirectory = getSelectedDirectoryPath(selectedNode);
 
+                // Elimina el primer dígito de selectedDirectory
+                if (selectedDirectory.length() > 1) {
+                    selectedDirectory = selectedDirectory.substring(1);
+                } else {
+                    selectedDirectory = ""; // O maneja el caso especial si la longitud es 1
+                }
+
+                System.out.println(selectedDirectory);
+
                 mainController.getFtpWindow().setDirectory(selectedDirectory);
                 mainController.getFtpWindow().getRutaLabel().setText(mainController.getFtpWindow().getModel().getTextsList().get(1) + mainController.getFtpWindow().getDirectory());
             }

@@ -150,6 +150,7 @@ public class Register extends JFrame {
         for (int i = 0; i < max; i++) {
             JButton button = new JButton(model.getTextsList().get(model.getTextsList().size() - 1));
             buttons.add(button);
+            buttons.get(0).setEnabled(false);
         }
     }
 

@@ -70,11 +70,17 @@ public class MainController {
     public void addLoginEventListeners() {
         loginView.getLabels().get(3).addMouseListener(new manolo.mainpacket.controller.listeners.login.LabelsListener(this));
         loginView.getButtons().getFirst().addActionListener(new manolo.mainpacket.controller.listeners.login.ButtonsListener(this));
+        loginView.getTextFields().getFirst().getDocument().addDocumentListener(new manolo.mainpacket.controller.listeners.login.LoginDocumentListener(this));
+        loginView.getPasswordFields().getFirst().getDocument().addDocumentListener(new manolo.mainpacket.controller.listeners.login.LoginDocumentListener(this));
     }
 
     public void addRegisterEventListeners() {
         registerView.getLabels().get(5).addMouseListener(new manolo.mainpacket.controller.listeners.register.LabelsListener(this));
         registerView.getButtons().getFirst().addActionListener(new manolo.mainpacket.controller.listeners.register.ButtonsListener(this));
+        registerView.getTextFields().getFirst().getDocument().addDocumentListener(new manolo.mainpacket.controller.listeners.register.RegisterDocumentListener(this));
+        registerView.getTextFields().get(1).getDocument().addDocumentListener(new manolo.mainpacket.controller.listeners.register.RegisterDocumentListener(this));
+        registerView.getTextFields().get(2).getDocument().addDocumentListener(new manolo.mainpacket.controller.listeners.register.RegisterDocumentListener(this));
+        registerView.getPasswordFields().getFirst().getDocument().addDocumentListener(new manolo.mainpacket.controller.listeners.register.RegisterDocumentListener(this));
     }
 
     public void addMenuEventListeners() {
@@ -92,6 +98,7 @@ public class MainController {
         ftpWindow.getDownloadButton().addActionListener(new manolo.mainpacket.controller.listeners.ftp.ButtonsListener(this));
         ftpWindow.getUploadButton().addActionListener(new manolo.mainpacket.controller.listeners.ftp.ButtonsListener(this));
         ftpWindow.getRefreshButton().addActionListener(new manolo.mainpacket.controller.listeners.ftp.ButtonsListener(this));
+        ftpWindow.getRenameButton().addActionListener(new manolo.mainpacket.controller.listeners.ftp.ButtonsListener(this));
         ftpWindow.getRenameField().addKeyListener(new manolo.mainpacket.controller.listeners.ftp.KeysListener(this));
     }
 
@@ -101,7 +108,7 @@ public class MainController {
         }
     }
 
-    public void addNewEmailListeners(){
+    public void addNewEmailListeners() {
         newEmail.getSendButton().addActionListener(new NewEmailButtonsListener(this));
         newEmail.getCancelButton().addActionListener(new NewEmailButtonsListener(this));
     }
@@ -131,7 +138,7 @@ public class MainController {
 
             addMenuEventListeners();
         } else {
-            showErrorWindow(loginView, "Error al iniciar sesión. DNI o contraseña incorrecto.");
+            showErrorWindow(loginView, "Error al iniciar sesión. DNI o contraseña incorrecta.");
         }
 
         mainConnection.closeConnection();
@@ -179,11 +186,7 @@ public class MainController {
 
             showInfoWindow(registerView, "Usuario creado correctamente.");
         } else {
-            if (!userExists) {
-                showWarningWindow(registerView, "Por favor, complete todos los campos antes de registrar.");
-            } else {
-                showErrorWindow(registerView, "El usuario ya existe, por favor ingrese otro o inicie sesión");
-            }
+            showErrorWindow(registerView, "El usuario ya existe, por favor ingrese otro o inicie sesión");
         }
 
         mainConnection.closeConnection();
@@ -200,7 +203,6 @@ public class MainController {
         JComboBox combo = registerView.getCombos().getFirst();
         return combo.getSelectedIndex() != -1;
     }
-
 
 
 }

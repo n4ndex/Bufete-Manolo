@@ -28,11 +28,13 @@ public class FTPWindow extends JFrame {
     private JTree treeDirectories;
     private JPanel mainPanel;
     private JLabel rutaLabel;
-    private JLabel DNILabel;
+    private JLabel nameLabel;
     private JLabel serverLabel;
     private JLabel renameLabel;
+    private JButton renameButton;
     private String directory = "";
     private String lawyerDni = "";
+    private String lawyerName = "";
     private FTPClient ftpClient;
     private FtpService ftpService;
     private FTPTexts model = new FTPTexts();
@@ -51,7 +53,7 @@ public class FTPWindow extends JFrame {
     }
 
     private void setLabelTexts() {
-        DNILabel.setText(model.getTextsList().get(0));
+        nameLabel.setText(model.getTextsList().get(0));
         rutaLabel.setText(model.getTextsList().get(1));
         serverLabel.setText(model.getTextsList().get(2));
         renameLabel.setText(model.getTextsList().get(10));
@@ -65,6 +67,7 @@ public class FTPWindow extends JFrame {
         downloadButton.setText(model.getTextsList().get(7));
         exitButton.setText(model.getTextsList().get(8));
         refreshButton.setText(model.getTextsList().get(9));
+        renameButton.setText(model.getTextsList().get(11));
     }
 
     private void initUI() {
@@ -100,7 +103,6 @@ public class FTPWindow extends JFrame {
         return "";
     }
 
-
     private DefaultMutableTreeNode createNodes(String path) {
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(path);
         FTPFile[] ftpFiles = ftpService.listFiles(path, ftpClient);
@@ -118,17 +120,9 @@ public class FTPWindow extends JFrame {
         return rootNode;
     }
 
-    public void loadDirectory(FTPClient ftpClient) {
-        try {
-            directory = ftpClient.printWorkingDirectory();
-            loadDirectoryInternal(ftpClient, directory);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
     public void loadDirectory(FTPClient ftpClient, String path) {
         try {
-            directory = ftpClient.printWorkingDirectory();
+            directory = ftpClient.printWorkingDirectory().substring(1);
             String fullPath = directory + "/" + path;
             loadDirectoryInternal(ftpClient, fullPath);
         } catch (Exception e) {

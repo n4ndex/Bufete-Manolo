@@ -42,7 +42,13 @@ public class ButtonsListener implements ActionListener {
                     String newDirectoryPath = selectedDirectory + File.separator + folderName;
 
                     mainController.getFtpService().createDirectory(newDirectoryPath, mainController.getMainClient(), mainController.getFtpWindow());
-                    mainController.getFtpWindow().loadDirectory(mainController.getMainClient());
+
+                    // Crear un archivo vacío dentro de la carpeta recién creada
+                    String emptyFileName = "empty_file.txt";
+                    String emptyFilePath = newDirectoryPath + File.separator + emptyFileName;
+                    mainController.getFtpService().createEmptyFile(emptyFilePath, mainController.getMainClient());
+
+                    mainController.getFtpWindow().loadDirectory(mainController.getMainClient(), mainController.getFtpWindow().getLawyerDni());
                 } else {
                     mainController.showErrorWindow(mainController.getFtpWindow(), "Error al crear la carpeta.");
                 }
@@ -61,7 +67,7 @@ public class ButtonsListener implements ActionListener {
 
                 if (option == JOptionPane.YES_OPTION) {
                     if (mainController.getFtpService().deleteDirectory(selectedDirectoryPath, mainController.getMainClient(), mainController.getFtpWindow())) {
-                        mainController.getFtpWindow().loadDirectory(mainController.getMainClient());
+                        mainController.getFtpWindow().loadDirectory(mainController.getMainClient(), mainController.getFtpWindow().getLawyerDni());
                     } else {
                         mainController.showErrorWindow(mainController.getFtpWindow(), "Error al eliminar el directorio.");
                     }
@@ -85,7 +91,7 @@ public class ButtonsListener implements ActionListener {
 
                 if (option == JOptionPane.YES_OPTION) {
                     if (mainController.getFtpService().deleteFile(selectedFilePath, mainController.getMainClient())) {
-                        mainController.getFtpWindow().loadDirectory(mainController.getMainClient());
+                        mainController.getFtpWindow().loadDirectory(mainController.getMainClient(), mainController.getFtpWindow().getLawyerDni());
                     } else {
                         mainController.showErrorWindow(mainController.getFtpWindow(), "Error al eliminar el archivo.");
                     }
@@ -148,7 +154,7 @@ public class ButtonsListener implements ActionListener {
                     try {
                         // Upload the file to the server
                         mainController.getFtpService().uploadFile(selectedFile.getAbsolutePath(), remotePath, mainController.getMainClient());
-                        mainController.getFtpWindow().loadDirectory(mainController.getMainClient());
+                        mainController.getFtpWindow().loadDirectory(mainController.getMainClient(), mainController.getFtpWindow().getLawyerDni());
                     } catch (Exception ex) {
                         mainController.showErrorWindow(mainController.getFtpWindow(), "Error subiendo archivo: " + ex.getMessage());
                     }
@@ -156,8 +162,36 @@ public class ButtonsListener implements ActionListener {
                     mainController.showWarningWindow(mainController.getFtpWindow(), "Selecciona un directorio antes de subir el archivo.");
                 }
             }
-        } else if (e.getSource() == mainController.getFtpWindow().getRefreshButton()) {
-            mainController.getFtpWindow().loadDirectory(mainController.getMainClient());
+        } else if (e.getSource() == mainController.getFtpWindow().getRefreshButton()) { // refresh tree button
+            mainController.getFtpWindow().loadDirectory(mainController.getMainClient(), mainController.getFtpWindow().getLawyerDni());
+        } else if (e.getSource() == mainController.getFtpWindow().getRenameButton()) {  // rename file button
+            int option = JOptionPane.showConfirmDialog(
+                    mainController.getFtpWindow(),
+                    "¿Seguro deseas renombrar?",
+                    "Renombrar",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (option == JOptionPane.YES_OPTION) {
+                DefaultMutableTreeNode selectedNode = mainController.getFtpWindow().getSelectedNode();
+                if (selectedNode != null) {
+                    String oldName = mainController.getFtpWindow().getSelectedDirectoryPath(selectedNode);
+                    String newName = mainController.getFtpWindow().getRenameField().getText();
+                    String currentPath = mainController.getFtpWindow().getDirectory() + "/" + oldName;
+                    String newPath = mainController.getFtpWindow().getDirectory() + "/" + newName;
+
+                    try {
+                        mainController.getFtpService().renameFile(currentPath, newPath, mainController.getMainClient());
+                        mainController.getFtpWindow().loadDirectory(mainController.getMainClient(), mainController.getFtpWindow().getLawyerDni());
+                        mainController.showInfoWindow(mainController.getFtpWindow(), "Archivo renombrado exitosamente.");
+                    } catch (Exception ex) {
+                        mainController.showErrorWindow(mainController.getFtpWindow(), "Error al renombrar el archivo: " + ex.getMessage());
+                    }
+                } else {
+                    mainController.showWarningWindow(mainController.getFtpWindow(), "Ningún archivo seleccionado para renombrar.");
+                }
+            }
+
         }
     }
 }

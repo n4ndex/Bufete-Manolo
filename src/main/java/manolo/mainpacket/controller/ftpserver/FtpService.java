@@ -71,6 +71,23 @@ public class FtpService {
         }
     }
 
+    public void createEmptyFile(String filePath, FTPClient ftpClient) {
+        try {
+            InputStream inputStream = new ByteArrayInputStream(new byte[0]);
+            boolean success = ftpClient.storeFile(filePath, inputStream);
+
+            if (success) {
+                System.out.printf("[createEmptyFile][%d] Empty file created successfully: %s%n",
+                        System.currentTimeMillis(), filePath);
+            } else {
+                System.out.printf("[createEmptyFile][%d] Error creating empty file: %s%n",
+                        System.currentTimeMillis(), filePath);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public boolean deleteDirectory(String path, FTPClient ftpClient, FTPWindow ftpWindow) {
         try {
             FTPFile[] files = ftpClient.listFiles(path);

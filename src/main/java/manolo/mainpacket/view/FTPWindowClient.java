@@ -14,11 +14,12 @@ import java.awt.event.WindowEvent;
 @Setter
 public class FTPWindowClient extends JFrame {
     private JPanel mainPanel;
-    private JList list1;
+    private JList list;
     private JButton downloadButton;
     private JLabel serverLabel;
-    private JLabel clientLabel;
+    private JLabel nameLabel;
     private MainController mainController;
+    private String clientName = "";
     private FTPTexts model = new FTPTexts();
 
     public FTPWindowClient(MainController mainController) {
@@ -28,9 +29,9 @@ public class FTPWindowClient extends JFrame {
     }
 
     private void initComponents() {
-        serverLabel.setText(model.getTextsList().get(11));
-        clientLabel.setText(model.getTextsList().get(12));
-        downloadButton.setText(model.getTextsList().get(13));
+        nameLabel.setText(model.getTextsList().get(0) + clientName);
+        serverLabel.setText(model.getTextsList().get(3));
+        downloadButton.setText(model.getTextsList().get(7));
     }
 
     private void initUI() {
