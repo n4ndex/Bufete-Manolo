@@ -1,23 +1,36 @@
 package manolo.mainpacket.view;
 
+import lombok.Getter;
+import lombok.Setter;
 import manolo.mainpacket.controller.MainController;
-import manolo.mainpacket.model.viewmodels.CasosTexts;
+import manolo.mainpacket.model.viewmodels.FTPTexts;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+@Getter
+@Setter
 public class FTPWindowClient extends JFrame {
     private JPanel mainPanel;
     private JList list1;
-    private JButton descargarButton;
+    private JButton downloadButton;
+    private JLabel serverLabel;
+    private JLabel clientLabel;
     private MainController mainController;
-    private CasosTexts model = new CasosTexts();
+    private FTPTexts model = new FTPTexts();
 
     public FTPWindowClient(MainController mainController) {
         this.mainController = mainController;
+        initComponents();
         initUI();
+    }
+
+    private void initComponents() {
+        serverLabel.setText(model.getTextsList().get(11));
+        clientLabel.setText(model.getTextsList().get(12));
+        downloadButton.setText(model.getTextsList().get(13));
     }
 
     private void initUI() {

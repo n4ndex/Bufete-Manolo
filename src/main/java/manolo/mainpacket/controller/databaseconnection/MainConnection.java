@@ -37,44 +37,6 @@ public class MainConnection {
         }
     }
 
-    public boolean loginLawyer(String dni, String password) {
-
-        String query = """
-                SELECT * FROM users 
-                WHERE dni = ? AND password = ? AND user_type_id = ?""";
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, dni);
-            preparedStatement.setString(2, password);
-            preparedStatement.setInt(3, 1);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                return resultSet.next();
-            }
-        } catch (SQLException e) {
-            return false;
-        }
-    }
-
-    public boolean loginClient(String dni, String password) {
-
-        String query = """
-                SELECT * FROM users 
-                WHERE dni = ? AND password = ? AND user_type_id = ?""";
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, dni);
-            preparedStatement.setString(2, password);
-            preparedStatement.setInt(3, 2);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                return resultSet.next();
-            }
-        } catch (SQLException e) {
-            return false;
-        }
-    }
-
     public User getUserData(String dni, String password) {
         String query = """
             SELECT users.*, user_types.*

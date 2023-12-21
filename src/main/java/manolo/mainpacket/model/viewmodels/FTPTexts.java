@@ -15,9 +15,9 @@ public class FTPTexts {
     }
 
     private void fillTexts() {
-        textsList.add("DNI: ");              // 0
-        textsList.add("Ruta: ");             // 1
-        textsList.add("Servidor: ");         // 2
+        textsList.add("DNI: ");             // 0
+        textsList.add("Ruta: ");            // 1
+        textsList.add("Servidor: ");        // 2
         textsList.add("Crear carpeta");     // 3
         textsList.add("Eliminar Carpeta");  // 4
         textsList.add("Subir archivo");     // 5
@@ -25,7 +25,11 @@ public class FTPTexts {
         textsList.add("Descargar archivo"); // 7
         textsList.add("Volver al menú");    // 8
         textsList.add("↻");                 // 9
-        textsList.add("Renombrar: ");         // 10
+        textsList.add("Renombrar: ");       // 10
+        textsList.add("Servidor:");         // 11
+        textsList.add("Usuario:");          // 12
+        textsList.add("Descargar");         // 13
+
     }
 
 }

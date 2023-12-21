@@ -32,6 +32,7 @@ public class FTPWindow extends JFrame {
     private JLabel serverLabel;
     private JLabel renameLabel;
     private String directory = "";
+    private String lawyerDni = "";
     private FTPClient ftpClient;
     private FtpService ftpService;
     private FTPTexts model = new FTPTexts();
@@ -44,7 +45,7 @@ public class FTPWindow extends JFrame {
     }
 
     private void initComponents() {
-        loadDirectory(ftpClient);
+        loadDirectory(ftpClient, lawyerDni);
         setLabelTexts();
         setButtonTexts();
     }
@@ -127,11 +128,14 @@ public class FTPWindow extends JFrame {
     }
     public void loadDirectory(FTPClient ftpClient, String path) {
         try {
-            loadDirectoryInternal(ftpClient, path);
+            directory = ftpClient.printWorkingDirectory();
+            String fullPath = directory + "/" + path;
+            loadDirectoryInternal(ftpClient, fullPath);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     private void loadDirectoryInternal(FTPClient ftpClient, String path) {
         try {
@@ -139,7 +143,7 @@ public class FTPWindow extends JFrame {
 
             treeDirectories.setModel(new DefaultTreeModel(rootNode));
 
-            rutaLabel.setText("Ruta actual: " + path);
+            rutaLabel.setText(model.getTextsList().get(1) + path);
         } catch (Exception e) {
             e.printStackTrace();
         }

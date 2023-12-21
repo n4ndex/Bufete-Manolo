@@ -26,30 +26,30 @@
               <model/>
             </properties>
           </component>
-          <component id="7ae3" class="javax.swing.JButton" binding="descargarButton" default-binding="true">
+          <component id="7ae3" class="javax.swing.JButton" binding="downloadButton">
             <constraints>
               <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Descargar"/>
+              <text value=""/>
             </properties>
           </component>
-          <component id="9b82" class="javax.swing.JLabel">
+          <component id="9b82" class="javax.swing.JLabel" binding="serverLabel">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <font size="18"/>
-              <text value="Servidor:"/>
+              <text value=""/>
             </properties>
           </component>
-          <component id="43962" class="javax.swing.JLabel">
+          <component id="43962" class="javax.swing.JLabel" binding="clientLabel">
             <constraints>
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <font size="18"/>
-              <text value="Usuario:"/>
+              <text value=""/>
             </properties>
           </component>
         </children>

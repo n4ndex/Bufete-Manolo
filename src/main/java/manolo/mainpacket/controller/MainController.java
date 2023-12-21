@@ -23,6 +23,7 @@ import java.awt.*;
 @Setter
 public class MainController {
     private User currentUser;
+    private boolean isLawyer;
     MainConnectionModel mainConnectionModel;
     MainConnection mainConnection;
     MainViewModel mainViewModel;
@@ -30,6 +31,7 @@ public class MainController {
     Register registerView;
     Menu menu;
     FTPWindow ftpWindow;
+    FTPWindowClient ftpWindowClient;
     Casos casosView;
     EmailTexts emailModel;
     Email emailView;
@@ -62,7 +64,7 @@ public class MainController {
         loginView = new Login();
         ftpServiceModel = new FtpServiceModel();
         ftpService = new FtpService(this);
-        mainClient = ftpService.loginFtp(ftpServiceModel.getHost(), ftpServiceModel.getPort(), ftpServiceModel.getUsernameLawyer(), ftpServiceModel.getPassword());
+        isLawyer = false;
     }
 
     public void addLoginEventListeners() {
@@ -77,7 +79,7 @@ public class MainController {
 
     public void addMenuEventListeners() {
         for (int i = 0; i < menu.getButtons().size(); i++) {
-            menu.getButtons().get(i).addActionListener(new manolo.mainpacket.controller.listeners.menu.ButtonsListener(this));
+            menu.getButtons().get(i).addActionListener(new manolo.mainpacket.controller.listeners.menu.ButtonsListener(this, isLawyer));
         }
     }
 
@@ -119,8 +121,12 @@ public class MainController {
 
             if (currentUser.getUserType().getType().equalsIgnoreCase("lawyer")) {
                 menu.getButtons().get(2).setEnabled(true);
+                mainClient = ftpService.loginFtp(ftpServiceModel.getHost(), ftpServiceModel.getPort(), ftpServiceModel.getUsernameLawyer(), ftpServiceModel.getPassword());
+                isLawyer = true;
             } else {
                 menu.getButtons().get(2).setEnabled(false);
+                mainClient = ftpService.loginFtp(ftpServiceModel.getHost(), ftpServiceModel.getPort(), ftpServiceModel.getUsernameClient(), ftpServiceModel.getPassword());
+                isLawyer = false;
             }
 
             addMenuEventListeners();
@@ -139,8 +145,8 @@ public class MainController {
                 mainConnectionModel.getPASSWORD()
         );
 
-        String username = registerView.getTextFields().get(0).getText();
-        boolean userExists = mainConnection.checkIfUserExists(username);
+        String dni = registerView.getTextFields().get(0).getText();
+        boolean userExists = mainConnection.checkIfUserExists(dni);
 
         if (areFieldsFilled() && !userExists) {
             registerView.dispose();
@@ -153,7 +159,7 @@ public class MainController {
             String selectedLawyerName = registerView.getCombos().getFirst().getSelectedItem().toString();
             int idLawyer = mainConnection.getLawyerIdFromName(selectedLawyerName);
 
-            boolean isLawyer = registerView.getChecks().getFirst().isSelected();
+            isLawyer = registerView.getChecks().getFirst().isSelected();
             UserType userType;
 
             if (isLawyer) {
@@ -166,7 +172,7 @@ public class MainController {
                 mainClient = ftpService.loginFtp(ftpServiceModel.getHost(), ftpServiceModel.getPort(), ftpServiceModel.getUsernameClient(), ftpServiceModel.getPassword());
             }
 
-            currentUser = new User(username, name, password, email, userType, idLawyer);
+            currentUser = new User(dni, name, password, email, userType, idLawyer);
             menu.setTitle("¡Bienvenido " + currentUser.getName() + "! - " + currentUser.getUserType().getType().toUpperCase());
             mainConnection.insertNewUser(currentUser);
             addMenuEventListeners();

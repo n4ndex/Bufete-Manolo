@@ -48,7 +48,7 @@ public class Menu extends JFrame {
 
                 button.setBackground(Color.WHITE);
 
-                Font customFont = new Font("Arial", Font.BOLD, 24);
+                Font customFont = new Font("Arial", Font.BOLD, 20);
                 label.setFont(customFont);
 
                 buttons.add(button);

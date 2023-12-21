@@ -1,11 +1,8 @@
 package manolo.mainpacket.controller.listeners.menu;
 
 import manolo.mainpacket.controller.MainController;
-import manolo.mainpacket.view.Email;
+import manolo.mainpacket.view.*;
 import manolo.mainpacket.model.viewmodels.EmailTexts;
-import manolo.mainpacket.view.Casos;
-import manolo.mainpacket.view.FTPWindow;
-import manolo.mainpacket.view.Login;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -13,9 +10,11 @@ import java.awt.event.ActionListener;
 
 public class ButtonsListener implements ActionListener {
     private final MainController mainController;
+    private final boolean isLawyer;
 
-    public ButtonsListener(MainController mainController) {
+    public ButtonsListener(MainController mainController, boolean isLawyer) {
         this.mainController = mainController;
+        this.isLawyer = isLawyer;
     }
 
     /**
@@ -28,9 +27,16 @@ public class ButtonsListener implements ActionListener {
         mainController.getMenu().dispose();
         switch (((JButton) e.getSource()).getName()) {
             case "FTP" -> {
-                mainController.setFtpWindow(new FTPWindow(mainController));
-                mainController.getFtpWindow().getServerLabel().setText(mainController.getFtpWindow().getModel().getTextsList().get(2) + mainController.getMainClient().getLocalAddress());
-                mainController.addFtpEventListeners();
+                if (isLawyer) {
+                    mainController.setFtpWindow(new FTPWindow(mainController));
+                    mainController.getFtpWindow().setLawyerDni(mainController.getCurrentUser().getDni());
+                    mainController.getFtpWindow().loadDirectory(mainController.getMainClient(),mainController.getFtpWindow().getLawyerDni());
+                    mainController.getFtpWindow().getServerLabel().setText(mainController.getFtpWindow().getModel().getTextsList().get(2) + mainController.getMainClient().getLocalAddress());
+                    mainController.getFtpWindow().getDNILabel().setText(mainController.getFtpWindow().getModel().getTextsList().get(0) + mainController.getFtpWindow().getLawyerDni());
+                    mainController.addFtpEventListeners();
+                } else {
+                    mainController.setFtpWindowClient(new FTPWindowClient(mainController));
+                }
             }
             case "EMAIL" -> {
                 mainController.setEmailModel(new EmailTexts());
