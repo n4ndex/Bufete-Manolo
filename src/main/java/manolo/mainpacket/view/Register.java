@@ -13,22 +13,22 @@ import java.util.ArrayList;
 @Setter
 public class Register extends JFrame {
 
-    private int amountPanels = 3;
-    private int amountLabels = 5;
-    private int amountTextFields = 3;
-    private int amountPasswordFields = 1;
-    private int amountButtons = 1;
-    private int amountCheckBox = 1;
-    private int amountCombos = 1;
+    int amountPanels = 3;
+    int amountLabels = 5;
+    int amountTextFields = 3;
+    int amountPasswordFields = 1;
+    int amountButtons = 1;
+    int amountCheckBox = 1;
+    int amountCombos = 1;
 
-    private ArrayList<JPanel> panels = new ArrayList<>();
-    private ArrayList<JLabel> labels = new ArrayList<>();
-    private ArrayList<JTextField> textFields = new ArrayList<>();
-    private ArrayList<JPasswordField> passwordFields = new ArrayList<>();
-    private ArrayList<JButton> buttons = new ArrayList<>();
-    private ArrayList<JCheckBox> checks = new ArrayList<>();
-    private ArrayList<JComboBox> combos = new ArrayList<>();
-    private RegisterTexts model = new RegisterTexts();
+    ArrayList<JPanel> panels = new ArrayList<>();
+    ArrayList<JLabel> labels = new ArrayList<>();
+    ArrayList<JTextField> textFields = new ArrayList<>();
+    ArrayList<JPasswordField> passwordFields = new ArrayList<>();
+    ArrayList<JButton> buttons = new ArrayList<>();
+    ArrayList<JCheckBox> checks = new ArrayList<>();
+    ArrayList<JComboBox> combos = new ArrayList<>();
+    RegisterTexts model = new RegisterTexts();
     private MainController mainController;
 
     public Register(MainController mainController) {
@@ -40,11 +40,14 @@ public class Register extends JFrame {
         createPasswordField(amountPasswordFields);
         createButtons(amountButtons);
         createCheckBox(amountCheckBox);
+        createCombos(amountCombos);
 
         // Visualización de elementos en ventana
         ordenateAll();
         settings();
     }
+
+
 
     private void ordenateAll() {
         combinePanels();
@@ -65,7 +68,7 @@ public class Register extends JFrame {
     }
 
     private void combinePanels() {
-        panels.get(1).setLayout(new BoxLayout(panels.get(1), BoxLayout.Y_AXIS));
+        panels.get(1).setLayout(new GridLayout(0, 1, 5, 5));
 
         panels.get(2).setLayout(new FlowLayout(FlowLayout.CENTER));
 
@@ -92,6 +95,11 @@ public class Register extends JFrame {
         }
     }
 
+    private void addCombo() {
+        panels.get(1).add(new JLabel(model.getTextsList().get(5)));
+        panels.get(1).add(combos.get(0));
+    }
+
     private void addPassword() {
         panels.get(1).add(new JLabel(model.getTextsList().get(4)));
         panels.get(1).add(passwordFields.get(0));
@@ -99,7 +107,7 @@ public class Register extends JFrame {
     }
 
     private void addRegisterLink() {
-        JLabel loginLabel = new JLabel(model.getTextsList().get(5));
+        JLabel loginLabel = new JLabel(model.getTextsList().get(6));
         loginLabel.setForeground(Color.BLUE);
         loginLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         labels.add(loginLabel);
@@ -147,16 +155,30 @@ public class Register extends JFrame {
 
     private void createCheckBox(int max) {
         for (int i = 0; i < max; i++) {
-            JCheckBox checkBox = new JCheckBox(model.getTextsList().get(6));
+            JCheckBox checkBox = new JCheckBox(model.getTextsList().get(7));
             checks.add(checkBox);
         }
     }
 
+    private void createCombos(int max) {
+        mainController.getMainConnection().openConnection(mainController.getMainConnectionModel().getMYSQL_URL(), mainController.getMainConnectionModel().getMYSQL_DATABASE(), mainController.getMainConnectionModel().getMYSQL_USERNAME(), mainController.getMainConnectionModel().getPASSWORD());
+
+        for (int i = 0; i < max; i++) {
+            JComboBox<String> combo = new JComboBox<>(mainController.getMainConnection().getLawyerNames().toArray(new String[0]));
+            combo.insertItemAt("", 0);
+            combo.setSelectedIndex(0);
+            combos.add(combo);
+        }
+
+        mainController.getMainConnection().closeConnection();
+    }
+
+
     private void settings() {
         Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
-        int height = pantalla.height + 200;
+        int height = pantalla.height;
         int width = pantalla.width;
-        this.setSize(width / 3, height / 3);
+        this.setSize(width / 3, height - 250);
         this.setTitle("Register Bufete");
         this.setLocationRelativeTo(null);
         this.setResizable(true);
