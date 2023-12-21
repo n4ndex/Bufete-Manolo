@@ -5,6 +5,7 @@ import lombok.Setter;
 import manolo.mainpacket.controller.databaseconnection.MainConnection;
 import manolo.mainpacket.controller.ftpserver.FtpService;
 import manolo.mainpacket.controller.listeners.email.EmailButtonsListener;
+import manolo.mainpacket.controller.listeners.email.NewEmailButtonsListener;
 import manolo.mainpacket.model.User;
 import manolo.mainpacket.model.UserType;
 import manolo.mainpacket.model.controllermodels.FtpServiceModel;
@@ -32,6 +33,7 @@ public class MainController {
     Casos casosView;
     EmailTexts emailModel;
     Email emailView;
+    NewEmail newEmail;
     FtpServiceModel ftpServiceModel;
     FtpService ftpService;
     FTPClient mainClient;
@@ -95,6 +97,11 @@ public class MainController {
         for (int i = 0; i < emailView.getButtons().size(); i++) {
             emailView.getButtons().get(i).addActionListener(new EmailButtonsListener(this));
         }
+    }
+
+    public void addNewEmailListeners(){
+        newEmail.getSendButton().addActionListener(new NewEmailButtonsListener(this));
+        newEmail.getCancelButton().addActionListener(new NewEmailButtonsListener(this));
     }
 
     public void submitLogin() {

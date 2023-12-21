@@ -24,6 +24,7 @@ public class Email extends JFrame {
         viewParams();
     }
 
+
     private void viewParams() {
         setSize(model.getNumDimensions().get(0), model.getNumDimensions().get(1));
         setLocation(model.getNumDimensions().get(2),model.getNumDimensions().get(3));
