@@ -125,7 +125,6 @@ public class FTPWindow extends JFrame {
             e.printStackTrace();
         }
     }
-
     public void loadDirectory(FTPClient ftpClient, String path) {
         try {
             loadDirectoryInternal(ftpClient, path);
