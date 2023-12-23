@@ -25,9 +25,7 @@ public class EmailButtonsListener implements ActionListener {
 
         if (e.getSource()== mainController.getEmailView().getButtons().get(1)){
             mainController.getEmailView().dispose();
-            mainController.setMenu(new Menu());
             mainController.getMenu().setVisible(true);
-            mainController.addMenuEventListeners();
         }
     }
 }

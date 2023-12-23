@@ -5,8 +5,9 @@ import manolo.mainpacket.view.FTPWindow;
 import org.apache.commons.net.*;
 import org.apache.commons.net.ftp.*;
 
-import javax.swing.*;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FtpService {
 
@@ -163,6 +164,28 @@ public class FtpService {
                     System.currentTimeMillis(), path);
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public String[] getClientFiles(String clientDni, FTPClient ftpClient) {
+        List<String> fileNames = new ArrayList<>();
+
+        searchClientFiles("/", clientDni, ftpClient, fileNames);
+
+        return fileNames.toArray(new String[0]);
+    }
+
+    private void searchClientFiles(String currentPath, String clientDni, FTPClient ftpClient, List<String> fileNames) {
+        FTPFile[] files = listFiles(currentPath, ftpClient);
+
+        for (FTPFile file : files) {
+            String filePath = currentPath + file.getName();
+
+            if (file.isDirectory()) {
+                searchClientFiles(filePath + "/", clientDni, ftpClient, fileNames);
+            } else if (filePath.contains("/" + clientDni + "/")) {
+                fileNames.add(filePath);
+            }
         }
     }
 

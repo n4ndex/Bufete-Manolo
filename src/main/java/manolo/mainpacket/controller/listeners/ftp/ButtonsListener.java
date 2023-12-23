@@ -191,7 +191,6 @@ public class ButtonsListener implements ActionListener {
                     mainController.showWarningWindow(mainController.getFtpWindow(), "Ningún archivo seleccionado para renombrar.");
                 }
             }
-
         }
     }
 }

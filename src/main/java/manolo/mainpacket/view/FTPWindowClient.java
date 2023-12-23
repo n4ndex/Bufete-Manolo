@@ -14,7 +14,7 @@ import java.awt.event.WindowEvent;
 @Setter
 public class FTPWindowClient extends JFrame {
     private JPanel mainPanel;
-    private JList list;
+    private JList listFiles;
     private JButton downloadButton;
     private JLabel serverLabel;
     private JLabel nameLabel;
@@ -26,6 +26,7 @@ public class FTPWindowClient extends JFrame {
         this.mainController = mainController;
         initComponents();
         initUI();
+        loadClientFiles();
     }
 
     private void initComponents() {
@@ -54,4 +55,15 @@ public class FTPWindowClient extends JFrame {
         });
         this.setVisible(true);
     }
+
+    public void loadClientFiles() {
+        String[] clientFiles = mainController.getFtpService().getClientFiles(mainController.getCurrentUser().getDni(), mainController.getMainClient());
+        DefaultListModel<String> listModel = new DefaultListModel<>();
+        for (String fileName : clientFiles) {
+            listModel.addElement(fileName);
+        }
+
+        listFiles.setModel(listModel);
+    }
+
 }

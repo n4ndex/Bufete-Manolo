@@ -89,7 +89,7 @@ public class MainController {
         }
     }
 
-    public void addFtpEventListeners() {
+    public void addFtpLawyerEventListeners() {
         ftpWindow.getTreeDirectories().addTreeSelectionListener(new manolo.mainpacket.controller.listeners.ftp.TreeListener(this));
         ftpWindow.getExitButton().addActionListener(new manolo.mainpacket.controller.listeners.ftp.ButtonsListener(this));
         ftpWindow.getCreateDirButton().addActionListener(new manolo.mainpacket.controller.listeners.ftp.ButtonsListener(this));
@@ -100,6 +100,10 @@ public class MainController {
         ftpWindow.getRefreshButton().addActionListener(new manolo.mainpacket.controller.listeners.ftp.ButtonsListener(this));
         ftpWindow.getRenameButton().addActionListener(new manolo.mainpacket.controller.listeners.ftp.ButtonsListener(this));
         ftpWindow.getRenameField().addKeyListener(new manolo.mainpacket.controller.listeners.ftp.KeysListener(this));
+    }
+
+    public void addFtpClientEventListeners() {
+        ftpWindowClient.getDownloadButton().addActionListener(new manolo.mainpacket.controller.listeners.ftp.ClientDownloadListener(this));
     }
 
     public void addEmailListeners() {

@@ -34,12 +34,13 @@ public class ButtonsListener implements ActionListener {
                     mainController.getFtpWindow().loadDirectory(mainController.getMainClient(),mainController.getFtpWindow().getLawyerDni());
                     mainController.getFtpWindow().getNameLabel().setText(mainController.getFtpWindow().getModel().getTextsList().get(0) + mainController.getFtpWindow().getLawyerName());
                     mainController.getFtpWindow().getServerLabel().setText(mainController.getFtpWindow().getModel().getTextsList().get(2) + mainController.getMainClient().getLocalAddress());
-                    mainController.addFtpEventListeners();
+                    mainController.addFtpLawyerEventListeners();
                 } else {
                     mainController.setFtpWindowClient(new FTPWindowClient(mainController));
                     mainController.getFtpWindowClient().setClientName(mainController.getCurrentUser().getName());
                     mainController.getFtpWindowClient().getNameLabel().setText(mainController.getFtpWindowClient().getModel().getTextsList().get(0) + mainController.getFtpWindowClient().getClientName());
                     mainController.getFtpWindowClient().getServerLabel().setText(mainController.getFtpWindowClient().getModel().getTextsList().get(2) + mainController.getMainClient().getLocalAddress());
+                    mainController.addFtpClientEventListeners();
                 }
             }
             case "EMAIL" -> {
