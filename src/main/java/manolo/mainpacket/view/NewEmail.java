@@ -12,7 +12,7 @@ public class NewEmail extends JFrame{
     private JButton sendButton;
     private JButton cancelButton;
     private JTextField toTextfield;
-    private JTextArea subjetTextfield;
+    private JTextArea subjetTextArea;
     private JPanel mainPanel;
     private JTextField messageTextfield;
 

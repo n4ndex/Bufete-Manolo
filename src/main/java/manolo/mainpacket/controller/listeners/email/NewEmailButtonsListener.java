@@ -1,6 +1,7 @@
 package manolo.mainpacket.controller.listeners.email;
 
 import manolo.mainpacket.controller.MainController;
+import manolo.mainpacket.controller.smptGmail.SendEmail;
 import manolo.mainpacket.view.Email;
 
 import java.awt.event.ActionEvent;
@@ -16,10 +17,19 @@ public class NewEmailButtonsListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        //BACK BUTTON
         if (e.getSource()==mainController.getNewEmail().getCancelButton()){
             mainController.getNewEmail().dispose();
-            mainController.setEmailView(new Email(mainController.getEmailModel()));
-            mainController.addEmailListeners();
+            mainController.getEmailView().setVisible(true);
+        }
+
+        //SEND EMAIL BUTTON
+        if (e.getSource()==mainController.getNewEmail().getSendButton()){
+            SendEmail send= new SendEmail(mainController);
+            send.createEmail(mainController.getNewEmail().getToTextfield(),
+                             mainController.getNewEmail().getSubjetTextArea(),
+                             mainController.getNewEmail().getMessageTextfield());
+            send.sendEmail();
         }
 
     }

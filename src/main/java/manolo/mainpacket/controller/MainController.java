@@ -5,6 +5,7 @@ import lombok.Setter;
 import manolo.mainpacket.controller.databaseconnection.MainConnection;
 import manolo.mainpacket.controller.ftpserver.FtpService;
 import manolo.mainpacket.controller.listeners.email.EmailButtonsListener;
+import manolo.mainpacket.controller.listeners.email.EmailLabelsListener;
 import manolo.mainpacket.controller.listeners.email.NewEmailButtonsListener;
 import manolo.mainpacket.model.User;
 import manolo.mainpacket.model.UserType;
@@ -109,6 +110,9 @@ public class MainController {
     public void addEmailListeners() {
         for (int i = 0; i < emailView.getButtons().size(); i++) {
             emailView.getButtons().get(i).addActionListener(new EmailButtonsListener(this));
+        }
+        for (int i=0; i<emailView.getLabels().size(); i++){
+            emailView.getLabels().get(i).addMouseListener(new EmailLabelsListener(this));
         }
     }
 

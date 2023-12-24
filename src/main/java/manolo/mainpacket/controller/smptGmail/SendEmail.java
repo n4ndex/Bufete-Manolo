@@ -1,5 +1,6 @@
-/*
 package manolo.mainpacket.controller.smptGmail;
+
+import manolo.mainpacket.controller.MainController;
 
 import javax.mail.*;
 import javax.mail.internet.AddressException;
@@ -12,6 +13,8 @@ import java.util.logging.Logger;
 
 public class SendEmail {
 
+    MainController mainController;
+
     private static String emailFrom = "";
     private static String passwordFrom = "";
     private String emailTo;
@@ -22,14 +25,17 @@ public class SendEmail {
     private Session mSession;
     private MimeMessage mCorreo;
 
-    public EnvioCorreos() {
+    public SendEmail(MainController mainController) {
+        this.mainController=mainController;
+        emailFrom=mainController.getCurrentUser().getEmail();
+        passwordFrom=mainController.getCurrentUser().getPassword();
         mProperties = new Properties();
     }
 
-    public void createEmail() {
-        emailTo = txtTo.getText().trim();
-        subject = txtSubject.getText().trim();
-        content = txtContent.getText().trim();
+    public void createEmail(JTextField to,JTextArea message, JTextField subjectt) {
+        emailTo = to.getText().trim();
+        subject = subjectt.getText().trim();
+        content = message.getText().trim();
 
         // Simple mail transfer protocol
         mProperties.put("mail.smtp.host", "smtp.gmail.com");
@@ -73,6 +79,6 @@ public class SendEmail {
         }
     }
 }
-*/
+
 
 
