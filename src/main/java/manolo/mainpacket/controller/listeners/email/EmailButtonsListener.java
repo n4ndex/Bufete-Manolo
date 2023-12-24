@@ -17,17 +17,17 @@ public class EmailButtonsListener implements ActionListener {
     }
     @Override
     public void actionPerformed(ActionEvent e) {
+        //NEW EMAIL BUTTON
         if (e.getSource()== mainController.getEmailView().getButtons().get(0)){
             mainController.getEmailView().dispose();
             mainController.setNewEmail(new NewEmail());
             mainController.addNewEmailListeners();
         }
 
+        //BACK BUTTON
         if (e.getSource()== mainController.getEmailView().getButtons().get(1)){
             mainController.getEmailView().dispose();
-            mainController.setMenu(new Menu());
             mainController.getMenu().setVisible(true);
-            mainController.addMenuEventListeners();
         }
     }
 }
