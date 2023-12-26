@@ -175,4 +175,18 @@ public class MainConnection {
         }
         return user_type_id;
     }
+
+    public void insertLog(String userDni, String operation) {
+        try {
+            String query = "INSERT INTO logs (operation, date, time, id_user) VALUES (?, CURDATE(), CURTIME(), (SELECT id_user FROM users WHERE dni = ?))";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, operation);
+            preparedStatement.setString(2, userDni);
+            preparedStatement.executeUpdate();
+            System.out.println("Log insertado correctamente.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error en la inserción del log.");
+        }
+    }
 }

@@ -45,11 +45,16 @@ public class ClientDownloadListener implements ActionListener {
                     int userSelection = fileChooser.showSaveDialog(mainController.getFtpWindowClient());
 
                     if (userSelection == JFileChooser.APPROVE_OPTION) {
+                        mainController.getMainConnection().openConnection(mainController.getMainConnectionModel().getMYSQL_URL(), mainController.getMainConnectionModel().getMYSQL_DATABASE(), mainController.getMainConnectionModel().getMYSQL_USERNAME(), mainController.getMainConnectionModel().getPASSWORD());
+
                         File selectedFile = fileChooser.getSelectedFile();
 
                         Files.write(selectedFile.toPath(), fileBytes);
 
-                        mainController.showInfoWindow(mainController.getFtpWindowClient(), "Archivo descargado exitosamente en la ruta seleccionada.");
+                        mainController.showInfoWindow(mainController.getFtpWindowClient(), "Archivo descargado exitosamente en la ruta: " + selectedFile.getAbsolutePath());
+
+                        mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " download file: " + selectedFile.getName());
+                        mainController.getMainConnection().closeConnection();
                     }
                 } catch (Exception ex) {
                     mainController.showErrorWindow(mainController.getFtpWindowClient(), "Error al descargar el archivo: " + ex.getMessage());

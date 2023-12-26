@@ -24,6 +24,8 @@ public class ButtonsListener implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
+        mainController.getMainConnection().openConnection(mainController.getMainConnectionModel().getMYSQL_URL(), mainController.getMainConnectionModel().getMYSQL_DATABASE(), mainController.getMainConnectionModel().getMYSQL_USERNAME(), mainController.getMainConnectionModel().getPASSWORD());
+
         mainController.getMenu().dispose();
         switch (((JButton) e.getSource()).getName()) {
             case "FTP" -> {
@@ -42,19 +44,24 @@ public class ButtonsListener implements ActionListener {
                     mainController.getFtpWindowClient().getServerLabel().setText(mainController.getFtpWindowClient().getModel().getTextsList().get(2) + mainController.getMainClient().getLocalAddress());
                     mainController.addFtpClientEventListeners();
                 }
+                mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " - " + mainController.getCurrentUser().getUserType().getType().toUpperCase() + " open FTP explorer");
             }
             case "EMAIL" -> {
                 mainController.setEmailModel(new EmailTexts());
                 mainController.setEmailView(new Email(mainController.getEmailModel()));
                 mainController.addEmailListeners();
+                mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " open EMAIL explorer");
             }
             case "CASOS" -> {
                 mainController.setCasosView(new Casos(mainController));
+                mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " open CASOS explorer");
             }
             case "LOG OUT" -> {
                 mainController.setLoginView(new Login());
                 mainController.addLoginEventListeners();
+                mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " LOG OUT");
             }
         }
+        mainController.getMainConnection().closeConnection();
     }
 }

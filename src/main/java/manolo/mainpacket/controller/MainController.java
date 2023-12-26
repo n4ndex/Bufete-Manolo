@@ -19,6 +19,7 @@ import org.apache.commons.net.ftp.FTPClient;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 @Getter
 @Setter
@@ -144,6 +145,8 @@ public class MainController {
                 isLawyer = false;
             }
 
+            mainConnection.insertLog(currentUser.getDni(), "LOGIN from user: " + currentUser.getName());
+
             addMenuEventListeners();
         } else {
             showErrorWindow(loginView, "Error al iniciar sesión. DNI o contraseña incorrecta.");
@@ -181,15 +184,29 @@ public class MainController {
                 userType = new UserType(registerView.getModel().getUser_types().getFirst(), 0);
                 menu.getButtons().get(2).setEnabled(true);
                 mainClient = ftpService.loginFtp(ftpServiceModel.getHost(), ftpServiceModel.getPort(), ftpServiceModel.getUsernameLawyer(), ftpServiceModel.getPassword());
+
+                currentUser = new User(dni, name, password, email, userType, idLawyer);
+
+                String userFolderName = currentUser.getDni();
+                String userFolderPath = File.separator + userFolderName;
+
+                ftpService.createDirectory(userFolderPath, mainClient, ftpWindow);
+
+                String emptyFileName = "empty_file.txt";
+                String emptyFilePath = userFolderPath + File.separator + emptyFileName;
+                ftpService.createEmptyFile(emptyFilePath, mainClient);
             } else {
                 userType = new UserType(registerView.getModel().getUser_types().get(1), 1);
                 menu.getButtons().get(2).setEnabled(false);
                 mainClient = ftpService.loginFtp(ftpServiceModel.getHost(), ftpServiceModel.getPort(), ftpServiceModel.getUsernameClient(), ftpServiceModel.getPassword());
+                currentUser = new User(dni, name, password, email, userType, idLawyer);
             }
 
-            currentUser = new User(dni, name, password, email, userType, idLawyer);
             menu.setTitle("¡Bienvenido " + currentUser.getName() + "! - " + currentUser.getUserType().getType().toUpperCase());
             mainConnection.insertNewUser(currentUser);
+
+            mainConnection.insertLog(currentUser.getDni(), "REGISTER & LOGIN from user: " + currentUser.getName());
+
             addMenuEventListeners();
 
             showInfoWindow(registerView, "Usuario creado correctamente.");

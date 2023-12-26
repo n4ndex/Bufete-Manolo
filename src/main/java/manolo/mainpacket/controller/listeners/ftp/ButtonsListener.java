@@ -26,9 +26,12 @@ public class ButtonsListener implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
+        mainController.getMainConnection().openConnection(mainController.getMainConnectionModel().getMYSQL_URL(), mainController.getMainConnectionModel().getMYSQL_DATABASE(), mainController.getMainConnectionModel().getMYSQL_USERNAME(), mainController.getMainConnectionModel().getPASSWORD());
+
         if (e.getSource() == mainController.getFtpWindow().getExitButton()) {   // exit to menu button
             mainController.getFtpWindow().dispose();
             mainController.getMenu().setVisible(true);
+            mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " leave FTP");
         } else if (e.getSource() == mainController.getFtpWindow().getCreateDirButton()) {   // create dir button
             TreePath selectedPath = mainController.getFtpWindow().getTreeDirectories().getSelectionPath();
 
@@ -47,6 +50,7 @@ public class ButtonsListener implements ActionListener {
                     String emptyFileName = "empty_file.txt";
                     String emptyFilePath = newDirectoryPath + File.separator + emptyFileName;
                     mainController.getFtpService().createEmptyFile(emptyFilePath, mainController.getMainClient());
+                    mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " creates directory: " + folderName);
 
                     mainController.getFtpWindow().loadDirectory(mainController.getMainClient(), mainController.getFtpWindow().getLawyerDni());
                 } else {
@@ -67,6 +71,8 @@ public class ButtonsListener implements ActionListener {
 
                 if (option == JOptionPane.YES_OPTION) {
                     if (mainController.getFtpService().deleteDirectory(selectedDirectoryPath, mainController.getMainClient(), mainController.getFtpWindow())) {
+                        mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " deletes directory: " + selectedDirectoryPath);
+
                         mainController.getFtpWindow().loadDirectory(mainController.getMainClient(), mainController.getFtpWindow().getLawyerDni());
                     } else {
                         mainController.showErrorWindow(mainController.getFtpWindow(), "Error al eliminar el directorio.");
@@ -91,6 +97,7 @@ public class ButtonsListener implements ActionListener {
 
                 if (option == JOptionPane.YES_OPTION) {
                     if (mainController.getFtpService().deleteFile(selectedFilePath, mainController.getMainClient())) {
+                        mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " deletes file: " + selectedFileName);
                         mainController.getFtpWindow().loadDirectory(mainController.getMainClient(), mainController.getFtpWindow().getLawyerDni());
                     } else {
                         mainController.showErrorWindow(mainController.getFtpWindow(), "Error al eliminar el archivo.");
@@ -121,7 +128,8 @@ public class ButtonsListener implements ActionListener {
 
                             Files.write(selectedFile.toPath(), fileBytes);
 
-                            mainController.showInfoWindow(mainController.getFtpWindow(), "Archivo descargado exitosamente en la ruta seleccionada.");
+                            mainController.showInfoWindow(mainController.getFtpWindow(), "Archivo descargado exitosamente en la ruta: " + selectedFile.getAbsolutePath());
+                            mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " download file: " + selectedFile.getName());
                         }
                     } else {
                         mainController.showErrorWindow(mainController.getFtpWindow(), "No se puede descargar un directorio. Por favor, seleccione un archivo.");
@@ -133,36 +141,36 @@ public class ButtonsListener implements ActionListener {
                 mainController.showWarningWindow(mainController.getFtpWindow(), "Ningún archivo seleccionado para descargar.");
             }
         } else if (e.getSource() == mainController.getFtpWindow().getUploadButton()) {  // upload file button
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setDialogTitle("Selecciona un archivo a subir");
+            // Get the selected directory node in the tree
+            DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) mainController.getFtpWindow().getTreeDirectories().getLastSelectedPathComponent();
 
-            int userSelection = fileChooser.showOpenDialog(mainController.getFtpWindow());
+            if (selectedNode != null) {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setDialogTitle("Selecciona un archivo a subir");
 
-            if (userSelection == JFileChooser.APPROVE_OPTION) {
-                File selectedFile = fileChooser.getSelectedFile();
+                int userSelection = fileChooser.showOpenDialog(mainController.getFtpWindow());
 
-                // Get the selected directory node in the tree
-                DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) mainController.getFtpWindow().getTreeDirectories().getLastSelectedPathComponent();
-
-                if (selectedNode != null) {
+                if (userSelection == JFileChooser.APPROVE_OPTION) {
+                    File selectedFile = fileChooser.getSelectedFile();
 
                     String selectedDirectory = mainController.getFtpWindow().getSelectedDirectoryPath(selectedNode);
 
-                    // Build the remote path for the new file
                     String remotePath = selectedDirectory + File.separator + selectedFile.getName();
 
                     try {
-                        // Upload the file to the server
                         mainController.getFtpService().uploadFile(selectedFile.getAbsolutePath(), remotePath, mainController.getMainClient());
+                        mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " uploads file: " + selectedFile.getName());
+
                         mainController.getFtpWindow().loadDirectory(mainController.getMainClient(), mainController.getFtpWindow().getLawyerDni());
                     } catch (Exception ex) {
                         mainController.showErrorWindow(mainController.getFtpWindow(), "Error subiendo archivo: " + ex.getMessage());
                     }
-                } else {
-                    mainController.showWarningWindow(mainController.getFtpWindow(), "Selecciona un directorio antes de subir el archivo.");
                 }
+            } else {
+                mainController.showWarningWindow(mainController.getFtpWindow(), "Selecciona un directorio antes de subir el archivo.");
             }
         } else if (e.getSource() == mainController.getFtpWindow().getRefreshButton()) { // refresh tree button
+            mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " refreshes tree");
             mainController.getFtpWindow().loadDirectory(mainController.getMainClient(), mainController.getFtpWindow().getLawyerDni());
         } else if (e.getSource() == mainController.getFtpWindow().getRenameButton()) {  // rename file button
             int option = JOptionPane.showConfirmDialog(
@@ -182,6 +190,8 @@ public class ButtonsListener implements ActionListener {
 
                     try {
                         mainController.getFtpService().renameFile(currentPath, newPath, mainController.getMainClient());
+                        mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " renames file: " + oldName + " to: " + newName);
+
                         mainController.getFtpWindow().loadDirectory(mainController.getMainClient(), mainController.getFtpWindow().getLawyerDni());
                         mainController.showInfoWindow(mainController.getFtpWindow(), "Archivo renombrado exitosamente.");
                     } catch (Exception ex) {
@@ -192,5 +202,6 @@ public class ButtonsListener implements ActionListener {
                 }
             }
         }
+        mainController.getMainConnection().closeConnection();
     }
 }
