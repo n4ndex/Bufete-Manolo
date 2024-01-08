@@ -50,7 +50,7 @@ public class FTPWindowClient extends JFrame {
             @Override
             public void windowClosed(WindowEvent e) {
                 super.windowClosed(e);
-                mainController.getMenu().setVisible(true); // Hace visible el menú al cerrar "Casos"
+                mainController.getMenu().setVisible(true); // Hace visible el menú al cerrar "FTP"
             }
         });
         this.setVisible(true);

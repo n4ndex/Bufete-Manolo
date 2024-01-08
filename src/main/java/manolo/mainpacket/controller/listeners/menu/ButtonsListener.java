@@ -56,6 +56,10 @@ public class ButtonsListener implements ActionListener {
                 mainController.setCasosView(new Casos(mainController));
                 mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " open CASOS explorer");
             }
+            case "ACERCA DE" -> {
+                mainController.setAbout(new About(mainController.getMenu()));
+                mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " open ABOUT window");
+            }
             case "LOG OUT" -> {
                 mainController.setLoginView(new Login());
                 mainController.addLoginEventListeners();

@@ -128,6 +128,10 @@ public class Login extends JFrame {
             JButton button = new JButton(model.getTextsList().get(model.getTextsList().size() - 1));
             buttons.add(button);
             buttons.get(0).setEnabled(false);
+
+            Font buttonFont = new Font("Arial", Font.BOLD, 16);
+            button.setFont(buttonFont);
+            button.setBackground(new Color(255, 215, 0));  // Dorado
         }
     }
 
