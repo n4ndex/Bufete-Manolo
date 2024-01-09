@@ -21,6 +21,8 @@ public class NewEmail extends JFrame{
     }
 
     private void initUI() {
+        ImageIcon icon = new ImageIcon("target/classes/assets/icon_app.jpg");
+        setIconImage(icon.getImage());
         this.setContentPane(mainPanel);
         Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
         int height = pantalla.height;

@@ -39,6 +39,8 @@ public class About extends JFrame {
     }
 
     private void settings(JFrame menu) {
+        ImageIcon icon = new ImageIcon("target/classes/assets/icon_app.jpg");
+        setIconImage(icon.getImage());
         setTitle(model.getTitle());
         setSize(600, 400);
         setLocationRelativeTo(menu);
@@ -61,7 +63,7 @@ public class About extends JFrame {
 
     private void addImagePanel() {
         JPanel imagePanel = new JPanel();
-        imagePanel.setBackground(Color.WHITE);
+        imagePanel.setBackground(new Color(252, 255, 195));
 
         URL imageURL = getClass().getClassLoader().getResource("assets/copyright.png");
 
@@ -101,7 +103,7 @@ public class About extends JFrame {
     private void createPanels(int max) {
         for (int i = 0; i < max; i++) {
             JPanel panel = new JPanel();
-            panel.setBackground(Color.WHITE);
+            panel.setBackground(new Color(252, 255, 195));
             panels.add(panel);
         }
     }

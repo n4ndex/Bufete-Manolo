@@ -7,6 +7,7 @@ import manolo.mainpacket.controller.ftpserver.FtpService;
 import manolo.mainpacket.controller.listeners.email.EmailButtonsListener;
 import manolo.mainpacket.controller.listeners.email.EmailLabelsListener;
 import manolo.mainpacket.controller.listeners.email.NewEmailButtonsListener;
+import manolo.mainpacket.controller.listeners.login.KeysListener;
 import manolo.mainpacket.model.User;
 import manolo.mainpacket.model.UserType;
 import manolo.mainpacket.model.controllermodels.FtpServiceModel;
@@ -75,6 +76,7 @@ public class MainController {
         loginView.getButtons().getFirst().addActionListener(new manolo.mainpacket.controller.listeners.login.ButtonsListener(this));
         loginView.getTextFields().getFirst().getDocument().addDocumentListener(new manolo.mainpacket.controller.listeners.login.LoginDocumentListener(this));
         loginView.getPasswordFields().getFirst().getDocument().addDocumentListener(new manolo.mainpacket.controller.listeners.login.LoginDocumentListener(this));
+        loginView.getPasswordFields().getFirst().addKeyListener(new KeysListener(this));
     }
 
     public void addRegisterEventListeners() {
@@ -84,6 +86,7 @@ public class MainController {
         registerView.getTextFields().get(1).getDocument().addDocumentListener(new manolo.mainpacket.controller.listeners.register.RegisterDocumentListener(this));
         registerView.getTextFields().get(2).getDocument().addDocumentListener(new manolo.mainpacket.controller.listeners.register.RegisterDocumentListener(this));
         registerView.getPasswordFields().getFirst().getDocument().addDocumentListener(new manolo.mainpacket.controller.listeners.register.RegisterDocumentListener(this));
+        registerView.getPasswordFields().getFirst().addKeyListener(new manolo.mainpacket.controller.listeners.register.KeysListener(this));
     }
 
     public void addMenuEventListeners() {
@@ -121,6 +124,11 @@ public class MainController {
     public void addNewEmailListeners() {
         newEmail.getSendButton().addActionListener(new NewEmailButtonsListener(this));
         newEmail.getCancelButton().addActionListener(new NewEmailButtonsListener(this));
+    }
+
+    public void addCasosEventListeners() {
+        casosView.getButtonCrear().addActionListener(new manolo.mainpacket.controller.listeners.casos.ButtonsListener(this));
+        casosView.getTextFieldCaso().addKeyListener(new manolo.mainpacket.controller.listeners.casos.KeysListener(this));
     }
 
     public void submitLogin() {
@@ -177,7 +185,7 @@ public class MainController {
                 String email = registerView.getTextFields().get(2).getText();
 
                 String selectedLawyerName = registerView.getCombos().getFirst().getSelectedItem().toString();
-                int idLawyer = mainConnection.getLawyerIdFromName(selectedLawyerName);
+                int idLawyer = mainConnection.getIdFromName(selectedLawyerName);
 
                 isLawyer = registerView.getChecks().getFirst().isSelected();
                 UserType userType;

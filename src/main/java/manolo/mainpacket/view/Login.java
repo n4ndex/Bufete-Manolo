@@ -5,6 +5,10 @@ import lombok.Setter;
 import manolo.mainpacket.model.viewmodels.LoginTexts;
 
 import javax.swing.*;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -29,7 +33,7 @@ public class Login extends JFrame {
         // Creación de elementos de la ventana
         createPanels(amountPanels);
         createLabels(amountLabels);
-        createTextField(amountTextFields);
+        createDniField(amountTextFields);
         createPasswordField(amountPasswordFields);
         createButtons(amountButtons);
 
@@ -102,16 +106,34 @@ public class Login extends JFrame {
         }
     }
 
-    private void createTextField(int max) {
+    private void createDniField(int max) {
         for (int i = 0; i < max; i++) {
-            JTextField textField = new JTextField(10);
-            textFields.add(textField);
+            JTextField dniField = new JTextField(9);
+
+            // Filtro de 9 caracteres maximo
+            ((AbstractDocument) dniField.getDocument()).setDocumentFilter(new DocumentFilter() {
+                @Override
+                public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+                    if ((fb.getDocument().getLength() + string.length()) <= 9) {
+                        super.insertString(fb, offset, string, attr);
+                    }
+                }
+
+                @Override
+                public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                    if ((fb.getDocument().getLength() + text.length() - length) <= 9) {
+                        super.replace(fb, offset, length, text, attrs);
+                    }
+                }
+            });
+
+            textFields.add(dniField);
         }
     }
 
     private void createPasswordField(int max) {
         for (int i = 0; i < max; i++) {
-            JPasswordField passwordField = new JPasswordField(30);
+            JPasswordField passwordField = new JPasswordField(20);
             passwordFields.add(passwordField);
         }
     }
@@ -136,13 +158,15 @@ public class Login extends JFrame {
     }
 
     private void settings() {
+        ImageIcon icon = new ImageIcon("target/classes/assets/icon_app.jpg");
+        setIconImage(icon.getImage());
         Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
         int height = pantalla.height;
         int width = pantalla.width;
-        this.setSize(width/3, height - 450);
+        this.setSize(width / 4, height - 450);
         this.setTitle(model.getTitle());
         this.setLocationRelativeTo(null);
-        this.setResizable(true);
+        this.setResizable(false);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(true);
     }

@@ -6,6 +6,10 @@ import manolo.mainpacket.controller.MainController;
 import manolo.mainpacket.model.viewmodels.RegisterTexts;
 
 import javax.swing.*;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -127,14 +131,35 @@ public class Register extends JFrame {
 
     private void createTextField(int max) {
         for (int i = 0; i < max; i++) {
-            JTextField textField = new JTextField(30);
+            JTextField textField;
+            if (i == 0) {
+                textField = new JTextField(9);  // Aplicar filtro al DNI
+                ((AbstractDocument) textField.getDocument()).setDocumentFilter(new DocumentFilter() {
+                    @Override
+                    public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+                        if ((fb.getDocument().getLength() + string.length()) <= 9) {
+                            super.insertString(fb, offset, string, attr);
+                        }
+                    }
+
+                    @Override
+                    public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                        if ((fb.getDocument().getLength() + text.length() - length) <= 9) {
+                            super.replace(fb, offset, length, text, attrs);
+                        }
+                    }
+                });
+            } else {
+                textField = new JTextField(10);
+            }
+
             textFields.add(textField);
         }
     }
 
     private void createPasswordField(int max) {
         for (int i = 0; i < max; i++) {
-            JPasswordField passwordField = new JPasswordField(30);
+            JPasswordField passwordField = new JPasswordField(20);
             passwordFields.add(passwordField);
         }
     }
@@ -179,12 +204,13 @@ public class Register extends JFrame {
         mainController.getMainConnection().closeConnection();
     }
 
-
     private void settings() {
+        ImageIcon icon = new ImageIcon("target/classes/assets/icon_app.jpg");
+        setIconImage(icon.getImage());
         Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
         int height = pantalla.height;
         int width = pantalla.width;
-        this.setSize(width / 3, height - 250);
+        this.setSize(width / 4, height - 200);
         this.setTitle("Register Bufete");
         this.setLocationRelativeTo(null);
         this.setResizable(true);

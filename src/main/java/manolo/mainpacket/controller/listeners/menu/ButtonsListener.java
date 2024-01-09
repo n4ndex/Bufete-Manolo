@@ -54,6 +54,7 @@ public class ButtonsListener implements ActionListener {
             }
             case "CASOS" -> {
                 mainController.setCasosView(new Casos(mainController));
+                mainController.addCasosEventListeners();
                 mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " open CASOS explorer");
             }
             case "ACERCA DE" -> {

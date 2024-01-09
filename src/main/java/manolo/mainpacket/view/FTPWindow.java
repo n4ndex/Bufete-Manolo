@@ -13,6 +13,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 @Getter
 @Setter
@@ -43,13 +45,14 @@ public class FTPWindow extends JFrame {
         this.ftpClient = mainController.getMainClient();
         this.ftpService = mainController.getFtpService();
         initComponents();
-        initUI();
+        initUI(mainController);
     }
 
     private void initComponents() {
         loadDirectory(ftpClient, lawyerDni);
         setLabelTexts();
         setButtonTexts();
+        setButtonStyles();
     }
 
     private void setLabelTexts() {
@@ -70,7 +73,24 @@ public class FTPWindow extends JFrame {
         renameButton.setText(model.getTextsList().get(11));
     }
 
-    private void initUI() {
+    private void setButtonStyles() {
+        applyButtonStyle(createDirButton);
+        applyButtonStyle(deleteFileButton);
+        applyButtonStyle(uploadButton);
+        applyButtonStyle(downloadButton);
+        applyButtonStyle(deleteDirButton);
+        applyButtonStyle(renameButton);
+    }
+
+    private void applyButtonStyle(JButton button) {
+        Font buttonFont = new Font("Arial", Font.BOLD, 16);
+        button.setFont(buttonFont);
+        button.setBackground(new Color(255, 215, 0));  // Dorado
+    }
+
+    private void initUI(MainController mainController) {
+        ImageIcon icon = new ImageIcon("target/classes/assets/icon_app.jpg");
+        setIconImage(icon.getImage());
         this.setContentPane(mainPanel);
         Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
         int height = (int) (pantalla.getHeight() + 300);
@@ -81,6 +101,13 @@ public class FTPWindow extends JFrame {
         this.setLocationRelativeTo(null);
         this.setResizable(true);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                super.windowClosed(e);
+                mainController.getMenu().setVisible(true); // Hace visible el menú al cerrar "FTP"
+            }
+        });
         this.setVisible(true);
     }
 
