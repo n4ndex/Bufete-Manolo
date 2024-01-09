@@ -175,53 +175,57 @@ public class MainController {
         String dni = registerView.getTextFields().get(0).getText();
         boolean userExists = mainConnection.checkIfUserExists(dni);
 
-        if (areFieldsFilled() && isValidDNI(registerView.getTextFields().get(0).getText()) && isValidEmail() && isStrongPassword()) {
-            if (!userExists) {
-                registerView.dispose();
-                menu = new Menu();
+        if (areFieldsFilled() && isValidEmail() && isStrongPassword()) {
+            if (isValidDNI(registerView.getTextFields().get(0).getText())) {
+                if (!userExists) {
+                    registerView.dispose();
+                    menu = new Menu();
 
-                String name = registerView.getTextFields().get(1).getText();
-                String password = new String(registerView.getPasswordFields().getFirst().getPassword());
-                String email = registerView.getTextFields().get(2).getText();
+                    String name = registerView.getTextFields().get(1).getText();
+                    String password = new String(registerView.getPasswordFields().getFirst().getPassword());
+                    String email = registerView.getTextFields().get(2).getText();
 
-                String selectedLawyerName = registerView.getCombos().getFirst().getSelectedItem().toString();
-                int idLawyer = mainConnection.getIdFromName(selectedLawyerName);
+                    String selectedLawyerName = registerView.getCombos().getFirst().getSelectedItem().toString();
+                    int idLawyer = mainConnection.getIdFromName(selectedLawyerName);
 
-                isLawyer = registerView.getChecks().getFirst().isSelected();
-                UserType userType;
+                    isLawyer = registerView.getChecks().getFirst().isSelected();
+                    UserType userType;
 
-                if (isLawyer) {
-                    userType = new UserType(registerView.getModel().getUser_types().getFirst(), 0);
-                    menu.getButtons().get(2).setEnabled(true);
-                    mainClient = ftpService.loginFtp(ftpServiceModel.getHost(), ftpServiceModel.getPort(), ftpServiceModel.getUsernameLawyer(), ftpServiceModel.getPassword());
+                    if (isLawyer) {
+                        userType = new UserType(registerView.getModel().getUser_types().getFirst(), 0);
+                        menu.getButtons().get(2).setEnabled(true);
+                        mainClient = ftpService.loginFtp(ftpServiceModel.getHost(), ftpServiceModel.getPort(), ftpServiceModel.getUsernameLawyer(), ftpServiceModel.getPassword());
 
-                    currentUser = new User(dni, name, password, email, userType, idLawyer);
+                        currentUser = new User(dni, name, password, email, userType, idLawyer);
 
-                    String userFolderName = currentUser.getDni();
-                    String userFolderPath = File.separator + userFolderName;
+                        String userFolderName = currentUser.getDni();
+                        String userFolderPath = File.separator + userFolderName;
 
-                    ftpService.createDirectory(userFolderPath, mainClient, ftpWindow);
+                        ftpService.createDirectory(userFolderPath, mainClient, ftpWindow);
 
-                    String emptyFileName = "empty_file.txt";
-                    String emptyFilePath = userFolderPath + File.separator + emptyFileName;
-                    ftpService.createEmptyFile(emptyFilePath, mainClient);
+                        String emptyFileName = "empty_file.txt";
+                        String emptyFilePath = userFolderPath + File.separator + emptyFileName;
+                        ftpService.createEmptyFile(emptyFilePath, mainClient);
+                    } else {
+                        userType = new UserType(registerView.getModel().getUser_types().get(1), 1);
+                        menu.getButtons().get(2).setEnabled(false);
+                        mainClient = ftpService.loginFtp(ftpServiceModel.getHost(), ftpServiceModel.getPort(), ftpServiceModel.getUsernameClient(), ftpServiceModel.getPassword());
+                        currentUser = new User(dni, name, password, email, userType, idLawyer);
+                    }
+
+                    menu.setTitle("¡Bienvenido " + currentUser.getName() + "! - " + currentUser.getUserType().getType().toUpperCase());
+                    mainConnection.insertNewUser(currentUser);
+
+                    mainConnection.insertLog(currentUser.getDni(), "REGISTER & LOGIN from user: " + currentUser.getName());
+
+                    addMenuEventListeners();
+
+                    showInfoWindow(registerView, "Usuario creado correctamente.");
                 } else {
-                    userType = new UserType(registerView.getModel().getUser_types().get(1), 1);
-                    menu.getButtons().get(2).setEnabled(false);
-                    mainClient = ftpService.loginFtp(ftpServiceModel.getHost(), ftpServiceModel.getPort(), ftpServiceModel.getUsernameClient(), ftpServiceModel.getPassword());
-                    currentUser = new User(dni, name, password, email, userType, idLawyer);
+                    showErrorWindow(registerView, "El usuario ya existe, por favor ingrese otro o inicie sesión");
                 }
-
-                menu.setTitle("¡Bienvenido " + currentUser.getName() + "! - " + currentUser.getUserType().getType().toUpperCase());
-                mainConnection.insertNewUser(currentUser);
-
-                mainConnection.insertLog(currentUser.getDni(), "REGISTER & LOGIN from user: " + currentUser.getName());
-
-                addMenuEventListeners();
-
-                showInfoWindow(registerView, "Usuario creado correctamente.");
             } else {
-                showErrorWindow(registerView, "El usuario ya existe, por favor ingrese otro o inicie sesión");
+                showErrorWindow(registerView, "Por favor, ingrese un DNI válido (8 dígitos seguidos de una letra)");
             }
         }
 
@@ -246,7 +250,6 @@ public class MainController {
         if (dni.matches(dniRegex)) {
             return true;
         } else {
-            showErrorWindow(registerView, "Por favor, ingrese un DNI válido (8 dígitos seguidos de una letra)");
             return false;
         }
     }
