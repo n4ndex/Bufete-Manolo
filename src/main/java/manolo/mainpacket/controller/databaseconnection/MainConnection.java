@@ -39,10 +39,10 @@ public class MainConnection {
 
     public User getUserData(String dni, String password) {
         String query = """
-            SELECT users.*, user_types.*
-            FROM users
-            INNER JOIN user_types ON users.user_type_id = user_types.id_type
-            WHERE users.dni = ? AND users.password = ?""";
+                SELECT users.*, user_types.*
+                FROM users
+                INNER JOIN user_types ON users.user_type_id = user_types.id_type
+                WHERE users.dni = ? AND users.password = ?""";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, dni);
@@ -71,13 +71,12 @@ public class MainConnection {
         ArrayList<String> lawyerNames = new ArrayList<>();
 
         String query = """
-        SELECT name
-        FROM users
-        INNER JOIN user_types ON users.user_type_id = user_types.id_type
-        WHERE users.user_type_id = 1""";
+                SELECT name
+                FROM users
+                INNER JOIN user_types ON users.user_type_id = user_types.id_type
+                WHERE users.user_type_id = 1""";
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query); ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {
                 String name = resultSet.getString("name");
@@ -188,5 +187,25 @@ public class MainConnection {
             e.printStackTrace();
             System.err.println("Error en la inserción del log.");
         }
+    }
+
+    public int whichLawyerHasUserAssigned(String userDni) {
+        int idLawyer = 0;
+        try {
+            String query = """
+                    SELECT id_lawyer
+                    FROM users
+                    WHERE dni = ?;
+                    """;
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, userDni);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                idLawyer = resultSet.getInt("id_lawyer");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return idLawyer;
     }
 }

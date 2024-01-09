@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -43,16 +45,26 @@ public class ButtonsListener implements ActionListener {
 
                 if (folderName != null && !folderName.isEmpty()) {
                     String newDirectoryPath = selectedDirectory + File.separator + folderName;
-
-                    mainController.getFtpService().createDirectory(newDirectoryPath, mainController.getMainClient(), mainController.getFtpWindow());
-
-                    // Crear un archivo vacío dentro de la carpeta recién creada
-                    String emptyFileName = "empty_file.txt";
-                    String emptyFilePath = newDirectoryPath + File.separator + emptyFileName;
-                    mainController.getFtpService().createEmptyFile(emptyFilePath, mainController.getMainClient());
-                    mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " creates directory: " + folderName);
-
-                    mainController.getFtpWindow().loadDirectory(mainController.getMainClient(), mainController.getFtpWindow().getLawyerDni());
+                    Path newDirectory = Paths.get(newDirectoryPath);
+                    System.out.println(isThreeLevelsDeep(newDirectory));
+                    if (isThreeLevelsDeep(newDirectory)) {
+                        if (mainController.isValidDNI(folderName)) {
+                            if (mainController.getMainConnection().checkIfUserExists(folderName)) {
+                                int laywerId = mainController.getMainConnection().whichLawyerHasUserAssigned(folderName);
+                                if (laywerId == mainController.getCurrentUser().getId_lawyer()) {
+                                    mainController.showWarningWindow(mainController.getFtpWindow(), "El usuario con ese DNI no es tu cliente.");
+                                } else {
+                                    createNewDirectory(newDirectoryPath, folderName);
+                                }
+                            } else {
+                                mainController.showWarningWindow(mainController.getFtpWindow(), "Sólo puedes poner DNI si es de un usuario existente.");
+                            }
+                        }else{
+                            createNewDirectory(newDirectoryPath, folderName);
+                        }
+                    } else {
+                        createNewDirectory(newDirectoryPath, folderName);
+                    }
                 } else {
                     mainController.showErrorWindow(mainController.getFtpWindow(), "Error al crear la carpeta.");
                 }
@@ -65,9 +77,7 @@ public class ButtonsListener implements ActionListener {
             if (selectedNode != null) {
                 String selectedDirectoryPath = "" + selectedNode.getUserObject();
 
-                int option = JOptionPane.showConfirmDialog(mainController.getFtpWindow(),
-                        "¿Seguro que quieres eliminar el directorio?\n" + selectedDirectoryPath,
-                        "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+                int option = JOptionPane.showConfirmDialog(mainController.getFtpWindow(), "¿Seguro que quieres eliminar el directorio?\n" + selectedDirectoryPath, "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
 
                 if (option == JOptionPane.YES_OPTION) {
                     if (mainController.getFtpService().deleteDirectory(selectedDirectoryPath, mainController.getMainClient(), mainController.getFtpWindow())) {
@@ -88,12 +98,7 @@ public class ButtonsListener implements ActionListener {
                 String selectedFileName = (String) selectedNode.getUserObject();
                 String selectedFilePath = mainController.getFtpWindow().getDirectory() + File.separator + selectedFileName;
 
-                int option = JOptionPane.showConfirmDialog(
-                        mainController.getFtpWindow(),
-                        "¿Seguro que deseas eliminar el archivo '" + selectedFileName + "'?",
-                        "Confirmar eliminación",
-                        JOptionPane.YES_NO_OPTION
-                );
+                int option = JOptionPane.showConfirmDialog(mainController.getFtpWindow(), "¿Seguro que deseas eliminar el archivo '" + selectedFileName + "'?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
 
                 if (option == JOptionPane.YES_OPTION) {
                     if (mainController.getFtpService().deleteFile(selectedFilePath, mainController.getMainClient())) {
@@ -173,12 +178,7 @@ public class ButtonsListener implements ActionListener {
             mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " refreshes tree");
             mainController.getFtpWindow().loadDirectory(mainController.getMainClient(), mainController.getFtpWindow().getLawyerDni());
         } else if (e.getSource() == mainController.getFtpWindow().getRenameButton()) {  // rename file button
-            int option = JOptionPane.showConfirmDialog(
-                    mainController.getFtpWindow(),
-                    "¿Seguro deseas renombrar?",
-                    "Renombrar",
-                    JOptionPane.YES_NO_OPTION
-            );
+            int option = JOptionPane.showConfirmDialog(mainController.getFtpWindow(), "¿Seguro deseas renombrar?", "Renombrar", JOptionPane.YES_NO_OPTION);
 
             if (option == JOptionPane.YES_OPTION) {
                 DefaultMutableTreeNode selectedNode = mainController.getFtpWindow().getSelectedNode();
@@ -203,5 +203,20 @@ public class ButtonsListener implements ActionListener {
             }
         }
         mainController.getMainConnection().closeConnection();
+    }
+
+    private void createNewDirectory(String newDirectoryPath, String folderName) {
+        mainController.getFtpService().createDirectory(newDirectoryPath, mainController.getMainClient(), mainController.getFtpWindow());
+        // Crear un archivo vacío dentro de la carpeta recién creada
+        String emptyFileName = "empty_file.txt";
+        String emptyFilePath = newDirectoryPath + File.separator + emptyFileName;
+        mainController.getFtpService().createEmptyFile(emptyFilePath, mainController.getMainClient());
+        mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " creates directory: " + folderName);
+        mainController.getFtpWindow().loadDirectory(mainController.getMainClient(), mainController.getFtpWindow().getLawyerDni());
+    }
+
+    public static boolean isThreeLevelsDeep(Path path) {
+        int levels = path.getNameCount();
+        return levels == 3;
     }
 }

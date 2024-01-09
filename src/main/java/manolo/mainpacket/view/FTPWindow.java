@@ -99,7 +99,6 @@ public class FTPWindow extends JFrame {
             }
             selectedNode = (DefaultMutableTreeNode) selectedNode.getParent();
         }
-
         return "";
     }
 

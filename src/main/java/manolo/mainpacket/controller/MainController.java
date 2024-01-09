@@ -167,7 +167,7 @@ public class MainController {
         String dni = registerView.getTextFields().get(0).getText();
         boolean userExists = mainConnection.checkIfUserExists(dni);
 
-        if (areFieldsFilled() && isValidDNI() && isValidEmail() && isStrongPassword()) {
+        if (areFieldsFilled() && isValidDNI(registerView.getTextFields().get(0).getText()) && isValidEmail() && isStrongPassword()) {
             if (!userExists) {
                 registerView.dispose();
                 menu = new Menu();
@@ -232,8 +232,7 @@ public class MainController {
         return combo.getSelectedIndex() != -1;
     }
 
-    private boolean isValidDNI() {
-        String dni = registerView.getTextFields().get(0).getText();
+    public boolean isValidDNI(String dni) {
         String dniRegex = "^[0-9]{8}[A-Za-z]$";
 
         if (dni.matches(dniRegex)) {
