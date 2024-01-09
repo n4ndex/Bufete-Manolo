@@ -8,12 +8,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 @Getter
 public class Casos extends JFrame {
     private JPanel mainPanel;
     private JLabel labelTitle;
-    private JComboBox comboClient;
+    private JComboBox<String> comboClient;
     private JTextField textFieldCaso;
     private JButton buttonCrear;
     private JLabel labelClient;
@@ -30,10 +31,23 @@ public class Casos extends JFrame {
     private void initComponents() {
         setLabelTexts();
         setButtonTexts();
+        createClientCombo();
+    }
+
+    private void createClientCombo() {
+        ArrayList<String> clientNames = mainController.getMainConnection().getClientNames();
+
+        for (String clientName : clientNames) {
+            comboClient.addItem(clientName);
+        }
     }
 
     private void setButtonTexts() {
         buttonCrear.setText(model.getTextsList().get(3));
+
+        Font buttonFont = new Font("Arial", Font.BOLD, 16);
+        buttonCrear.setFont(buttonFont);
+        buttonCrear.setBackground(new Color(255, 215, 0));  // Dorado
     }
 
     private void setLabelTexts() {
@@ -49,6 +63,8 @@ public class Casos extends JFrame {
         int height = pantalla.height;
         int width = pantalla.width;
 
+        ImageIcon icon = new ImageIcon("target/classes/assets/icon_app.jpg");
+        setIconImage(icon.getImage());
         this.setTitle(model.getTitle());
         this.setSize(width / 3, height / 3);
         this.setLocationRelativeTo(null);

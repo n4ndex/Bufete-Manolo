@@ -34,6 +34,8 @@ public class Email extends JFrame {
     }
 
     public void creation(){
+        ImageIcon icon = new ImageIcon("target/classes/assets/icon_app.jpg");
+        setIconImage(icon.getImage());
         panelsSettings();
         labelSettings();
         buttonSettings();

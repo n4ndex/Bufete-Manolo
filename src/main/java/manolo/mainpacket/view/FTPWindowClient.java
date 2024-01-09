@@ -33,9 +33,15 @@ public class FTPWindowClient extends JFrame {
         nameLabel.setText(model.getTextsList().get(0) + clientName);
         serverLabel.setText(model.getTextsList().get(3));
         downloadButton.setText(model.getTextsList().get(7));
+
+        Font buttonFont = new Font("Arial", Font.BOLD, 16);
+        downloadButton.setFont(buttonFont);
+        downloadButton.setBackground(new Color(255, 215, 0));  // Dorado
     }
 
     private void initUI() {
+        ImageIcon icon = new ImageIcon("target/classes/assets/icon_app.jpg");
+        setIconImage(icon.getImage());
         this.setContentPane(mainPanel);
         Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
         int height = pantalla.height;

@@ -90,15 +90,39 @@ public class MainConnection {
         return lawyerNames;
     }
 
-    public int getLawyerIdFromName(String lawyerName) {
-        if (lawyerName.isEmpty() || lawyerName.equals("")) {
+    public ArrayList<String> getClientNames() {
+        ArrayList<String> clientNames = new ArrayList<>();
+
+        String query = """
+        SELECT name
+        FROM users
+        INNER JOIN user_types ON users.user_type_id = user_types.id_type
+        WHERE users.user_type_id = 2""";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            while (resultSet.next()) {
+                String name = resultSet.getString("name");
+                clientNames.add(name);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return clientNames;
+    }
+
+    public int getIdFromName(String name) {
+        if (name.isEmpty() || name.equals("")) {
             return 0; // Si el nombre del abogado está vacío o es "", asigna id_lawyer = 0
         }
 
         String query = "SELECT id_user FROM users WHERE name = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, lawyerName);
+            preparedStatement.setString(1, name);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
@@ -110,6 +134,28 @@ public class MainConnection {
         }
 
         return 0;
+    }
+
+    public String getDniFromName(String name) {
+        if (name.isEmpty() || name.equals("")) {
+            return "";
+        }
+
+        String query = "SELECT dni FROM users WHERE name = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, name);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getString("dni");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return "";
     }
 
     public boolean checkIfUserExists(String username) {
@@ -173,6 +219,18 @@ public class MainConnection {
             throw new RuntimeException(e);
         }
         return user_type_id;
+    }
+
+    public void updateClientLawyerId(String clientName, int newLawyerId) {
+        String query = "UPDATE users SET id_lawyer = ? WHERE name = ? AND user_type_id = 2";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, newLawyerId);
+            preparedStatement.setString(2, clientName);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void insertLog(String userDni, String operation) {

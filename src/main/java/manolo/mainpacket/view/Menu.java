@@ -67,6 +67,8 @@ public class Menu extends JFrame {
     }
 
     private void settings() {
+        ImageIcon icon = new ImageIcon("target/classes/assets/icon_app.jpg");
+        setIconImage(icon.getImage());
         Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
         int height = pantalla.height;
         int width = pantalla.width;
