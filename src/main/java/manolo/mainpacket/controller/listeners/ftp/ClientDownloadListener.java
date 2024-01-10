@@ -1,7 +1,7 @@
 package manolo.mainpacket.controller.listeners.ftp;
 
-import com.mysql.cj.xdevapi.Client;
 import manolo.mainpacket.controller.MainController;
+import manolo.mainpacket.model.controllermodels.Utils;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,8 +9,6 @@ import java.io.File;
 import java.nio.file.Files;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
 
 public class ClientDownloadListener implements ActionListener {
 
@@ -51,16 +49,16 @@ public class ClientDownloadListener implements ActionListener {
 
                         Files.write(selectedFile.toPath(), fileBytes);
 
-                        mainController.showInfoWindow(mainController.getFtpWindowClient(), "Archivo descargado exitosamente en la ruta: " + selectedFile.getAbsolutePath());
+                        Utils.showInfoWindow(mainController.getFtpWindowClient(), mainController.getMainViewModel().getFILE_DOWNLOAD_SUCCESS() + selectedFile.getAbsolutePath(), mainController.getMainViewModel().getINFO());
 
                         mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " download file: " + selectedFile.getName());
                         mainController.getMainConnection().closeConnection();
                     }
                 } catch (Exception ex) {
-                    mainController.showErrorWindow(mainController.getFtpWindowClient(), "Error al descargar el archivo: " + ex.getMessage());
+                    Utils.showErrorWindow(mainController.getFtpWindowClient(), mainController.getMainViewModel().getFILE_DOWNLOAD_ERROR() + ex.getMessage(), mainController.getMainViewModel().getERROR());
                 }
             } else {
-                mainController.showWarningWindow(mainController.getFtpWindowClient(), "Ningún archivo seleccionado para descargar.");
+                Utils.showWarningWindow(mainController.getFtpWindowClient(), mainController.getMainViewModel().getNO_FILE_SELECTED(), mainController.getMainViewModel().getWARNING());
             }
         }
     }

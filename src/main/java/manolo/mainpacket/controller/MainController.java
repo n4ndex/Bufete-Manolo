@@ -12,6 +12,7 @@ import manolo.mainpacket.model.User;
 import manolo.mainpacket.model.UserType;
 import manolo.mainpacket.model.controllermodels.FtpServiceModel;
 import manolo.mainpacket.model.controllermodels.MainConnectionModel;
+import manolo.mainpacket.model.controllermodels.Utils;
 import manolo.mainpacket.model.viewmodels.EmailTexts;
 import manolo.mainpacket.model.viewmodels.MainViewModel;
 import manolo.mainpacket.view.Menu;
@@ -27,38 +28,26 @@ import java.io.File;
 public class MainController {
     private User currentUser;
     private boolean isLawyer;
-    MainConnectionModel mainConnectionModel;
-    MainConnection mainConnection;
-    MainViewModel mainViewModel;
-    Login loginView;
-    Register registerView;
-    Menu menu;
-    FTPWindow ftpWindow;
-    FTPWindowClient ftpWindowClient;
-    Casos casosView;
-    EmailTexts emailModel;
-    Email emailView;
-    NewEmail newEmail;
-    About about;
-    FtpServiceModel ftpServiceModel;
-    FtpService ftpService;
-    FTPClient mainClient;
+    private MainConnectionModel mainConnectionModel;
+    private MainConnection mainConnection;
+    private MainViewModel mainViewModel;
+    private Login loginView;
+    private Register registerView;
+    private Menu menu;
+    private FTPWindow ftpWindow;
+    private FTPWindowClient ftpWindowClient;
+    private Casos casosView;
+    private EmailTexts emailModel;
+    private Email emailView;
+    private NewEmail newEmail;
+    private About about;
+    private FtpServiceModel ftpServiceModel;
+    private FtpService ftpService;
+    private FTPClient mainClient;
 
     public MainController() {
         initAttributes();
         addLoginEventListeners();
-    }
-
-    public void showErrorWindow(Component parentComponent, String errorMessage) {
-        JOptionPane.showMessageDialog(parentComponent, errorMessage, mainViewModel.getERROR(), JOptionPane.ERROR_MESSAGE);
-    }
-
-    public void showWarningWindow(Component parentComponent, String warningMessage) {
-        JOptionPane.showMessageDialog(parentComponent, warningMessage, mainViewModel.getWARNING(), JOptionPane.WARNING_MESSAGE);
-    }
-
-    public void showInfoWindow(Component parentComponent, String infoMessage) {
-        JOptionPane.showMessageDialog(parentComponent, infoMessage, mainViewModel.getINFO(), JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void initAttributes() {
@@ -116,7 +105,7 @@ public class MainController {
         for (int i = 0; i < emailView.getButtons().size(); i++) {
             emailView.getButtons().get(i).addActionListener(new EmailButtonsListener(this));
         }
-        for (int i=0; i<emailView.getLabels().size(); i++){
+        for (int i = 0; i < emailView.getLabels().size(); i++) {
             emailView.getLabels().get(i).addMouseListener(new EmailLabelsListener(this));
         }
     }
@@ -159,19 +148,14 @@ public class MainController {
 
             addMenuEventListeners();
         } else {
-            showErrorWindow(loginView, "Error al iniciar sesión. DNI o contraseña incorrecta.");
+            Utils.showErrorWindow(loginView, mainViewModel.getLOGIN_ERROR(), mainViewModel.getERROR());
         }
 
         mainConnection.closeConnection();
     }
 
     public void submitRegister() {
-        mainConnection.openConnection(
-                mainConnectionModel.getMYSQL_URL(),
-                mainConnectionModel.getMYSQL_DATABASE(),
-                mainConnectionModel.getMYSQL_USERNAME(),
-                mainConnectionModel.getPASSWORD()
-        );
+        mainConnection.openConnection(mainConnectionModel.getMYSQL_URL(), mainConnectionModel.getMYSQL_DATABASE(), mainConnectionModel.getMYSQL_USERNAME(), mainConnectionModel.getPASSWORD());
 
         String dni = registerView.getTextFields().get(0).getText();
         boolean userExists = mainConnection.checkIfUserExists(dni);
@@ -221,12 +205,12 @@ public class MainController {
 
                     addMenuEventListeners();
 
-                    showInfoWindow(registerView, "Usuario creado correctamente.");
+                    Utils.showInfoWindow(registerView, mainViewModel.getUSER_CREATED_SUCCESS(), mainViewModel.getINFO());
                 } else {
-                    showErrorWindow(registerView, "El usuario ya existe, por favor ingrese otro o inicie sesión");
+                    Utils.showWarningWindow(registerView, mainViewModel.getUSER_EXISTS(), mainViewModel.getWARNING());
                 }
             } else {
-                showErrorWindow(registerView, "Por favor, ingrese un DNI válido (8 dígitos seguidos de una letra)");
+                Utils.showWarningWindow(registerView, mainViewModel.getINVALID_DNI(), mainViewModel.getWARNING());
             }
         }
 
@@ -262,7 +246,7 @@ public class MainController {
         if (email.matches(emailRegex)) {
             return true;
         } else {
-            showErrorWindow(registerView, "Por favor, ingrese un correo electrónico válido");
+            Utils.showWarningWindow(registerView, mainViewModel.getINVALID_EMAIL(), mainViewModel.getWARNING());
             return false;
         }
     }
@@ -274,7 +258,7 @@ public class MainController {
         if (password.matches(passwordRegex)) {
             return true;
         } else {
-            showErrorWindow(registerView, "La contraseña debe contener al menos 8 caracteres, una letra, un número y un carácter especial.");
+            Utils.showWarningWindow(registerView, mainViewModel.getINVALID_PASSWORD(), mainViewModel.getWARNING());
             return false;
         }
     }

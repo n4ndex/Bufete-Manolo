@@ -1,7 +1,7 @@
 package manolo.mainpacket.controller.listeners.ftp;
 
 import manolo.mainpacket.controller.MainController;
-import manolo.mainpacket.controller.Utils;
+import manolo.mainpacket.model.controllermodels.Utils;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -42,34 +42,34 @@ public class ButtonsListener implements ActionListener {
                 DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) selectedPath.getLastPathComponent();
                 String selectedDirectory = mainController.getFtpWindow().getSelectedDirectoryPath(selectedNode);
 
-                String folderName = JOptionPane.showInputDialog(mainController.getFtpWindow(), "Ingrese el nombre de la carpeta:");
+                String directoryName = JOptionPane.showInputDialog(mainController.getFtpWindow(), "Ingrese el nombre de la carpeta:");
 
-                if (folderName != null && !folderName.isEmpty()) {
-                    String newDirectoryPath = selectedDirectory + File.separator + folderName;
+                if (directoryName != null && !directoryName.isEmpty()) {
+                    String newDirectoryPath = selectedDirectory + File.separator + directoryName;
                     Path newDirectory = Paths.get(newDirectoryPath);
                     if (Utils.isLevelsDeep(newDirectory, 3)) {
-                        if (mainController.isValidDNI(folderName)) {
-                            if (mainController.getMainConnection().checkIfUserExists(folderName)) {
-                                int laywerId = mainController.getMainConnection().whichLawyerHasUserAssigned(folderName);
+                        if (mainController.isValidDNI(directoryName)) {
+                            if (mainController.getMainConnection().checkIfUserExists(directoryName)) {
+                                int laywerId = mainController.getMainConnection().whichLawyerHasUserAssigned(directoryName);
                                 if (laywerId == mainController.getCurrentUser().getId_lawyer()) {
-                                    mainController.showWarningWindow(mainController.getFtpWindow(), "El usuario con ese DNI no es tu cliente.");
+                                    Utils.showWarningWindow(mainController.getFtpWindow(), mainController.getMainViewModel().getUSER_WITH_DNI_NOT_YOUR_CLIENT(), mainController.getMainViewModel().getWARNING());
                                 } else {
-                                    createNewDirectory(newDirectoryPath, folderName);
+                                    createNewDirectory(newDirectoryPath, directoryName);
                                 }
                             } else {
-                                mainController.showWarningWindow(mainController.getFtpWindow(), "Sólo puedes poner DNI si es de un usuario existente.");
+                                Utils.showWarningWindow(mainController.getFtpWindow(), mainController.getMainViewModel().getONLY_PUT_DNI_FROM_EXISTING_USER(), mainController.getMainViewModel().getWARNING());
                             }
-                        }else{
-                            createNewDirectory(newDirectoryPath, folderName);
+                        } else {
+                            createNewDirectory(newDirectoryPath, directoryName);
                         }
                     } else {
-                        createNewDirectory(newDirectoryPath, folderName);
+                        createNewDirectory(newDirectoryPath, directoryName);
                     }
                 } else {
-                    mainController.showErrorWindow(mainController.getFtpWindow(), "Error al crear la carpeta.");
+                    Utils.showErrorWindow(mainController.getFtpWindow(), mainController.getMainViewModel().getCREATE_DIRECTORY_ERROR() + directoryName, mainController.getMainViewModel().getERROR());
                 }
             } else {
-                mainController.showWarningWindow(mainController.getFtpWindow(), "Seleccione una carpeta origen antes de crear una nueva.");
+                Utils.showWarningWindow(mainController.getFtpWindow(), mainController.getMainViewModel().getSELECT_FOLDER_BEFORE_CREATE(), mainController.getMainViewModel().getWARNING());
             }
         } else if (e.getSource() == mainController.getFtpWindow().getDeleteDirButton()) {   // delete dir button
             DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) mainController.getFtpWindow().getTreeDirectories().getLastSelectedPathComponent();
@@ -85,11 +85,11 @@ public class ButtonsListener implements ActionListener {
 
                         mainController.getFtpWindow().loadDirectory(mainController.getMainClient(), mainController.getFtpWindow().getLawyerDni());
                     } else {
-                        mainController.showErrorWindow(mainController.getFtpWindow(), "Error al eliminar el directorio.");
+                        Utils.showErrorWindow(mainController.getFtpWindow(), mainController.getMainViewModel().getDELETE_DIRECTORY_ERROR() + selectedDirectoryPath, mainController.getMainViewModel().getERROR());
                     }
                 }
             } else {
-                mainController.showWarningWindow(mainController.getFtpWindow(), "Selecciona un directorio para eliminar.");
+                Utils.showWarningWindow(mainController.getFtpWindow(), mainController.getMainViewModel().getSELECT_DIRECTORY_BEFORE_DELETING(), mainController.getMainViewModel().getWARNING());
             }
         } else if (e.getSource() == mainController.getFtpWindow().getDeleteFileButton()) {  // delete file button
             DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) mainController.getFtpWindow().getTreeDirectories().getLastSelectedPathComponent();
@@ -105,11 +105,11 @@ public class ButtonsListener implements ActionListener {
                         mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " deletes file: " + selectedFileName);
                         mainController.getFtpWindow().loadDirectory(mainController.getMainClient(), mainController.getFtpWindow().getLawyerDni());
                     } else {
-                        mainController.showErrorWindow(mainController.getFtpWindow(), "Error al eliminar el archivo.");
+                        Utils.showErrorWindow(mainController.getFtpWindow(), mainController.getMainViewModel().getFILE_DELETE_ERROR() + selectedFileName, mainController.getMainViewModel().getERROR());
                     }
                 }
             } else {
-                mainController.showWarningWindow(mainController.getFtpWindow(), "Selecciona un archivo para eliminar.");
+                Utils.showWarningWindow(mainController.getFtpWindow(), mainController.getMainViewModel().getSELECT_FILE_BEFORE_DELETING(), mainController.getMainViewModel().getWARNING());
             }
         } else if (e.getSource() == mainController.getFtpWindow().getDownloadButton()) {    // download file button
             DefaultMutableTreeNode selectedNode = mainController.getFtpWindow().getSelectedNode();
@@ -133,17 +133,17 @@ public class ButtonsListener implements ActionListener {
 
                             Files.write(selectedFile.toPath(), fileBytes);
 
-                            mainController.showInfoWindow(mainController.getFtpWindow(), "Archivo descargado exitosamente en la ruta: " + selectedFile.getAbsolutePath());
+                            Utils.showInfoWindow(mainController.getFtpWindow(), mainController.getMainViewModel().getFILE_DOWNLOAD_SUCCESS() + selectedFile.getAbsolutePath(), mainController.getMainViewModel().getINFO());
                             mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " download file: " + selectedFile.getName());
                         }
                     } else {
-                        mainController.showErrorWindow(mainController.getFtpWindow(), "No se puede descargar un directorio. Por favor, seleccione un archivo.");
+                        Utils.showWarningWindow(mainController.getFtpWindow(), mainController.getMainViewModel().getSELECT_FILE_NO_DIRECTORY(), mainController.getMainViewModel().getWARNING());
                     }
                 } catch (Exception ex) {
-                    mainController.showErrorWindow(mainController.getFtpWindow(), "Error al descargar el archivo: " + ex.getMessage());
+                    Utils.showErrorWindow(mainController.getFtpWindow(), mainController.getMainViewModel().getFILE_DOWNLOAD_ERROR() + ex.getMessage(), mainController.getMainViewModel().getERROR());
                 }
             } else {
-                mainController.showWarningWindow(mainController.getFtpWindow(), "Ningún archivo seleccionado para descargar.");
+                Utils.showWarningWindow(mainController.getFtpWindow(), mainController.getMainViewModel().getNO_FILE_SELECTED(), mainController.getMainViewModel().getWARNING());
             }
         } else if (e.getSource() == mainController.getFtpWindow().getUploadButton()) {  // upload file button
             // Get the selected directory node in the tree
@@ -168,11 +168,11 @@ public class ButtonsListener implements ActionListener {
 
                         mainController.getFtpWindow().loadDirectory(mainController.getMainClient(), mainController.getFtpWindow().getLawyerDni());
                     } catch (Exception ex) {
-                        mainController.showErrorWindow(mainController.getFtpWindow(), "Error subiendo archivo: " + ex.getMessage());
+                        Utils.showErrorWindow(mainController.getFtpWindow(), mainController.getMainViewModel().getFILE_UPLOAD_ERROR() + ex.getMessage(), mainController.getMainViewModel().getERROR());
                     }
                 }
             } else {
-                mainController.showWarningWindow(mainController.getFtpWindow(), "Selecciona un directorio antes de subir el archivo.");
+                Utils.showWarningWindow(mainController.getFtpWindow(), mainController.getMainViewModel().getSELECT_DIRECTORY_BEFORE_UPLOADING_FILE(), mainController.getMainViewModel().getWARNING());
             }
         } else if (e.getSource() == mainController.getFtpWindow().getRefreshButton()) { // refresh tree button
             mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " refreshes tree");
@@ -193,12 +193,13 @@ public class ButtonsListener implements ActionListener {
                         mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " renames file: " + oldName + " to: " + newName);
 
                         mainController.getFtpWindow().loadDirectory(mainController.getMainClient(), mainController.getFtpWindow().getLawyerDni());
-                        mainController.showInfoWindow(mainController.getFtpWindow(), "Archivo renombrado exitosamente.");
+
+                        Utils.showInfoWindow(mainController.getFtpWindow(), mainController.getMainViewModel().getFILE_RENAME_SUCCESS(), mainController.getMainViewModel().getINFO());
                     } catch (Exception ex) {
-                        mainController.showErrorWindow(mainController.getFtpWindow(), "Error al renombrar el archivo: " + ex.getMessage());
+                        Utils.showErrorWindow(mainController.getFtpWindow(), mainController.getMainViewModel().getFILE_RENAME_ERROR() + ex.getMessage(), mainController.getMainViewModel().getERROR());
                     }
                 } else {
-                    mainController.showWarningWindow(mainController.getFtpWindow(), "Ningún archivo seleccionado para renombrar.");
+                    Utils.showWarningWindow(mainController.getFtpWindow(), mainController.getMainViewModel().getNO_FILE_CHOSEN_TO_RENAME(), mainController.getMainViewModel().getWARNING());
                 }
             }
         }

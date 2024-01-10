@@ -1,6 +1,7 @@
 package manolo.mainpacket.controller.listeners.ftp;
 
 import manolo.mainpacket.controller.MainController;
+import manolo.mainpacket.model.controllermodels.Utils;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -45,12 +46,12 @@ public class KeysListener implements KeyListener {
             try {
                 mainController.getFtpService().renameFile(currentPath, newPath, mainController.getMainClient());
                 mainController.getFtpWindow().loadDirectory(mainController.getMainClient(), mainController.getFtpWindow().getLawyerDni());
-                mainController.showInfoWindow(mainController.getFtpWindow(), "Archivo renombrado exitosamente.");
+                Utils.showInfoWindow(mainController.getFtpWindow(), mainController.getMainViewModel().getFILE_RENAME_SUCCESS(), mainController.getMainViewModel().getINFO());
             } catch (Exception e) {
-                mainController.showErrorWindow(mainController.getFtpWindow(), "Error al renombrar el archivo: " + e.getMessage());
+                Utils.showErrorWindow(mainController.getFtpWindow(), mainController.getMainViewModel().getFILE_RENAME_ERROR() + e.getMessage(), mainController.getMainViewModel().getERROR());
             }
         } else {
-            mainController.showWarningWindow(mainController.getFtpWindow(), "Ningún archivo seleccionado para renombrar.");
+            Utils.showWarningWindow(mainController.getFtpWindow(), mainController.getMainViewModel().getNO_FILE_SELECTED(), mainController.getMainViewModel().getWARNING());
         }
     }
 
