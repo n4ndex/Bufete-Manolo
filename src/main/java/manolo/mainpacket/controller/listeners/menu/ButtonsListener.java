@@ -2,7 +2,7 @@ package manolo.mainpacket.controller.listeners.menu;
 
 import manolo.mainpacket.controller.MainController;
 import manolo.mainpacket.view.*;
-import manolo.mainpacket.model.viewmodels.EmailTexts;
+import manolo.mainpacket.model.viewmodels.EmailTexts_es;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -47,7 +47,6 @@ public class ButtonsListener implements ActionListener {
                 mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " - " + mainController.getCurrentUser().getUserType().getType().toUpperCase() + " open FTP explorer");
             }
             case "EMAIL" -> {
-                mainController.setEmailModel(new EmailTexts());
                 mainController.setEmailView(new Email(mainController));
                 mainController.addEmailListeners();
                 mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " open EMAIL explorer");
@@ -57,12 +56,12 @@ public class ButtonsListener implements ActionListener {
                 mainController.addCasosEventListeners();
                 mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " open CASOS explorer");
             }
-            case "ACERCA DE" -> {
+            case "ACERCA" -> {
                 mainController.setAbout(new About(mainController));
                 mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " open ABOUT window");
             }
             case "LOG OUT" -> {
-                mainController.setLoginView(new Login());
+                mainController.setLoginView(new Login(mainController.getLanguage()));
                 mainController.addLoginEventListeners();
                 mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " LOG OUT");
             }

@@ -79,7 +79,7 @@ public class Menu extends JFrame {
 
     // Method to set frame settings
     private void settings() {
-        ImageIcon icon = new ImageIcon("target/classes/assets/icon_app.jpg");
+        ImageIcon icon = new ImageIcon(model.getICON_PATH());
         setIconImage(icon.getImage());
 
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();

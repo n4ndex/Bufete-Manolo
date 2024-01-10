@@ -1,6 +1,7 @@
 package manolo.mainpacket.controller.listeners.casos;
 
 import manolo.mainpacket.controller.MainController;
+import manolo.mainpacket.model.controllermodels.Utils;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,9 +23,15 @@ public class ButtonsListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         mainController.getMainConnection().openConnection(mainController.getMainConnectionModel().getMYSQL_URL(), mainController.getMainConnectionModel().getMYSQL_DATABASE(), mainController.getMainConnectionModel().getMYSQL_USERNAME(), mainController.getMainConnectionModel().getPASSWORD());
 
+        String caso = mainController.getCasosView().getTextFieldCaso().getText().trim();
+        if (caso.isEmpty()) {
+            Utils.showWarningWindow(mainController.getCasosView(), mainController.getMainViewModel().getCASE_EMPTY(), mainController.getMainViewModel().getWARNING());
+            mainController.getMainConnection().closeConnection();
+            return;
+        }
+
         String clientName = mainController.getCasosView().getComboClient().getSelectedItem().toString();
         String clientDni = mainController.getMainConnection().getDniFromName(clientName);
-        String caso = mainController.getCasosView().getTextFieldCaso().getText();
 
         int newLawyerId = mainController.getMainConnection().getIdFromName(mainController.getCurrentUser().getName());
         mainController.getMainConnection().updateClientLawyerId(clientName, newLawyerId);
@@ -44,4 +51,5 @@ public class ButtonsListener implements ActionListener {
 
         mainController.getMainConnection().closeConnection();
     }
+
 }

@@ -3,6 +3,8 @@ package manolo.mainpacket.view;
 import lombok.Getter;
 import manolo.mainpacket.controller.MainController;
 import manolo.mainpacket.model.viewmodels.CasosTexts;
+import manolo.mainpacket.model.viewmodels.CasosTexts_en;
+import manolo.mainpacket.model.viewmodels.CasosTexts_es;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,11 +21,28 @@ public class Casos extends JFrame {
     private JButton buttonCrear;
     private JLabel labelClient;
     private JLabel labelCase;
-    private CasosTexts model = new CasosTexts();
+
+    // Model for Casos texts
+    private CasosTexts model;
+    private CasosTexts_es modelEs = new CasosTexts_es();
+    private CasosTexts_en modelEn = new CasosTexts_en();
 
     public Casos(MainController mainController) {
+        switchLanguage(mainController.getLanguage());
         settings(mainController); // Initialize the frame settings
         initComponents(mainController); // Initialize Swing components
+    }
+
+    // Method for switch language of Casos Window
+    private void switchLanguage(String language) {
+        switch (language) {
+            case "espanol":
+                model = modelEs;
+                break;
+            case "english":
+                model = modelEn;
+                break;
+        }
     }
 
     private void initComponents(MainController mainController) {
@@ -56,7 +75,7 @@ public class Casos extends JFrame {
 
     private void settings(MainController mainController) {
         this.setContentPane(mainPanel); // Set the content pane to the main panel
-        ImageIcon icon = new ImageIcon("target/classes/assets/icon_app.jpg");
+        ImageIcon icon = new ImageIcon(mainController.getMainViewModel().getICON_PATH());
         setIconImage(icon.getImage());
 
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();

@@ -21,4 +21,12 @@ public class Utils {
     public static void showInfoWindow(Component parentComponent, String infoMessage, String title) {
         JOptionPane.showMessageDialog(parentComponent, infoMessage, title, JOptionPane.INFORMATION_MESSAGE);
     }
+
+    public static int showConfirmDialog(Component parentComponent, String message, String title) {
+        return JOptionPane.showConfirmDialog(parentComponent, message, title, JOptionPane.YES_NO_OPTION);
+    }
+
+    public static String showInputDialog(Component parentComponent, String message) {
+        return JOptionPane.showInputDialog(parentComponent, message);
+    }
 }

@@ -3,6 +3,8 @@ package manolo.mainpacket.view;
 import lombok.Getter;
 import lombok.Setter;
 import manolo.mainpacket.model.viewmodels.LoginTexts;
+import manolo.mainpacket.model.viewmodels.LoginTexts_en;
+import manolo.mainpacket.model.viewmodels.LoginTexts_es;
 
 import javax.swing.*;
 import javax.swing.text.AbstractDocument;
@@ -31,26 +33,46 @@ public class Login extends JFrame {
     ArrayList<JButton> buttons = new ArrayList<>();
 
     // Model for login texts
-    LoginTexts model = new LoginTexts();
+    private LoginTexts model;
+    private LoginTexts_es modelEs = new LoginTexts_es();
+    private LoginTexts_en modelEn = new LoginTexts_en();
+
+    // ComboBox for language selection
+    JComboBox<Object> languageComboBox;
 
     // Constructor
-    public Login() {
+    public Login(String language) {
+        switchLanguage(language);
+
         // Create elements of the window
         createPanels();
         createLabels();
         createDniField();
         createPasswordField();
         createButtons();
+        createLanguageComboBox();
 
         // Display elements in the window
         ordinateAll();
         settings();
     }
 
+    private void switchLanguage(String language) {
+        switch (language) {
+            case "espanol":
+                model = modelEs;
+                break;
+            case "english":
+                model = modelEn;
+                break;
+        }
+    }
+
     // Method to organize all elements in the window
     private void ordinateAll() {
         combinePanels();
         addTitle();
+        addLanguageComboBox();
         addTLTV();
         addButtons();
     }
@@ -63,6 +85,11 @@ public class Login extends JFrame {
         panels.getFirst().add(titleLabel);
     }
 
+    // Method to add language selection ComboBox to the first panel
+    private void addLanguageComboBox() {
+        panels.getFirst().add(languageComboBox);
+    }
+
     // Method to combine and set layouts for specific panels
     private void combinePanels() {
         panels.get(1).setLayout(new GridLayout(0, 1, 5, 5));
@@ -73,9 +100,11 @@ public class Login extends JFrame {
 
         this.add(panels.get(2), BorderLayout.CENTER);
 
-        panels.get(0).setLayout(new FlowLayout(FlowLayout.CENTER));
+        FlowLayout flowLayout = new FlowLayout(FlowLayout.CENTER);
+        flowLayout.setHgap(75);  // Set horizontal gap (margin)
+        panels.getFirst().setLayout(flowLayout);
 
-        this.add(panels.get(0), BorderLayout.NORTH);
+        this.add(panels.getFirst(), BorderLayout.NORTH);
     }
 
     // Method to add labels, text fields, password fields, and register link to the second panel
@@ -109,6 +138,18 @@ public class Login extends JFrame {
     // Method to add buttons to the second panel
     private void addButtons() {
         panels.get(1).add(buttons.getFirst());
+    }
+
+    // Method to add the language selection ComboBox to the first panel
+    private void createLanguageComboBox() {
+        String espanolIconPath = model.getESPANOL_ICON_PATH();
+        String englishIconPath = model.getENGLISH_ICON_PATH();
+
+        ImageIcon espanolIcon = new ImageIcon(new ImageIcon(espanolIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+        ImageIcon englishIcon = new ImageIcon(new ImageIcon(englishIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+
+        Object[] languageOptions = {espanolIcon, englishIcon};
+        languageComboBox = new JComboBox<>(languageOptions);
     }
 
     // Method to create and initialize panels with background color
@@ -176,7 +217,7 @@ public class Login extends JFrame {
 
     // Method to set up frame settings
     private void settings() {
-        ImageIcon icon = new ImageIcon("target/classes/assets/icon_app.jpg");
+        ImageIcon icon = new ImageIcon(model.getICON_PATH());
         setIconImage(icon.getImage());
 
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();

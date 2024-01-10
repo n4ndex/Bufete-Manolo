@@ -5,6 +5,8 @@ import lombok.Setter;
 import manolo.mainpacket.controller.MainController;
 import manolo.mainpacket.controller.ftpserver.FtpService;
 import manolo.mainpacket.model.viewmodels.FTPTexts;
+import manolo.mainpacket.model.viewmodels.FTPTexts_en;
+import manolo.mainpacket.model.viewmodels.FTPTexts_es;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 
@@ -42,14 +44,31 @@ public class FTPWindow extends JFrame {
     private String lawyerName = "";        // Lawyer's name
     private FTPClient ftpClient;           // FTP client for handling FTP operations
     private FtpService ftpService;         // Service class for FTP operations
-    private FTPTexts model = new FTPTexts();  // Model containing texts for FTP window
+
+    // Model for FTP texts
+    private FTPTexts model;
+    private FTPTexts_es modelEs = new FTPTexts_es();
+    private FTPTexts_en modelEn = new FTPTexts_en();
 
     // Constructor for FTPWindow, initializes FTP-related components and settings.
     public FTPWindow(MainController mainController) {
+        switchLanguage(mainController.getLanguage());
         this.ftpClient = mainController.getMainClient();
         this.ftpService = mainController.getFtpService();
         initComponents();           // Initialize Swing components
         settings(mainController);   // Apply settings and make the FTP client window visible
+    }
+
+    // Method for switch language of FTP Window
+    private void switchLanguage(String language) {
+        switch (language) {
+            case "espanol":
+                model = modelEs;
+                break;
+            case "english":
+                model = modelEn;
+                break;
+        }
     }
 
     private void initComponents() {
@@ -151,7 +170,7 @@ public class FTPWindow extends JFrame {
 
     // Method to initialize UI settings.
     private void settings(MainController mainController) {
-        ImageIcon icon = new ImageIcon("target/classes/assets/icon_app.jpg");
+        ImageIcon icon = new ImageIcon(mainController.getMainViewModel().getICON_PATH());
         setIconImage(icon.getImage());
         this.setContentPane(mainPanel);
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();

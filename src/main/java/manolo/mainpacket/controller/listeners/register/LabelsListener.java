@@ -21,8 +21,8 @@ public class LabelsListener implements MouseListener {
      */
     @Override
     public void mouseClicked(MouseEvent e) {
-        mainController.getRegisterView().dispose();
-        mainController.setLoginView(new Login());
+        mainController.getRegisterView().setVisible(false);
+        mainController.getLoginView().setVisible(true);
         mainController.addLoginEventListeners();
     }
 

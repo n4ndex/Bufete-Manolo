@@ -8,6 +8,8 @@ import java.util.ArrayList;
 public class MenuTexts {
     ArrayList<String> textsButtonList = new ArrayList(); // Textos del Menu
 
+    private final String ICON_PATH = "target/classes/assets/icon_app.jpg";
+
     public MenuTexts() {
         fillTexts();
     }
@@ -16,7 +18,7 @@ public class MenuTexts {
         textsButtonList.add("FTP");      // 0
         textsButtonList.add("EMAIL");    // 1
         textsButtonList.add("CASOS");    // 2
-        textsButtonList.add("ACERCA DE");   // 3
+        textsButtonList.add("ACERCA");   // 3
         textsButtonList.add("LOG OUT");  // 4
     }
 }

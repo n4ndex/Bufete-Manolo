@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import manolo.mainpacket.controller.MainController;
 import manolo.mainpacket.model.viewmodels.AboutTexts;
+import manolo.mainpacket.model.viewmodels.AboutTexts_en;
+import manolo.mainpacket.model.viewmodels.AboutTexts_es;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,15 +28,19 @@ public class About extends JFrame {
     private ArrayList<JPanel> panels = new ArrayList<>();
 
     // Model to get about texts
-    private AboutTexts model = new AboutTexts();
+    private AboutTexts model;
+    private AboutTexts_es modelEs = new AboutTexts_es();
+    private AboutTexts_en modelEn = new AboutTexts_en();
 
     // Constructor that takes the menu JFrame as a parameter
     public About(MainController mainController) {
         // Assign the main menu to the local variable
         this.menu = mainController.getMenu();
 
+        switchLanguage(mainController.getLanguage());
+
         // Set up the frame settings
-        settings(menu);
+        settings(mainController);
 
         // Create panels and set up the layout
         createPanels();
@@ -53,6 +59,18 @@ public class About extends JFrame {
 
         // Set the frame to be visible
         setVisible(true);
+    }
+
+    // Method for switch language of About Window
+    private void switchLanguage(String language) {
+        switch (language) {
+            case "espanol":
+                model = modelEs;
+                break;
+            case "english":
+                model = modelEn;
+                break;
+        }
     }
 
     // Method to combine and set layouts for specific panels
@@ -126,9 +144,9 @@ public class About extends JFrame {
     }
 
     // Method to set up the frame settings
-    private void settings(JFrame menu) {
+    private void settings(MainController mainController) {
         // Set icon, title, size, location, and other frame settings
-        ImageIcon icon = new ImageIcon("target/classes/assets/icon_app.jpg");
+        ImageIcon icon = new ImageIcon(mainController.getMainViewModel().getICON_PATH());
         setIconImage(icon.getImage());
         setTitle(model.getTitle());
         setSize(600, 400);

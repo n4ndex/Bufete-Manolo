@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import manolo.mainpacket.controller.MainController;
 import manolo.mainpacket.model.viewmodels.FTPTexts;
+import manolo.mainpacket.model.viewmodels.FTPTexts_en;
+import manolo.mainpacket.model.viewmodels.FTPTexts_es;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,13 +23,30 @@ public class FTPWindowClient extends JFrame {
     private JLabel nameLabel;          // Label for displaying client name
     private MainController mainController;  // Reference to the MainController
     private String clientName = "";   // Client's name
-    private FTPTexts model = new FTPTexts();  // Model containing texts for FTP client window
+
+    // Model for FTP texts
+    private FTPTexts model;
+    private FTPTexts_es modelEs = new FTPTexts_es();
+    private FTPTexts_en modelEn = new FTPTexts_en();
 
     // Constructor for FTPWindowClient, initializes components and loads client files.
     public FTPWindowClient(MainController mainController) {
         this.mainController = mainController;
+        switchLanguage(mainController.getLanguage());
         initComponents();     // Initialize Swing components
         settings();           // Apply settings and make the FTP client window visible
+    }
+
+    // Method for switch language of FTP Window
+    private void switchLanguage(String language) {
+        switch (language) {
+            case "espanol":
+                model = modelEs;
+                break;
+            case "english":
+                model = modelEn;
+                break;
+        }
     }
 
     // Method to initialize Swing components.
@@ -63,7 +82,7 @@ public class FTPWindowClient extends JFrame {
     // Method to initialize UI settings.
     private void settings() {
         this.setContentPane(mainPanel);
-        ImageIcon icon = new ImageIcon("target/classes/assets/icon_app.jpg");
+        ImageIcon icon = new ImageIcon(mainController.getMainViewModel().getICON_PATH());
         setIconImage(icon.getImage());
 
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();

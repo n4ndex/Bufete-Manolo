@@ -13,8 +13,7 @@ import manolo.mainpacket.model.UserType;
 import manolo.mainpacket.model.controllermodels.FtpServiceModel;
 import manolo.mainpacket.model.controllermodels.MainConnectionModel;
 import manolo.mainpacket.model.controllermodels.Utils;
-import manolo.mainpacket.model.viewmodels.EmailTexts;
-import manolo.mainpacket.model.viewmodels.MainViewModel;
+import manolo.mainpacket.model.viewmodels.*;
 import manolo.mainpacket.view.*;
 import org.apache.commons.net.ftp.FTPClient;
 
@@ -24,11 +23,15 @@ import java.io.File;
 @Getter
 @Setter
 public class MainController {
+    private String language;
     private User currentUser;
     private boolean isLawyer;
+    private FtpServiceModel ftpServiceModel;
     private MainConnectionModel mainConnectionModel;
     private MainConnection mainConnection;
     private MainViewModel mainViewModel;
+    private MainViewModel_es mainViewModelEs;
+    private MainViewModel_en mainViewModelEn;
     private Login loginView;
     private Register registerView;
     private Menu menu;
@@ -36,10 +39,11 @@ public class MainController {
     private FTPWindowClient ftpWindowClient;
     private Casos casosView;
     private EmailTexts emailModel;
+    private EmailTexts_es emailModel_es;
+    private EmailTexts_en emailModel_en;
     private Email emailView;
     private NewEmail newEmail;
     private About about;
-    private FtpServiceModel ftpServiceModel;
     private FtpService ftpService;
     private FTPClient mainClient;
 
@@ -49,16 +53,34 @@ public class MainController {
     }
 
     private void initAttributes() {
+        language = "espanol";
         mainConnectionModel = new MainConnectionModel();
         mainConnection = new MainConnection(mainConnectionModel.getDRIVER());
-        mainViewModel = new MainViewModel();
-        loginView = new Login();
+        mainViewModelEs = new MainViewModel_es();
+        mainViewModelEn = new MainViewModel_en();
+        emailModel_es = new EmailTexts_es();
+        emailModel_en = new EmailTexts_en();
+        loginView = new Login(language);
         ftpServiceModel = new FtpServiceModel();
         ftpService = new FtpService(this);
         isLawyer = false;
     }
 
+    private void switchLanguage() {
+        switch (language) {
+            case "espanol":
+                mainViewModel = mainViewModelEs;
+                emailModel = emailModel_es;
+                break;
+            case "english":
+                mainViewModel = mainViewModelEn;
+                emailModel = emailModel_en;
+                break;
+        }
+    }
+
     public void addLoginEventListeners() {
+        loginView.getLanguageComboBox().addActionListener(new manolo.mainpacket.controller.listeners.login.ButtonsListener(this));
         loginView.getLabels().get(3).addMouseListener(new manolo.mainpacket.controller.listeners.login.LabelsListener(this));
         loginView.getButtons().getFirst().addActionListener(new manolo.mainpacket.controller.listeners.login.ButtonsListener(this));
         loginView.getTextFields().getFirst().getDocument().addDocumentListener(new manolo.mainpacket.controller.listeners.login.LoginDocumentListener(this));
@@ -120,6 +142,7 @@ public class MainController {
     }
 
     public void submitLogin() {
+        switchLanguage();
         mainConnection.openConnection(mainConnectionModel.getMYSQL_URL(), mainConnectionModel.getMYSQL_DATABASE(), mainConnectionModel.getMYSQL_USERNAME(), mainConnectionModel.getPASSWORD());
 
         String dni = loginView.getTextFields().getFirst().getText();
@@ -130,7 +153,7 @@ public class MainController {
             currentUser = userData;
             loginView.dispose();
             menu = new Menu();
-            menu.setTitle("¡Bienvenido " + currentUser.getName() + "! - " + currentUser.getUserType().getType().toUpperCase());
+            menu.setTitle(mainViewModel.getWELCOME() + currentUser.getName() + "! - " + currentUser.getUserType().getType().toUpperCase());
 
             if (currentUser.getUserType().getType().equalsIgnoreCase("lawyer")) {
                 menu.getButtons().get(2).setEnabled(true);
@@ -153,6 +176,7 @@ public class MainController {
     }
 
     public void submitRegister() {
+        switchLanguage();
         mainConnection.openConnection(mainConnectionModel.getMYSQL_URL(), mainConnectionModel.getMYSQL_DATABASE(), mainConnectionModel.getMYSQL_USERNAME(), mainConnectionModel.getPASSWORD());
 
         String dni = registerView.getTextFields().get(0).getText();
@@ -175,7 +199,7 @@ public class MainController {
                     UserType userType;
 
                     if (isLawyer) {
-                        userType = new UserType(registerView.getModel().getUser_types().getFirst(), 0);
+                        userType = new UserType(registerView.getModel().getUserTypes().getFirst(), 0);
                         menu.getButtons().get(2).setEnabled(true);
                         mainClient = ftpService.loginFtp(ftpServiceModel.getHost(), ftpServiceModel.getPort(), ftpServiceModel.getUsernameLawyer(), ftpServiceModel.getPassword());
 
@@ -190,13 +214,13 @@ public class MainController {
                         String emptyFilePath = userFolderPath + File.separator + emptyFileName;
                         ftpService.createEmptyFile(emptyFilePath, mainClient);
                     } else {
-                        userType = new UserType(registerView.getModel().getUser_types().get(1), 1);
+                        userType = new UserType(registerView.getModel().getUserTypes().get(1), 1);
                         menu.getButtons().get(2).setEnabled(false);
                         mainClient = ftpService.loginFtp(ftpServiceModel.getHost(), ftpServiceModel.getPort(), ftpServiceModel.getUsernameClient(), ftpServiceModel.getPassword());
                         currentUser = new User(dni, name, password, email, userType, idLawyer);
                     }
 
-                    menu.setTitle("¡Bienvenido " + currentUser.getName() + "! - " + currentUser.getUserType().getType().toUpperCase());
+                    menu.setTitle(mainViewModel.getWELCOME() + currentUser.getName() + "! - " + currentUser.getUserType().getType().toUpperCase());
                     mainConnection.insertNewUser(currentUser);
 
                     mainConnection.insertLog(currentUser.getDni(), "REGISTER & LOGIN from user: " + currentUser.getName());

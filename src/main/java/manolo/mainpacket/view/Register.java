@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import manolo.mainpacket.controller.MainController;
 import manolo.mainpacket.model.viewmodels.RegisterTexts;
+import manolo.mainpacket.model.viewmodels.RegisterTexts_en;
+import manolo.mainpacket.model.viewmodels.RegisterTexts_es;
 
 import javax.swing.*;
 import javax.swing.text.AbstractDocument;
@@ -35,13 +37,16 @@ public class Register extends JFrame {
     private ArrayList<JCheckBox> checks = new ArrayList<>();
     private ArrayList<JComboBox> combos = new ArrayList<>();
 
-    // Model for text content
-    private RegisterTexts model = new RegisterTexts();
+    // Model for register texts
+    private RegisterTexts model;
+    private RegisterTexts_es modelEs = new RegisterTexts_es();
+    private RegisterTexts_en modelEn = new RegisterTexts_en();
 
     // Reference to the MainController
     private MainController mainController;
 
-    public Register(MainController mainController) {
+    public Register(MainController mainController, String language) {
+        switchLanguage(language);
         this.mainController = mainController;
         // Create Swing components
         createPanels();
@@ -55,6 +60,17 @@ public class Register extends JFrame {
         // Arrange and display components in the window
         organizeAll();
         settings();
+    }
+
+    private void switchLanguage(String language) {
+        switch (language) {
+            case "espanol":
+                model = modelEs;
+                break;
+            case "english":
+                model = modelEn;
+                break;
+        }
     }
 
     private void organizeAll() {
@@ -210,7 +226,7 @@ public class Register extends JFrame {
     }
 
     private void settings() {
-        ImageIcon icon = new ImageIcon("target/classes/assets/icon_app.jpg");
+        ImageIcon icon = new ImageIcon(model.getICON_PATH());
         setIconImage(icon.getImage());
 
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();

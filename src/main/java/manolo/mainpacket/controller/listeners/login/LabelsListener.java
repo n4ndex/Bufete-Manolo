@@ -31,9 +31,13 @@ public class LabelsListener implements MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
         mainController.getLoginView().dispose();
-        mainController.setRegisterView(new Register(mainController));
+        mainController.setRegisterView(new Register(mainController, mainController.getLanguage()));
         mainController.addRegisterEventListeners();
+
+        // Deshabilitar temporalmente el botón para evitar eventos duplicados
+        mainController.getLoginView().getLabels().get(3).removeMouseListener(this);
     }
+
 
     /**
      * Invoked when a mouse button has been released on a component.

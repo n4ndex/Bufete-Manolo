@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import manolo.mainpacket.model.User;
 import manolo.mainpacket.model.UserType;
+import manolo.mainpacket.model.viewmodels.QueriesModel;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -38,11 +39,7 @@ public class MainConnection {
     }
 
     public User getUserData(String dni, String password) {
-        String query = """
-                SELECT users.*, user_types.*
-                FROM users
-                INNER JOIN user_types ON users.user_type_id = user_types.id_type
-                WHERE users.dni = ? AND users.password = ?""";
+        String query = QueriesModel.GET_USER_DATA;
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, dni);
@@ -70,11 +67,7 @@ public class MainConnection {
     public ArrayList<String> getLawyerNames() {
         ArrayList<String> lawyerNames = new ArrayList<>();
 
-        String query = """
-                SELECT name
-                FROM users
-                INNER JOIN user_types ON users.user_type_id = user_types.id_type
-                WHERE users.user_type_id = 1""";
+        String query = QueriesModel.GET_LAWYER_NAMES;
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query); ResultSet resultSet = preparedStatement.executeQuery()) {
 
@@ -93,11 +86,7 @@ public class MainConnection {
     public ArrayList<String> getClientNames() {
         ArrayList<String> clientNames = new ArrayList<>();
 
-        String query = """
-        SELECT name
-        FROM users
-        INNER JOIN user_types ON users.user_type_id = user_types.id_type
-        WHERE users.user_type_id = 2""";
+        String query = QueriesModel.GET_CLIENT_NAMES;
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query);
              ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -119,7 +108,7 @@ public class MainConnection {
             return 0; // Si el nombre del abogado está vacío o es "", asigna id_lawyer = 0
         }
 
-        String query = "SELECT id_user FROM users WHERE name = ?";
+        String query = QueriesModel.GET_ID_FROM_NAME;
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, name);
@@ -141,7 +130,7 @@ public class MainConnection {
             return "";
         }
 
-        String query = "SELECT dni FROM users WHERE name = ?";
+        String query = QueriesModel.GET_DNI_FROM_NAME;
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, name);
@@ -161,11 +150,7 @@ public class MainConnection {
     public boolean checkIfUserExists(String username) {
         boolean exists = false;
         try {
-            String query = """
-                    SELECT *
-                    FROM users
-                    WHERE dni = ?;
-                    """;
+            String query = QueriesModel.CHECK_IF_USER_EXISTS;
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -180,11 +165,7 @@ public class MainConnection {
 
     public int insertNewUser(User currentUser) {
         int rowsAffected = 0;
-        String query = """
-                INSERT INTO users (dni, name, password, email, user_type_id, id_lawyer)
-                VALUES (?, ?, ?, ?, ?, ?)
-                ;
-                """;
+        String query = QueriesModel.INSERT_NEW_USER;
         int user_type_id = getUserTypeIdFromTypeName(currentUser.getUserType().getType());
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -204,11 +185,7 @@ public class MainConnection {
     private int getUserTypeIdFromTypeName(String type) {
         int user_type_id = 0;
         try {
-            String query = """
-                    SELECT id_type
-                    FROM user_types
-                    WHERE type_name = ?;
-                    """;
+            String query = QueriesModel.GET_USER_TYPE_ID_FROM_TYPE_NAME;
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, type);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -222,7 +199,7 @@ public class MainConnection {
     }
 
     public void updateClientLawyerId(String clientName, int newLawyerId) {
-        String query = "UPDATE users SET id_lawyer = ? WHERE name = ? AND user_type_id = 2";
+        String query = QueriesModel.UPDATE_CLIENT_LAWYER_ID;
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, newLawyerId);
@@ -235,7 +212,7 @@ public class MainConnection {
 
     public void insertLog(String userDni, String operation) {
         try {
-            String query = "INSERT INTO logs (operation, date, time, id_user) VALUES (?, CURDATE(), CURTIME(), (SELECT id_user FROM users WHERE dni = ?))";
+            String query = QueriesModel.INSERT_LOG;
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, operation);
             preparedStatement.setString(2, userDni);
@@ -250,11 +227,7 @@ public class MainConnection {
     public int whichLawyerHasUserAssigned(String userDni) {
         int idLawyer = 0;
         try {
-            String query = """
-                    SELECT id_lawyer
-                    FROM users
-                    WHERE dni = ?;
-                    """;
+            String query = QueriesModel.WHICH_LAWYER_HAS_USER_ASSIGNED;
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, userDni);
             ResultSet resultSet = preparedStatement.executeQuery();

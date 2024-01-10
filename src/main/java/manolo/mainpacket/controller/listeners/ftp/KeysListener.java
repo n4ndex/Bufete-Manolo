@@ -22,12 +22,7 @@ public class KeysListener implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-            int option = JOptionPane.showConfirmDialog(
-                    mainController.getFtpWindow(),
-                    "¿Seguro deseas renombrar?",
-                    "Renombrar",
-                    JOptionPane.YES_NO_OPTION
-            );
+            int option = Utils.showConfirmDialog(mainController.getFtpWindow(), mainController.getMainViewModel().getCONFIRM_RENAME_FILE(), mainController.getMainViewModel().getCONFIRM_RENAME_TITLE());
 
             if (option == JOptionPane.YES_OPTION) {
                 renameSelectedFile();

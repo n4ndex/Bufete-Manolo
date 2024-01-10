@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import manolo.mainpacket.controller.MainController;
 import manolo.mainpacket.model.viewmodels.EmailTexts;
+import manolo.mainpacket.model.viewmodels.EmailTexts_es;
 
 import javax.swing.*;
 import java.awt.*;

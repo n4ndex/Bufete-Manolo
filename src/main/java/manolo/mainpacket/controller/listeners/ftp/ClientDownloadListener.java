@@ -36,9 +36,8 @@ public class ClientDownloadListener implements ActionListener {
                     byte[] fileBytes = mainController.getFtpService().downloadFile(filePath, mainController.getMainClient());
 
                     JFileChooser fileChooser = new JFileChooser();
-                    fileChooser.setDialogTitle("Guardar archivo");
+                    fileChooser.setDialogTitle(mainController.getMainViewModel().getFILE_CHOOSER_SAVE_FILE());
                     fileChooser.setSelectedFile(new File(selectedFileName));
-                    fileChooser.setFileFilter(new FileNameExtensionFilter("Archivos", ".*"));
 
                     int userSelection = fileChooser.showSaveDialog(mainController.getFtpWindowClient());
 

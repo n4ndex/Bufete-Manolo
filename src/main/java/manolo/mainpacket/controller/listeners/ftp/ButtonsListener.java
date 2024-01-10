@@ -42,7 +42,7 @@ public class ButtonsListener implements ActionListener {
                 DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) selectedPath.getLastPathComponent();
                 String selectedDirectory = mainController.getFtpWindow().getSelectedDirectoryPath(selectedNode);
 
-                String directoryName = JOptionPane.showInputDialog(mainController.getFtpWindow(), "Ingrese el nombre de la carpeta:");
+                String directoryName = Utils.showInputDialog(mainController.getFtpWindow(), mainController.getMainViewModel().getCREATE_DIRECTORY());
 
                 if (directoryName != null && !directoryName.isEmpty()) {
                     String newDirectoryPath = selectedDirectory + File.separator + directoryName;
@@ -77,7 +77,7 @@ public class ButtonsListener implements ActionListener {
             if (selectedNode != null) {
                 String selectedDirectoryPath = "" + selectedNode.getUserObject();
 
-                int option = JOptionPane.showConfirmDialog(mainController.getFtpWindow(), "¿Seguro que quieres eliminar el directorio?\n" + selectedDirectoryPath, "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+                int option = Utils.showConfirmDialog(mainController.getFtpWindow(), mainController.getMainViewModel().getCONFIRM_DELETE_DIRECTORY() + selectedDirectoryPath, mainController.getMainViewModel().getCONFIRM_DELETE_TITLE());
 
                 if (option == JOptionPane.YES_OPTION) {
                     if (mainController.getFtpService().deleteDirectory(selectedDirectoryPath, mainController.getMainClient(), mainController.getFtpWindow())) {
@@ -98,7 +98,7 @@ public class ButtonsListener implements ActionListener {
                 String selectedFileName = (String) selectedNode.getUserObject();
                 String selectedFilePath = mainController.getFtpWindow().getDirectory() + File.separator + selectedFileName;
 
-                int option = JOptionPane.showConfirmDialog(mainController.getFtpWindow(), "¿Seguro que deseas eliminar el archivo '" + selectedFileName + "'?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+                int option = Utils.showConfirmDialog(mainController.getFtpWindow(), mainController.getMainViewModel().getCONFIRM_DELETE_FILE() + selectedFileName, mainController.getMainViewModel().getCONFIRM_DELETE_TITLE());
 
                 if (option == JOptionPane.YES_OPTION) {
                     if (mainController.getFtpService().deleteFile(selectedFilePath, mainController.getMainClient())) {
@@ -122,9 +122,8 @@ public class ButtonsListener implements ActionListener {
                         byte[] fileBytes = mainController.getFtpService().downloadFile(filePath, mainController.getMainClient());
 
                         JFileChooser fileChooser = new JFileChooser();
-                        fileChooser.setDialogTitle("Guardar archivo");
+                        fileChooser.setDialogTitle(mainController.getMainViewModel().getFILE_CHOOSER_SAVE_FILE());
                         fileChooser.setSelectedFile(new File(fileName));
-                        fileChooser.setFileFilter(new FileNameExtensionFilter("Archivos", ".*"));
 
                         int userSelection = fileChooser.showSaveDialog(mainController.getFtpWindow());
 
@@ -151,7 +150,7 @@ public class ButtonsListener implements ActionListener {
 
             if (selectedNode != null) {
                 JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setDialogTitle("Selecciona un archivo a subir");
+                fileChooser.setDialogTitle(mainController.getMainViewModel().getFILE_CHOOSER_UPLOAD_FILE());
 
                 int userSelection = fileChooser.showOpenDialog(mainController.getFtpWindow());
 
@@ -178,7 +177,7 @@ public class ButtonsListener implements ActionListener {
             mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " refreshes tree");
             mainController.getFtpWindow().loadDirectory(mainController.getMainClient(), mainController.getFtpWindow().getLawyerDni());
         } else if (e.getSource() == mainController.getFtpWindow().getRenameButton()) {  // rename file button
-            int option = JOptionPane.showConfirmDialog(mainController.getFtpWindow(), "¿Seguro deseas renombrar?", "Renombrar", JOptionPane.YES_NO_OPTION);
+            int option = Utils.showConfirmDialog(mainController.getFtpWindow(), mainController.getMainViewModel().getCONFIRM_RENAME_FILE(), mainController.getMainViewModel().getCONFIRM_RENAME_TITLE());
 
             if (option == JOptionPane.YES_OPTION) {
                 DefaultMutableTreeNode selectedNode = mainController.getFtpWindow().getSelectedNode();
@@ -208,7 +207,7 @@ public class ButtonsListener implements ActionListener {
 
     private void createNewDirectory(String newDirectoryPath, String folderName) {
         mainController.getFtpService().createDirectory(newDirectoryPath, mainController.getMainClient(), mainController.getFtpWindow());
-        // Crear un archivo vacío dentro de la carpeta recién creada
+        // Create an empty file inside the new directory
         String emptyFileName = "empty_file.txt";
         String emptyFilePath = newDirectoryPath + File.separator + emptyFileName;
         mainController.getFtpService().createEmptyFile(emptyFilePath, mainController.getMainClient());
