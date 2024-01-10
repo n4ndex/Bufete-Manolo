@@ -15,6 +15,7 @@ import java.util.List;
 public class FtpService {
 
     private final MainController mainController;
+
     public FtpService(MainController mainController) {
         this.mainController = mainController;
     }
@@ -24,15 +25,12 @@ public class FtpService {
         ftpClient.addProtocolCommandListener(new ProtocolCommandListener() {
             @Override
             public void protocolCommandSent(ProtocolCommandEvent protocolCommandEvent) {
-                System.out.printf("[%s][%d] Command sent : [%s]-%s", Thread.currentThread().getName(),
-                        System.currentTimeMillis(), protocolCommandEvent.getCommand(),
-                        protocolCommandEvent.getMessage());
+                System.out.printf("[%s][%d] Command sent : [%s]-%s", Thread.currentThread().getName(), System.currentTimeMillis(), protocolCommandEvent.getCommand(), protocolCommandEvent.getMessage());
             }
 
             @Override
             public void protocolReplyReceived(ProtocolCommandEvent protocolCommandEvent) {
-                System.out.printf("[%s][%d] Reply received : %s", Thread.currentThread().getName(),
-                        System.currentTimeMillis(), protocolCommandEvent.getMessage());
+                System.out.printf("[%s][%d] Reply received : %s", Thread.currentThread().getName(), System.currentTimeMillis(), protocolCommandEvent.getMessage());
             }
         });
 
@@ -81,11 +79,9 @@ public class FtpService {
             boolean success = ftpClient.storeFile(filePath, inputStream);
 
             if (success) {
-                System.out.printf("[createEmptyFile][%d] Empty file created successfully: %s%n",
-                        System.currentTimeMillis(), filePath);
+                System.out.printf("[createEmptyFile][%d] Empty file created successfully: %s%n", System.currentTimeMillis(), filePath);
             } else {
-                System.out.printf("[createEmptyFile][%d] Error creating empty file: %s%n",
-                        System.currentTimeMillis(), filePath);
+                System.out.printf("[createEmptyFile][%d] Error creating empty file: %s%n", System.currentTimeMillis(), filePath);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -124,8 +120,7 @@ public class FtpService {
         try {
             FileInputStream fileInputStream = new FileInputStream(localPath);
             System.out.println();
-            System.out.printf("[uploadFile][%d] Is success to upload file : %s -> %b",
-                    System.currentTimeMillis(), remotePath, ftpClient.storeFile(remotePath, fileInputStream));
+            System.out.printf("[uploadFile][%d] Is success to upload file : %s -> %b", System.currentTimeMillis(), remotePath, ftpClient.storeFile(remotePath, fileInputStream));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -135,8 +130,7 @@ public class FtpService {
     public void renameFile(String oldPath, String newPath, FTPClient ftpClient) {
         System.out.println();
         try {
-            System.out.printf("[renameFile][%d] Is success to rename file : from %s to %s -> %b",
-                    System.currentTimeMillis(), oldPath, newPath, ftpClient.rename(oldPath, newPath));
+            System.out.printf("[renameFile][%d] Is success to rename file : from %s to %s -> %b", System.currentTimeMillis(), oldPath, newPath, ftpClient.rename(oldPath, newPath));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -147,8 +141,7 @@ public class FtpService {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         System.out.println();
         try {
-            System.out.printf("[downloadFile][%d] Is success to download file : %s -> %b",
-                    System.currentTimeMillis(), path, ftpClient.retrieveFile(path, byteArrayOutputStream));
+            System.out.printf("[downloadFile][%d] Is success to download file : %s -> %b", System.currentTimeMillis(), path, ftpClient.retrieveFile(path, byteArrayOutputStream));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -159,12 +152,10 @@ public class FtpService {
     public boolean deleteFile(String path, FTPClient ftpClient) {
         try {
             boolean success = ftpClient.deleteFile(path);
-            System.out.printf("[deleteFile][%d] Is success to delete file : %s -> %b%n",
-                    System.currentTimeMillis(), path, success);
+            System.out.printf("[deleteFile][%d] Is success to delete file : %s -> %b%n", System.currentTimeMillis(), path, success);
             return success;
         } catch (IOException e) {
-            System.out.printf("[deleteFile][%d] Error deleting file : %s%n",
-                    System.currentTimeMillis(), path);
+            System.out.printf("[deleteFile][%d] Error deleting file : %s%n", System.currentTimeMillis(), path);
             e.printStackTrace();
             return false;
         }
@@ -186,8 +177,10 @@ public class FtpService {
             Path filePathPath = Paths.get(filePath);
             if (file.isDirectory()) {
                 searchClientFiles(filePath + "/", clientDni, ftpClient, fileNames);
-            } else if (filePathPath.getName( 2).toString().equals(clientDni)) {
-                fileNames.add(filePath);
+            } else if (filePathPath.getNameCount() >= 4) {
+                if (filePathPath.getName(2).toString().equals(clientDni)) {
+                    fileNames.add(filePath);
+                }
             }
         }
     }

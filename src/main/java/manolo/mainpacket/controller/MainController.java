@@ -15,12 +15,10 @@ import manolo.mainpacket.model.controllermodels.MainConnectionModel;
 import manolo.mainpacket.model.controllermodels.Utils;
 import manolo.mainpacket.model.viewmodels.EmailTexts;
 import manolo.mainpacket.model.viewmodels.MainViewModel;
-import manolo.mainpacket.view.Menu;
 import manolo.mainpacket.view.*;
 import org.apache.commons.net.ftp.FTPClient;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.File;
 
 @Getter
@@ -232,11 +230,7 @@ public class MainController {
     public boolean isValidDNI(String dni) {
         String dniRegex = "^[0-9]{8}[A-Za-z]$";
 
-        if (dni.matches(dniRegex)) {
-            return true;
-        } else {
-            return false;
-        }
+        return dni.matches(dniRegex);
     }
 
     private boolean isValidEmail() {
