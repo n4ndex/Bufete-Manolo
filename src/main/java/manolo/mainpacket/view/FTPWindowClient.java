@@ -40,16 +40,17 @@ public class FTPWindowClient extends JFrame {
     }
 
     private void initUI() {
+        this.setContentPane(mainPanel);
         ImageIcon icon = new ImageIcon("target/classes/assets/icon_app.jpg");
         setIconImage(icon.getImage());
-        this.setContentPane(mainPanel);
-        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
-        int height = pantalla.height;
-        int width = pantalla.width;
 
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenHeight = screen.height;
+        int screenWidth = screen.width;
+
+        this.setSize(screenWidth / 3, screenHeight / 3);
         this.setTitle(model.getTitle());
-        this.setSize(width / 3, height / 3);
-        this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(mainController.getMenu());
         this.setResizable(false);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.addWindowListener(new WindowAdapter() {

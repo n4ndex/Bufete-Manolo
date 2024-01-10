@@ -11,6 +11,8 @@ import java.awt.*;
 public class NewEmail extends JFrame{
     private JButton sendButton;
     private JButton cancelButton;
+    private JButton addFilesButton;
+    private JLabel filesNameLabel;
     private JTextField toTextfield;
     private JTextArea subjetTextArea;
     private JPanel mainPanel;

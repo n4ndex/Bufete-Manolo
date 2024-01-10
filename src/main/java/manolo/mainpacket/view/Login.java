@@ -16,46 +16,54 @@ import java.util.ArrayList;
 @Setter
 public class Login extends JFrame {
 
-    int amountPanels = 3;
-    int amountLabels = 3;
-    int amountTextFields = 1;
-    int amountPasswordFields = 1;
-    int amountButtons = 1;
+    // Constants for the number of panels, labels, text fields, password fields, and buttons
+    private final int AMOUNT_PANELS = 3;
+    private final int AMOUNT_LABELS = 3;
+    private final int AMOUNT_TEXT_FIELDS = 1;
+    private final int AMOUNT_PASSWORD_FIELDS = 1;
+    private final int AMOUNT_BUTTONS = 1;
 
+    // Lists to store panels, labels, text fields, password fields, and buttons
     ArrayList<JPanel> panels = new ArrayList<>();
     ArrayList<JLabel> labels = new ArrayList<>();
     ArrayList<JTextField> textFields = new ArrayList<>();
     ArrayList<JPasswordField> passwordFields = new ArrayList<>();
     ArrayList<JButton> buttons = new ArrayList<>();
+
+    // Model for login texts
     LoginTexts model = new LoginTexts();
 
+    // Constructor
     public Login() {
-        // Creación de elementos de la ventana
-        createPanels(amountPanels);
-        createLabels(amountLabels);
-        createDniField(amountTextFields);
-        createPasswordField(amountPasswordFields);
-        createButtons(amountButtons);
+        // Create elements of the window
+        createPanels();
+        createLabels();
+        createDniField();
+        createPasswordField();
+        createButtons();
 
-        // Visualización de elementos en ventana
-        ordenateAll();
+        // Display elements in the window
+        ordinateAll();
         settings();
     }
 
-    private void ordenateAll() {
+    // Method to organize all elements in the window
+    private void ordinateAll() {
         combinePanels();
         addTitle();
         addTLTV();
         addButtons();
     }
 
+    // Method to add the title label to the first panel
     private void addTitle() {
         Font titleFont = new Font("Arial", Font.BOLD, 24);
-        JLabel titleLabel = labels.get(0);
+        JLabel titleLabel = labels.getFirst();
         titleLabel.setFont(titleFont);
-        panels.get(0).add(titleLabel);
+        panels.getFirst().add(titleLabel);
     }
 
+    // Method to combine and set layouts for specific panels
     private void combinePanels() {
         panels.get(1).setLayout(new GridLayout(0, 1, 5, 5));
 
@@ -70,11 +78,12 @@ public class Login extends JFrame {
         this.add(panels.get(0), BorderLayout.NORTH);
     }
 
+    // Method to add labels, text fields, password fields, and register link to the second panel
     private void addTLTV() {
-        for (int i = 1; i < amountLabels; i++) {
-            if (i != amountLabels - 1) {
+        for (int i = 1; i < AMOUNT_LABELS; i++) {
+            if (i != AMOUNT_LABELS - 1) {
                 panels.get(1).add(labels.get(i));
-                panels.get(1).add(textFields.get(i - 1));
+                panels.get(1).add(textFields.getFirst());
             } else {
                 addPassword();
                 addRegisterLink();
@@ -82,11 +91,13 @@ public class Login extends JFrame {
         }
     }
 
+    // Method to add password label and password field to the second panel
     private void addPassword() {
         panels.get(1).add(new JLabel(model.getTextsList().get(2)));
-        panels.get(1).add(passwordFields.get(0));
+        panels.get(1).add(passwordFields.getFirst());
     }
 
+    // Method to add register link to the second panel
     private void addRegisterLink() {
         JLabel registerLabel = new JLabel(model.getTextsList().get(3));
         registerLabel.setForeground(Color.BLUE);
@@ -95,22 +106,25 @@ public class Login extends JFrame {
         panels.get(1).add(registerLabel);
     }
 
+    // Method to add buttons to the second panel
     private void addButtons() {
-        panels.get(1).add(buttons.get(0));
+        panels.get(1).add(buttons.getFirst());
     }
 
-    private void createPanels(int max) {
-        for (int i = 0; i < max; i++) {
+    // Method to create and initialize panels with background color
+    private void createPanels() {
+        for (int i = 0; i < AMOUNT_PANELS; i++) {
             JPanel panel = new JPanel();
             panels.add(panel);
         }
     }
 
-    private void createDniField(int max) {
-        for (int i = 0; i < max; i++) {
+    // Method to create and initialize text fields with a character limit filter
+    private void createDniField() {
+        for (int i = 0; i < AMOUNT_TEXT_FIELDS; i++) {
             JTextField dniField = new JTextField(9);
 
-            // Filtro de 9 caracteres maximo
+            // Filter for a maximum of 9 characters
             ((AbstractDocument) dniField.getDocument()).setDocumentFilter(new DocumentFilter() {
                 @Override
                 public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
@@ -131,39 +145,45 @@ public class Login extends JFrame {
         }
     }
 
-    private void createPasswordField(int max) {
-        for (int i = 0; i < max; i++) {
+    // Method to create and initialize password fields
+    private void createPasswordField() {
+        for (int i = 0; i < AMOUNT_PASSWORD_FIELDS; i++) {
             JPasswordField passwordField = new JPasswordField(20);
             passwordFields.add(passwordField);
         }
     }
 
-    private void createLabels(int max) {
-        for (int i = 0; i < max; i++) {
+    // Method to create and initialize labels
+    private void createLabels() {
+        for (int i = 0; i < AMOUNT_LABELS; i++) {
             JLabel label = new JLabel(model.getTextsList().get(i));
             labels.add(label);
         }
     }
 
-    private void createButtons(int max) {
-        for (int i = 0; i < max; i++) {
-            JButton button = new JButton(model.getTextsList().get(model.getTextsList().size() - 1));
+    // Method to create and initialize buttons
+    private void createButtons() {
+        for (int i = 0; i < AMOUNT_BUTTONS; i++) {
+            JButton button = new JButton(model.getTextsList().getLast());
             buttons.add(button);
-            buttons.get(0).setEnabled(false);
+            buttons.getFirst().setEnabled(false);
 
             Font buttonFont = new Font("Arial", Font.BOLD, 16);
             button.setFont(buttonFont);
-            button.setBackground(new Color(255, 215, 0));  // Dorado
+            button.setBackground(new Color(255, 215, 0));  // Set button background color to gold
         }
     }
 
+    // Method to set up frame settings
     private void settings() {
         ImageIcon icon = new ImageIcon("target/classes/assets/icon_app.jpg");
         setIconImage(icon.getImage());
-        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
-        int height = pantalla.height;
-        int width = pantalla.width;
-        this.setSize(width / 4, height - 450);
+
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenHeight = screen.height;
+        int screenWidth = screen.width;
+
+        this.setSize(screenWidth / 4, screenHeight - 450);
         this.setTitle(model.getTitle());
         this.setLocationRelativeTo(null);
         this.setResizable(false);

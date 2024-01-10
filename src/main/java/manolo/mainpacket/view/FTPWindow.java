@@ -45,7 +45,7 @@ public class FTPWindow extends JFrame {
         this.ftpClient = mainController.getMainClient();
         this.ftpService = mainController.getFtpService();
         initComponents();
-        initUI(mainController);
+        settings(mainController);
     }
 
     private void initComponents() {
@@ -85,27 +85,27 @@ public class FTPWindow extends JFrame {
     private void applyButtonStyle(JButton button) {
         Font buttonFont = new Font("Arial", Font.BOLD, 16);
         button.setFont(buttonFont);
-        button.setBackground(new Color(255, 215, 0));  // Dorado
+        button.setBackground(new Color(255, 215, 0));  // Set button background color to gold
     }
 
-    private void initUI(MainController mainController) {
+    private void settings(MainController mainController) {
         ImageIcon icon = new ImageIcon("target/classes/assets/icon_app.jpg");
         setIconImage(icon.getImage());
         this.setContentPane(mainPanel);
-        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
-        int height = (int) (pantalla.getHeight() + 300);
-        int width = (int) (pantalla.width + 200);
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenHeight = (int) (screen.getHeight() + 300);
+        int screenWidth = (int) (screen.width + 200);
 
         this.setTitle(model.getTitle());
-        this.setSize(width / 2, height / 3);
-        this.setLocationRelativeTo(null);
+        this.setSize(screenWidth / 2, screenHeight / 3);
+        this.setLocationRelativeTo(mainController.getMenu());
         this.setResizable(true);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
                 super.windowClosed(e);
-                mainController.getMenu().setVisible(true); // Hace visible el menú al cerrar "FTP"
+                mainController.getMenu().setVisible(true); // Make the menu visible when the "FTP" window is closed
             }
         });
         this.setVisible(true);
@@ -150,14 +150,13 @@ public class FTPWindow extends JFrame {
         try {
             directory = ftpClient.printWorkingDirectory().substring(1);
             String fullPath = directory + "/" + path;
-            loadDirectoryInternal(ftpClient, fullPath);
+            loadDirectoryInternal(fullPath);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-
-    private void loadDirectoryInternal(FTPClient ftpClient, String path) {
+    private void loadDirectoryInternal(String path) {
         try {
             DefaultMutableTreeNode rootNode = createNodes(path);
 

@@ -19,22 +19,20 @@ public class Casos extends JFrame {
     private JButton buttonCrear;
     private JLabel labelClient;
     private JLabel labelCase;
-    private MainController mainController;
     private CasosTexts model = new CasosTexts();
 
     public Casos(MainController mainController) {
-        this.mainController = mainController;
-        initUI();
-        initComponents();
+        settings(mainController); // Initialize the frame settings
+        initComponents(mainController); // Initialize Swing components
     }
 
-    private void initComponents() {
-        setLabelTexts();
-        setButtonTexts();
-        createClientCombo();
+    private void initComponents(MainController mainController) {
+        setLabelTexts(); // Set text for labels
+        setButtonTexts(); // Set text for buttons
+        createClientCombo(mainController); // Client names in the combo box
     }
 
-    private void createClientCombo() {
+    private void createClientCombo(MainController mainController) {
         ArrayList<String> clientNames = mainController.getMainConnection().getClientNames();
 
         for (String clientName : clientNames) {
@@ -43,40 +41,40 @@ public class Casos extends JFrame {
     }
 
     private void setButtonTexts() {
-        buttonCrear.setText(model.getTextsList().get(3));
+        buttonCrear.setText(model.getTextsList().get(3)); // Set text for the "Crear" button
 
         Font buttonFont = new Font("Arial", Font.BOLD, 16);
         buttonCrear.setFont(buttonFont);
-        buttonCrear.setBackground(new Color(255, 215, 0));  // Dorado
+        buttonCrear.setBackground(new Color(255, 215, 0));  // Set button background color to gold
     }
 
     private void setLabelTexts() {
-        labelTitle.setText(model.getTextsList().get(0));
-        labelClient.setText(model.getTextsList().get(1));
-        labelCase.setText(model.getTextsList().get(2));
-
+        labelTitle.setText(model.getTextsList().get(0)); // Set text for the title label
+        labelClient.setText(model.getTextsList().get(1)); // Set text for the client label
+        labelCase.setText(model.getTextsList().get(2)); // Set text for the case label
     }
 
-    private void initUI() {
-        this.setContentPane(mainPanel);
-        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
-        int height = pantalla.height;
-        int width = pantalla.width;
-
+    private void settings(MainController mainController) {
+        this.setContentPane(mainPanel); // Set the content pane to the main panel
         ImageIcon icon = new ImageIcon("target/classes/assets/icon_app.jpg");
         setIconImage(icon.getImage());
-        this.setTitle(model.getTitle());
-        this.setSize(width / 3, height / 3);
-        this.setLocationRelativeTo(null);
-        this.setResizable(false);
-        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenHeight = screen.height;
+        int screenWidth = screen.width;
+
+        this.setSize(screenWidth / 3, screenHeight / 3); // Set the size of the frame
+        this.setTitle(model.getTitle()); // Set the title of the frame
+        this.setLocationRelativeTo(mainController.getMenu()); // Set the location relative to the menu frame
+        this.setResizable(false); // Make the frame not resizable
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE); // Dispose the frame on close
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
                 super.windowClosed(e);
-                mainController.getMenu().setVisible(true); // Hace visible el menú al cerrar "Casos"
+                mainController.getMenu().setVisible(true); // Make the menu visible when the "Casos" window is closed
             }
         });
-        this.setVisible(true);
+        this.setVisible(true); // Set the frame to be visible
     }
 }

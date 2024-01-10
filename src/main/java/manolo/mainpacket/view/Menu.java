@@ -12,25 +12,34 @@ import java.util.ArrayList;
 @Getter
 @Setter
 public class Menu extends JFrame {
+
+    // Lists to store buttons and labels
     private ArrayList<JButton> buttons = new ArrayList<>();
     private ArrayList<JLabel> labels = new ArrayList<>();
+
+    // Model for menu texts
     private MenuTexts model = new MenuTexts();
 
+    // Constructor
     public Menu() {
-        createButtons();
-        addButtonsToFrame();
-        settings();
+        createButtons(); // Create menu buttons
+        addButtonsToFrame(); // Add buttons to the frame
+        settings(); // Set frame settings
     }
 
+    // Method to create menu buttons
     private void createButtons() {
         int desiredWidth = 120;
         int desiredHeight = 120;
 
+        // Loop through each button text in the model
         for (String buttonText : model.getTextsButtonList()) {
             String imagePath = "assets/" + buttonText + ".png";
             URL imageURL = getClass().getClassLoader().getResource(imagePath);
 
+            // Check if the image can be loaded
             if (imageURL != null) {
+                // Resize and set up the button with the image
                 ImageIcon originalIcon = new ImageIcon(imageURL);
                 Image originalImage = originalIcon.getImage();
                 Image resizedImage = originalImage.getScaledInstance(desiredWidth, desiredHeight, Image.SCALE_SMOOTH);
@@ -53,11 +62,13 @@ public class Menu extends JFrame {
 
                 buttons.add(button);
             } else {
-                System.out.println("No se pudo cargar la imagen: " + imagePath);
+                // Print an error message if the image couldn't be loaded
+                System.out.println("Failed to load the image: " + imagePath);
             }
         }
     }
 
+    // Method to add buttons to the frame
     private void addButtonsToFrame() {
         setLayout(new GridLayout(1, model.getTextsButtonList().size()));
 
@@ -66,14 +77,16 @@ public class Menu extends JFrame {
         }
     }
 
+    // Method to set frame settings
     private void settings() {
         ImageIcon icon = new ImageIcon("target/classes/assets/icon_app.jpg");
         setIconImage(icon.getImage());
-        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
-        int height = pantalla.height;
-        int width = pantalla.width;
 
-        this.setSize(width/2, height/3);
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenHeight = screen.height;
+        int screenWidth = screen.width;
+
+        this.setSize(screenWidth / 2, screenHeight / 3);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
