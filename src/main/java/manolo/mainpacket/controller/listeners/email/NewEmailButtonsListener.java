@@ -14,6 +14,7 @@ import java.io.File;
 public class NewEmailButtonsListener implements ActionListener {
 
     MainController mainController;
+    SendEmail send;
 
 
     public NewEmailButtonsListener(MainController mainController) {
@@ -22,6 +23,7 @@ public class NewEmailButtonsListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        send = new SendEmail(mainController);
         //BACK BUTTON
         if (e.getSource() == mainController.getNewEmail().getCancelButton()) {
             mainController.getNewEmail().dispose();
@@ -32,7 +34,6 @@ public class NewEmailButtonsListener implements ActionListener {
         if (e.getSource() == mainController.getNewEmail().getSendButton()) {
             mainController.getMainConnection().openConnection(mainController.getMainConnectionModel().getMYSQL_URL(), mainController.getMainConnectionModel().getMYSQL_DATABASE(), mainController.getMainConnectionModel().getMYSQL_USERNAME(), mainController.getMainConnectionModel().getPASSWORD());
 
-            SendEmail send = new SendEmail(mainController);
             send.createEmail(mainController.getNewEmail().getToTextfield(),
                     mainController.getNewEmail().getSubjetTextArea(),
                     mainController.getNewEmail().getMessageTextfield());
@@ -40,6 +41,22 @@ public class NewEmailButtonsListener implements ActionListener {
 
             mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), "EMAIL SEND to " + mainController.getNewEmail().getToTextfield().getText());
             mainController.getMainConnection().closeConnection();
+        }
+
+        if (e.getSource()== mainController.getNewEmail().getAddFilesButton()){
+            JFileChooser chooser= new JFileChooser();
+            chooser.setMultiSelectionEnabled(true);
+            chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+            if (chooser.showOpenDialog(send) != JFileChooser.CANCEL_OPTION){
+                send.setFiles(chooser.getSelectedFiles());
+
+                for (File file: send.getFiles()){
+                    send.setFilesNames(send.getFilesNames()+ file.getName()+ "<br>");
+                }
+
+                mainController.getNewEmail().getLabel1().setText("<html><p>"+ send.getFilesNames()+ "</p></html>");
+            }
         }
 
     }

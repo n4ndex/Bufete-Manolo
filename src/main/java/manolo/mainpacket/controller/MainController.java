@@ -124,6 +124,7 @@ public class MainController {
     public void addNewEmailListeners() {
         newEmail.getSendButton().addActionListener(new NewEmailButtonsListener(this));
         newEmail.getCancelButton().addActionListener(new NewEmailButtonsListener(this));
+        newEmail.getAddFilesButton().addActionListener(new NewEmailButtonsListener(this));
     }
 
     public void addCasosEventListeners() {
