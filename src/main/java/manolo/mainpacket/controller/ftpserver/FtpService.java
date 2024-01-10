@@ -1,6 +1,7 @@
 package manolo.mainpacket.controller.ftpserver;
 
 import manolo.mainpacket.controller.MainController;
+import manolo.mainpacket.model.controllermodels.Utils;
 import manolo.mainpacket.view.FTPWindow;
 import org.apache.commons.net.*;
 import org.apache.commons.net.ftp.*;
@@ -40,7 +41,7 @@ public class FtpService {
             ftpClient.connect(host, port);
             ftpClient.login(username, password);
         } catch (IOException e) {
-            mainController.showErrorWindow(mainController.getLoginView(), "Error: Servidor FTP no iniciado.");
+            Utils.showErrorWindow(mainController.getLoginView(), mainController.getMainViewModel().getFTP_NOT_STARTED(), mainController.getMainViewModel().getERROR());
         }
         return ftpClient;
     }
@@ -65,9 +66,9 @@ public class FtpService {
     public void createDirectory(String newDirectoryPath, FTPClient ftpClient, FTPWindow ftpWindow) {
         try {
             if (ftpClient.makeDirectory(newDirectoryPath)) {
-                mainController.showInfoWindow(ftpWindow, "Directorio creado exitosamente: " + newDirectoryPath);
+                Utils.showInfoWindow(ftpWindow, mainController.getMainViewModel().getDIRECTORY_CREATED_SUCCESS() + newDirectoryPath, mainController.getMainViewModel().getINFO());
             } else {
-                mainController.showErrorWindow(ftpWindow, "Error al crear: " + newDirectoryPath);
+                Utils.showErrorWindow(ftpWindow, mainController.getMainViewModel().getCREATE_DIRECTORY_ERROR() + newDirectoryPath, mainController.getMainViewModel().getERROR());
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -108,10 +109,10 @@ public class FtpService {
             }
 
             if (ftpClient.removeDirectory(path)) {
-                mainController.showInfoWindow(ftpWindow, "Directorio eliminado exitosamente: " + path);
+                Utils.showInfoWindow(ftpWindow, mainController.getMainViewModel().getDIRECTORY_DELETED_SUCCESS() + path, mainController.getMainViewModel().getINFO());
                 return true;
             } else {
-                mainController.showErrorWindow(ftpWindow, "Error al eliminar: " + path);
+                Utils.showErrorWindow(ftpWindow, mainController.getMainViewModel().getDELETE_DIRECTORY_ERROR() + path, mainController.getMainViewModel().getERROR());
                 return false;
             }
         } catch (IOException e) {

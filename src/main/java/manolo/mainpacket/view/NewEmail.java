@@ -8,35 +8,42 @@ import java.awt.*;
 
 @Getter
 @Setter
-public class NewEmail extends JFrame{
-    private JButton sendButton;
-    private JButton cancelButton;
-    private JButton addFilesButton;
-    private JLabel filesNameLabel;
-    private JTextField toTextfield;
-    private JTextArea subjetTextArea;
-    private JPanel mainPanel;
-    private JTextField messageTextfield;
+public class NewEmail extends JFrame {
+    // Swing components for the new email window
+    private JButton sendButton;        // Button to send the email
+    private JButton cancelButton;      // Button to cancel composing the email
+    private JButton addFilesButton;    // Button to add files to the email
+    private JLabel filesNameLabel;     // Label displaying the names of attached files
+    private JTextField toTextfield;    // Textfield for entering the recipient's email address
+    private JTextArea subjetTextArea;  // Text area for entering the email subject
+    private JPanel mainPanel;           // Main panel containing NewEmail components
+    private JTextField messageTextfield;  // Textfield for composing the email message
 
-    public NewEmail(){
-        initUI();
+    // Constructor for the NewEmail class, initializes components and applies settings.
+    public NewEmail() {
+        settings();  // Apply window settings
     }
 
-    private void initUI() {
+    // Method to apply settings to the new email window.
+    private void settings() {
+        // Set the content pane to the main panel
+        this.setContentPane(mainPanel);
+
+        // Set the window icon
         ImageIcon icon = new ImageIcon("target/classes/assets/icon_app.jpg");
         setIconImage(icon.getImage());
-        this.setContentPane(mainPanel);
-        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
-        int height = pantalla.height;
-        int width = pantalla.width;
 
+        // Get screen dimensions
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenHeight = screen.height;
+        int screenWidth = screen.width;
+
+        // Set window title, size, location, and other properties
         this.setTitle("New Email");
-        this.setSize(width / 3, height / 3);
+        this.setSize(screenWidth / 3, screenHeight / 3);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setVisible(true);
+        setVisible(true);  // Make the new email window visible
     }
-
-
 }
