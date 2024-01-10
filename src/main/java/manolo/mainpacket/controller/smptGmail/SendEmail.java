@@ -31,9 +31,11 @@ public class SendEmail extends JFrame {
     private Session mSession;
     private MimeMessage mCorreo;
 
+    private File[] files;
+    private String filesNames;
+
 
     public SendEmail(MainController mainController) {
-        this.mainController=mainController;
         emailFrom=mainController.getCurrentUser().getEmail();
         passwordFrom=mainController.getCurrentUser().getPassword();
         mProperties = new Properties();

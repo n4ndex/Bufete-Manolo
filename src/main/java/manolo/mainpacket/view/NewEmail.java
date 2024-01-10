@@ -15,6 +15,8 @@ public class NewEmail extends JFrame{
     private JTextArea subjetTextArea;
     private JPanel mainPanel;
     private JTextField messageTextfield;
+    private JButton AddFilesButton;
+    private JLabel label1;
 
     public NewEmail(){
         initUI();
