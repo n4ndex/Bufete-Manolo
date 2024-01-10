@@ -3,7 +3,6 @@ package manolo.mainpacket.controller.listeners.email;
 import lombok.Getter;
 import manolo.mainpacket.controller.MainController;
 import manolo.mainpacket.controller.smptGmail.SendEmail;
-import manolo.mainpacket.view.Email;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -55,7 +54,7 @@ public class NewEmailButtonsListener implements ActionListener {
                     send.setFilesNames(send.getFilesNames()+ file.getName()+ "<br>");
                 }
 
-                mainController.getNewEmail().getLabel1().setText("<html><p>"+ send.getFilesNames()+ "</p></html>");
+                mainController.getNewEmail().getFilesAttachedLabel().setText("<html><p>" + send.getFilesNames() + "</p></html>");
             }
         }
 

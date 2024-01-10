@@ -97,7 +97,7 @@
               <text value="Escribe el mensaje"/>
             </properties>
           </component>
-          <component id="1a2ac" class="javax.swing.JButton" binding="AddFilesButton" default-binding="true">
+          <component id="1a2ac" class="javax.swing.JButton" binding="addFilesButton">
             <constraints>
               <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -105,7 +105,7 @@
               <text value="Adjuntar archivos"/>
             </properties>
           </component>
-          <component id="9da56" class="javax.swing.JLabel" binding="label1">
+          <component id="9da56" class="javax.swing.JLabel" binding="filesAttachedLabel">
             <constraints>
               <grid row="3" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>

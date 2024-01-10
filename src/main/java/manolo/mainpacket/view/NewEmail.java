@@ -18,8 +18,7 @@ public class NewEmail extends JFrame {
     private JTextArea subjetTextArea;  // Text area for entering the email subject
     private JPanel mainPanel;           // Main panel containing NewEmail components
     private JTextField messageTextfield;  // Textfield for composing the email message
-    private JButton AddFilesButton;
-    private JLabel label1;
+    private JLabel filesAttachedLabel; // Textfielf shows the files attached
 
     // Constructor for the NewEmail class, initializes components and applies settings.
     public NewEmail() {
