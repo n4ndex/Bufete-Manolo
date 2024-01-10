@@ -1,5 +1,7 @@
 package manolo.mainpacket.controller.smptGmail;
 
+import lombok.Getter;
+import lombok.Setter;
 import manolo.mainpacket.controller.MainController;
 
 import javax.mail.*;
@@ -7,11 +9,15 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.swing.*;
+import java.awt.*;
+import java.io.File;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class SendEmail {
+@Getter
+@Setter
+public class SendEmail extends JFrame {
 
     MainController mainController;
 
@@ -25,11 +31,13 @@ public class SendEmail {
     private Session mSession;
     private MimeMessage mCorreo;
 
+
     public SendEmail(MainController mainController) {
         this.mainController=mainController;
         emailFrom=mainController.getCurrentUser().getEmail();
         passwordFrom=mainController.getCurrentUser().getPassword();
         mProperties = new Properties();
+       // FilesName="";
     }
 
     public void createEmail(JTextField to,JTextArea message, JTextField subjectt) {
@@ -37,7 +45,7 @@ public class SendEmail {
         subject = subjectt.getText().trim();
         content = message.getText().trim();
 
-        // Simple mail transfer protocol
+        // Mail transfer protocol
         mProperties.put("mail.smtp.host", "smtp.gmail.com");
         mProperties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
         mProperties.setProperty("mail.smtp.starttls.enable", "true");
