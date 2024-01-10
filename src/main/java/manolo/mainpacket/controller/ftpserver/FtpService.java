@@ -6,6 +6,8 @@ import org.apache.commons.net.*;
 import org.apache.commons.net.ftp.*;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -180,13 +182,12 @@ public class FtpService {
 
         for (FTPFile file : files) {
             String filePath = currentPath + file.getName();
-
+            Path filePathPath = Paths.get(filePath);
             if (file.isDirectory()) {
                 searchClientFiles(filePath + "/", clientDni, ftpClient, fileNames);
-            } else if (filePath.contains("/" + clientDni + "/")) {
+            } else if (filePathPath.getName( 2).toString().equals(clientDni)) {
                 fileNames.add(filePath);
             }
         }
     }
-
 }

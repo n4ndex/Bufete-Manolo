@@ -1,6 +1,7 @@
 package manolo.mainpacket.controller.listeners.ftp;
 
 import manolo.mainpacket.controller.MainController;
+import manolo.mainpacket.controller.Utils;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -46,8 +47,7 @@ public class ButtonsListener implements ActionListener {
                 if (folderName != null && !folderName.isEmpty()) {
                     String newDirectoryPath = selectedDirectory + File.separator + folderName;
                     Path newDirectory = Paths.get(newDirectoryPath);
-                    System.out.println(isThreeLevelsDeep(newDirectory));
-                    if (isThreeLevelsDeep(newDirectory)) {
+                    if (Utils.isLevelsDeep(newDirectory, 3)) {
                         if (mainController.isValidDNI(folderName)) {
                             if (mainController.getMainConnection().checkIfUserExists(folderName)) {
                                 int laywerId = mainController.getMainConnection().whichLawyerHasUserAssigned(folderName);
@@ -213,10 +213,5 @@ public class ButtonsListener implements ActionListener {
         mainController.getFtpService().createEmptyFile(emptyFilePath, mainController.getMainClient());
         mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " creates directory: " + folderName);
         mainController.getFtpWindow().loadDirectory(mainController.getMainClient(), mainController.getFtpWindow().getLawyerDni());
-    }
-
-    public static boolean isThreeLevelsDeep(Path path) {
-        int levels = path.getNameCount();
-        return levels == 3;
     }
 }
