@@ -48,7 +48,7 @@ public class ButtonsListener implements ActionListener {
             }
             case "EMAIL" -> {
                 mainController.setEmailModel(new EmailTexts());
-                mainController.setEmailView(new Email(mainController.getEmailModel()));
+                mainController.setEmailView(new Email(mainController));
                 mainController.addEmailListeners();
                 mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " open EMAIL explorer");
             }
@@ -58,7 +58,7 @@ public class ButtonsListener implements ActionListener {
                 mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " open CASOS explorer");
             }
             case "ACERCA DE" -> {
-                mainController.setAbout(new About(mainController.getMenu()));
+                mainController.setAbout(new About(mainController));
                 mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " open ABOUT window");
             }
             case "LOG OUT" -> {

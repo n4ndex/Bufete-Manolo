@@ -6,8 +6,11 @@ import java.util.ArrayList;
 
 @Getter
 public class RegisterTexts {
+
     ArrayList<String> textsList = new ArrayList<>(); // Textos del Register
     ArrayList<String> user_types = new ArrayList<>();   // Tipos de usuarios
+
+    String title = "Register Bufete";
 
     public RegisterTexts() {
         fillTexts();
