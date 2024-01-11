@@ -39,7 +39,6 @@ public class SendEmail extends JFrame {
         emailFrom=mainController.getCurrentUser().getEmail();
         passwordFrom=mainController.getCurrentUser().getPassword();
         mProperties = new Properties();
-       // FilesName="";
     }
 
     public void createEmail(JTextField to,JTextArea message, JTextField subjectt) {

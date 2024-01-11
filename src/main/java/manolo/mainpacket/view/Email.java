@@ -2,16 +2,24 @@ package manolo.mainpacket.view;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import manolo.mainpacket.controller.MainController;
+import manolo.mainpacket.controller.smptGmail.ReceiveEmail;
 import manolo.mainpacket.model.viewmodels.EmailTexts;
 
+import javax.mail.MessagingException;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
 @Getter
 @Setter
-public class Email extends JFrame {
+public class Email extends JFrame implements Runnable{
+
+    private ReceiveEmail receiveEmail;
+
+    private Thread thread;
+    private boolean keepChecking;
 
     // Model for email text
     private EmailTexts model;
@@ -26,7 +34,10 @@ public class Email extends JFrame {
 
     // Constructor that takes mainController as a parameter
     public Email(MainController mainController) {
+        receiveEmail = new ReceiveEmail(mainController);
+        this.thread = new Thread();
         this.model = mainController.getEmailModel();
+        keepChecking = true;
         creation(); // Initialize and set up the view
         settings(); // Set parameters for the view
     }
@@ -124,5 +135,25 @@ public class Email extends JFrame {
         JTextArea emailTextArea = new JTextArea();
         emailTextArea.setText("AQUI APARECERAN LOS EMAILS");
         panels.get(2).add(emailTextArea);
+    }
+
+    @SneakyThrows
+    @Override
+    public void run() {
+
+        while(keepChecking){
+
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+                checkEmails();
+
+        }
+    }
+
+    private void checkEmails(){
+        receiveEmail.check();
     }
 }
