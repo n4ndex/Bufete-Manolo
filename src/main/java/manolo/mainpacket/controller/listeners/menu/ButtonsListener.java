@@ -1,6 +1,7 @@
 package manolo.mainpacket.controller.listeners.menu;
 
 import manolo.mainpacket.controller.MainController;
+import manolo.mainpacket.controller.smptGmail.ReceiveEmail;
 import manolo.mainpacket.view.*;
 import manolo.mainpacket.model.viewmodels.EmailTexts_es;
 
@@ -48,6 +49,10 @@ public class ButtonsListener implements ActionListener {
             }
             case "EMAIL" -> {
                 mainController.setEmailView(new Email(mainController));
+                Thread hilo = new Thread(mainController.getEmailView());
+                hilo.start();
+                //ReceiveEmail receiveEmail= new ReceiveEmail(mainController);
+                //receiveEmail.check();
                 mainController.addEmailListeners();
                 mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " open EMAIL explorer");
             }
