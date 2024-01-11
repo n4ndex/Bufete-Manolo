@@ -21,7 +21,7 @@
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Enviar"/>
+              <text value=""/>
             </properties>
           </component>
           <hspacer id="44a0">
@@ -29,12 +29,12 @@
               <grid row="0" column="3" row-span="1" col-span="12" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
           </hspacer>
-          <component id="bcf8" class="javax.swing.JLabel">
+          <component id="bcf8" class="javax.swing.JLabel" binding="toTextLabel">
             <constraints>
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Para:"/>
+              <text value=""/>
             </properties>
           </component>
           <component id="cab2d" class="javax.swing.JTextField" binding="toTextfield" default-binding="true">
@@ -60,7 +60,7 @@
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Cancelar"/>
+              <text value=""/>
             </properties>
           </component>
           <hspacer id="be25d">
@@ -68,12 +68,12 @@
               <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
           </hspacer>
-          <component id="8c661" class="javax.swing.JLabel">
+          <component id="8c661" class="javax.swing.JLabel" binding="subjectTextLabel">
             <constraints>
               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Asunto:"/>
+              <text value=""/>
             </properties>
           </component>
           <component id="cb64c" class="javax.swing.JTextField" binding="messageTextfield" default-binding="true">
@@ -89,12 +89,12 @@
               <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
             </constraints>
           </vspacer>
-          <component id="ab50c" class="javax.swing.JLabel">
+          <component id="ab50c" class="javax.swing.JLabel" binding="messageTextLabel">
             <constraints>
               <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Escribe el mensaje"/>
+              <text value=""/>
             </properties>
           </component>
           <component id="1a2ac" class="javax.swing.JButton" binding="addFilesButton">
@@ -102,7 +102,7 @@
               <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Adjuntar archivos"/>
+              <text value=""/>
             </properties>
           </component>
           <component id="9da56" class="javax.swing.JLabel" binding="filesAttachedLabel">
@@ -110,7 +110,7 @@
               <grid row="3" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="..."/>
+              <text value=""/>
             </properties>
           </component>
         </children>

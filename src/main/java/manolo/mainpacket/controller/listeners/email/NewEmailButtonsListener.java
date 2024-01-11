@@ -26,11 +26,11 @@ public class NewEmailButtonsListener implements ActionListener {
 
     public NewEmailButtonsListener(MainController mainController) {
         this.mainController = mainController;
+        this.send = new SendEmail(mainController);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        send = new SendEmail(mainController);
         //BACK BUTTON
         if (e.getSource() == mainController.getNewEmail().getCancelButton()) {
             mainController.getNewEmail().dispose();
@@ -50,6 +50,7 @@ public class NewEmailButtonsListener implements ActionListener {
             mainController.getMainConnection().closeConnection();
         }
 
+        // ADD FILES BUTTON
         if (e.getSource()== mainController.getNewEmail().getAddFilesButton()){
             JFileChooser chooser= new JFileChooser();
             chooser.setMultiSelectionEnabled(true);
@@ -59,7 +60,7 @@ public class NewEmailButtonsListener implements ActionListener {
                 send.setFiles(chooser.getSelectedFiles());
 
                 for (File file: send.getFiles()){
-                    send.setFilesNames(send.getFilesNames()+ file.getName()+ "<br>");
+                    send.setFilesNames(send.getFilesNames() + file.getName()+ "<br>");
                 }
 
                 mainController.getNewEmail().getFilesAttachedLabel().setText("<html><p>" + send.getFilesNames() + "</p></html>");

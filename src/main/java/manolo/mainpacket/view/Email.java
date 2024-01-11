@@ -6,9 +6,7 @@ import lombok.SneakyThrows;
 import manolo.mainpacket.controller.MainController;
 import manolo.mainpacket.controller.smptGmail.ReceiveEmail;
 import manolo.mainpacket.model.viewmodels.EmailTexts;
-import manolo.mainpacket.model.viewmodels.EmailTexts_es;
 
-import javax.mail.MessagingException;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -39,12 +37,14 @@ public class Email extends JFrame implements Runnable{
         this.thread = new Thread();
         this.model = mainController.getEmailModel();
         keepChecking = true;
-        creation(); // Initialize and set up the view
-        settings(); // Set parameters for the view
+        initComponents(); // Initialize and set up the view
+        settings(mainController); // Set parameters for the view
     }
 
     // Method to set view parameters
-    private void settings() {
+    private void settings(MainController mainController) {
+        ImageIcon icon = new ImageIcon(mainController.getMainViewModel().getICON_PATH());
+        setIconImage(icon.getImage());
         setSize(model.getNumDimensions().get(0), model.getNumDimensions().get(1));
         setLocation(model.getNumDimensions().get(2), model.getNumDimensions().get(3));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -52,9 +52,7 @@ public class Email extends JFrame implements Runnable{
     }
 
     // Method to initialize and set up the view
-    public void creation() {
-        ImageIcon icon = new ImageIcon("target/classes/assets/icon_app.jpg");
-        setIconImage(icon.getImage());
+    public void initComponents() {
         panelsSettings(); // Set up panels
         labelSettings(); // Set up labels
         buttonSettings(); // Set up buttons
