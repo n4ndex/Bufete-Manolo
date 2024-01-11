@@ -1,3 +1,11 @@
+
+/**
+ * ClientDownloadListener - ActionListener for handling file download events in the FTPWindowClient of the MainPacket application.
+ *
+ * This class listens for the download button click event in the FTPWindowClient and performs the download
+ * operation for the selected file.
+ */
+
 package manolo.mainpacket.controller.listeners.ftp;
 
 import manolo.mainpacket.controller.MainController;
@@ -8,7 +16,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.nio.file.Files;
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class ClientDownloadListener implements ActionListener {
 

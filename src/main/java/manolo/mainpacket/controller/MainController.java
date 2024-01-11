@@ -1,3 +1,14 @@
+
+/**
+ * MainController - Controller class for the MainPacket application.
+ *
+ * Version: 1.0
+ * Authors: Diego Fernández Rojo, David Maestre Díaz, Hugo Villodres Moreno, Isaac Requena Santiago
+ *
+ * This class manages the interaction between the application's views and models,
+ * handling user inputs and application logic.
+ */
+
 package manolo.mainpacket.controller;
 
 import lombok.Getter;

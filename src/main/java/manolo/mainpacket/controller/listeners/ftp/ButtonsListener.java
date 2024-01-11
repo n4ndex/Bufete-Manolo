@@ -1,3 +1,12 @@
+
+/**
+ * ButtonsListener - ActionListener for handling button events in the FTPWindow of the MainPacket application.
+ *
+ * This class listens for button click events in the FTPWindow and performs corresponding actions based
+ * on the clicked button, such as creating or deleting directories, downloading or uploading files,
+ * and refreshing the tree view.
+ */
+
 package manolo.mainpacket.controller.listeners.ftp;
 
 import manolo.mainpacket.controller.MainController;
@@ -10,7 +19,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 

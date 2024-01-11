@@ -1,3 +1,12 @@
+
+/**
+ * MainConnection - Handles the database connection and executes queries for the MainPacket application.
+ *
+ * This class provides methods to interact with the database, such as retrieving user data,
+ * obtaining lists of lawyer and client names, checking user existence, inserting new users,
+ * and updating client lawyer assignments, among other database operations.
+ */
+
 package manolo.mainpacket.controller.databaseconnection;
 
 import lombok.Getter;

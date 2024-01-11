@@ -1,3 +1,11 @@
+
+/**
+ * EmailLabelsListener - MouseListener for handling mouse click events on labels in the EmailView of the MainPacket application.
+ *
+ * This class listens for mouse click events on specific labels in the EmailView and performs corresponding actions based
+ * on the clicked label, such as printing a message to the console.
+ */
+
 package manolo.mainpacket.controller.listeners.email;
 
 import manolo.mainpacket.controller.MainController;

@@ -1,3 +1,10 @@
+
+/**
+ * ButtonsListener - ActionListener for handling button events in the login view of the MainPacket application.
+ *
+ * This class listens for button clicks in the login view and performs actions accordingly.
+ */
+
 package manolo.mainpacket.controller.listeners.login;
 
 import manolo.mainpacket.controller.MainController;
@@ -8,7 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ButtonsListener implements ActionListener {
-    private MainController mainController;
+    private final MainController mainController;
 
     public ButtonsListener(MainController mainController) {
         this.mainController = mainController;

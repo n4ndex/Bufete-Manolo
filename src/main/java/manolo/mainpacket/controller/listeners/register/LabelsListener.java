@@ -1,13 +1,19 @@
+
+/**
+ * LabelsListener - MouseListener for handling mouse events on labels in the register view.
+ *
+ * This class responds to mouse events, specifically mouse clicks, on labels in the register view by switching to the login view.
+ */
+
 package manolo.mainpacket.controller.listeners.register;
 
 import manolo.mainpacket.controller.MainController;
-import manolo.mainpacket.view.Login;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class LabelsListener implements MouseListener {
-    private MainController mainController;
+    private final MainController mainController;
 
     public LabelsListener(MainController mainController) {
         this.mainController = mainController;

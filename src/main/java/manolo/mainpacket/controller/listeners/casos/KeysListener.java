@@ -1,3 +1,11 @@
+
+/**
+ * KeysListener - KeyListener for handling key events related to case management in the MainPacket application.
+ *
+ * This class listens for key events, specifically the Enter key, to trigger case management actions,
+ * such as updating client assignments, creating directories and empty files on the FTP server, and inserting logs into the database.
+ */
+
 package manolo.mainpacket.controller.listeners.casos;
 
 import manolo.mainpacket.controller.MainController;

@@ -1,3 +1,11 @@
+
+/**
+ * ButtonsListener - ActionListener for buttons related to case management in the MainPacket application.
+ *
+ * This class handles button clicks associated with case management, including updating client assignments,
+ * creating directories and empty files on the FTP server, and inserting logs into the database.
+ */
+
 package manolo.mainpacket.controller.listeners.casos;
 
 import manolo.mainpacket.controller.MainController;

@@ -1,3 +1,10 @@
+
+/**
+ * TreeListener - TreeSelectionListener for handling tree selection events in the FTPWindow of the MainPacket application.
+ *
+ * This class listens for tree selection events and updates the FTPWindow based on the selected tree node.
+ */
+
 package manolo.mainpacket.controller.listeners.ftp;
 
 import manolo.mainpacket.controller.MainController;

@@ -1,3 +1,10 @@
+
+/**
+ * RegisterDocumentListener - DocumentListener for handling document events in the register view.
+ *
+ * This class responds to document events, such as text insertion or removal, in the register view by updating the state of the register button.
+ */
+
 package manolo.mainpacket.controller.listeners.register;
 
 import javax.swing.*;
@@ -7,7 +14,7 @@ import manolo.mainpacket.controller.MainController;
 
 public class RegisterDocumentListener implements DocumentListener {
 
-    private MainController mainController;
+    private final MainController mainController;
 
     public RegisterDocumentListener(MainController mainController) {
         this.mainController = mainController;

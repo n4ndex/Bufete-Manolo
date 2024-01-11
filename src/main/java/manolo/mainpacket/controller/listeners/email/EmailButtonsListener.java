@@ -1,3 +1,11 @@
+
+/**
+ * EmailButtonsListener - ActionListener for handling button events related to email management in the MainPacket application.
+ *
+ * This class listens for button events in the EmailView, specifically the "New Email" and "Back" buttons, and performs
+ * corresponding actions such as displaying the NewEmail view or navigating back to the main menu.
+ */
+
 package manolo.mainpacket.controller.listeners.email;
 
 import manolo.mainpacket.controller.MainController;

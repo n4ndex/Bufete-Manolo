@@ -1,3 +1,11 @@
+
+/**
+ * ButtonsListener - ActionListener for handling button clicks in the menu.
+ *
+ * This class responds to button clicks in the menu by performing various actions such as opening different explorer windows,
+ * logging out, and more.
+ */
+
 package manolo.mainpacket.controller.listeners.menu;
 
 import manolo.mainpacket.controller.MainController;

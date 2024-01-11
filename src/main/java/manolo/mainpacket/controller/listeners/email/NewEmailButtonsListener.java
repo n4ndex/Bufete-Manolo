@@ -1,3 +1,11 @@
+
+/**
+ * NewEmailButtonsListener - ActionListener for handling button events in the New Email view of the MainPacket application.
+ *
+ * This class listens for button click events in the New Email view and performs corresponding actions based
+ * on the clicked button, such as sending an email, attaching files, or canceling the email composition.
+ */
+
 package manolo.mainpacket.controller.listeners.email;
 
 import lombok.Getter;

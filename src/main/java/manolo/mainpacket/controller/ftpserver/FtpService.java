@@ -1,3 +1,12 @@
+
+/**
+ * FtpService - Handles FTP server interactions for the MainPacket application.
+ *
+ * This class provides methods for connecting to an FTP server, listing files and directories,
+ * creating directories, uploading and downloading files, renaming and deleting files and directories,
+ * and retrieving client-specific files from the FTP server.
+ */
+
 package manolo.mainpacket.controller.ftpserver;
 
 import manolo.mainpacket.controller.MainController;

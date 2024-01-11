@@ -1,3 +1,10 @@
+
+/**
+ * LoginDocumentListener - DocumentListener for monitoring changes in the login view text fields.
+ *
+ * This class tracks changes in the login view text fields and updates the login button state accordingly.
+ */
+
 package manolo.mainpacket.controller.listeners.login;
 
 import javax.swing.event.DocumentEvent;
@@ -6,7 +13,7 @@ import manolo.mainpacket.controller.MainController;
 
 public class LoginDocumentListener implements DocumentListener {
 
-    private MainController mainController;
+    private final MainController mainController;
 
     public LoginDocumentListener(MainController mainController) {
         this.mainController = mainController;
