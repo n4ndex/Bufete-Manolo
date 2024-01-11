@@ -15,8 +15,8 @@ public class FTPTexts_es implements FTPTexts {
     }
 
     private void fillTexts() {
-        textsList.add("Nombre: ");             // 0
-        textsList.add("Ruta: ");            // 1
+        textsList.add("Nombre: ");          // 0
+        textsList.add("Tipo de usuario: "); // 1
         textsList.add("Servidor: ");        // 2
         textsList.add("Crear carpeta");     // 3
         textsList.add("Eliminar Carpeta");  // 4

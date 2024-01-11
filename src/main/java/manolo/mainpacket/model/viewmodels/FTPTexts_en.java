@@ -16,7 +16,7 @@ public class FTPTexts_en implements FTPTexts {
 
     private void fillTexts() {
         textsList.add("Name: ");             // 0
-        textsList.add("Path: ");             // 1
+        textsList.add("User Type: ");        // 1
         textsList.add("Server: ");           // 2
         textsList.add("Create Folder");      // 3
         textsList.add("Delete Folder");      // 4
