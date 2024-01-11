@@ -14,10 +14,10 @@ public class MainViewModel_en implements MainViewModel {
     private final String INVALID_DNI = "Please enter a valid DNI (8 digits followed by a letter).";
     private final String INVALID_EMAIL = "Please enter a valid email.";
     private final String INVALID_PASSWORD = "Password must contain at least 8 characters, one letter, one number, and one special character.";
-    private final String FILE_RENAME_ERROR = "Error renaming file: ";
+    private final String FILE_RENAME_ERROR = "Error renaming: ";
     private final String FILE_DOWNLOAD_ERROR = "Error downloading file: ";
     private final String FILE_DELETE_ERROR = "Error deleting file: ";
-    private final String FILE_RENAME_SUCCESS = "File successfully renamed.";
+    private final String FILE_RENAME_SUCCESS = "Successfully renamed.";
     private final String NO_FILE_SELECTED = "No file selected.";
     private final String FTP_NOT_STARTED = "Error: FTP server not started.";
     private final String DIRECTORY_CREATED_SUCCESS = "Directory created successfully: ";
@@ -31,9 +31,9 @@ public class MainViewModel_en implements MainViewModel {
     private final String SELECT_DIRECTORY_BEFORE_DELETING = "Select a directory before deleting.";
     private final String SELECT_FILE_BEFORE_DELETING = "Select a file before deleting.";
     private final String SELECT_DIRECTORY_BEFORE_UPLOADING_FILE = "Select a directory before uploading a file.";
-    private final String NO_FILE_CHOSEN_TO_RENAME = "No file selected for renaming.";
+    private final String NO_FILE_CHOSEN_TO_RENAME = "Nothing selected for renaming.";
     private final String USER_CREATED_SUCCESS = "User created successfully.";
-    private final String FILE_DOWNLOAD_SUCCESS = "File downloaded successfully at the path:";
+    private final String FILE_DOWNLOAD_SUCCESS = "File downloaded successfully at the path: ";
     private final String FILE_UPLOAD_ERROR = "Error uploading file: ";
     private final String CASE_EMPTY = "Please enter a case name.";
     private final String CONFIRM_DELETE_DIRECTORY = "Are you sure you want to delete the directory?\n";

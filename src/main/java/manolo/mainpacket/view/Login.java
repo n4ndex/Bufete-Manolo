@@ -230,5 +230,10 @@ public class Login extends JFrame {
         this.setResizable(false);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(true);
+
+        // Focus on the JTextField after displaying the window
+        EventQueue.invokeLater(() -> {
+            textFields.getFirst().requestFocusInWindow();
+        });
     }
 }

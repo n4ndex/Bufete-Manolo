@@ -188,17 +188,18 @@ public class ButtonsListener implements ActionListener {
                     String newPath = mainController.getFtpWindow().getDirectory() + "/" + newName;
 
                     try {
-                        mainController.getFtpService().renameFile(currentPath, newPath, mainController.getMainClient());
-                        mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " renames file: " + oldName + " to: " + newName);
-
+                        if (selectedNode.isLeaf()) {
+                            mainController.getFtpService().renameFile(currentPath, newPath, mainController.getMainClient());
+                        } else {
+                            mainController.getFtpService().renameFile(oldName, newName, mainController.getMainClient());
+                        }
                         mainController.getFtpWindow().loadDirectory(mainController.getMainClient(), mainController.getFtpWindow().getLawyerDni());
-
                         Utils.showInfoWindow(mainController.getFtpWindow(), mainController.getMainViewModel().getFILE_RENAME_SUCCESS(), mainController.getMainViewModel().getINFO());
                     } catch (Exception ex) {
                         Utils.showErrorWindow(mainController.getFtpWindow(), mainController.getMainViewModel().getFILE_RENAME_ERROR() + ex.getMessage(), mainController.getMainViewModel().getERROR());
                     }
                 } else {
-                    Utils.showWarningWindow(mainController.getFtpWindow(), mainController.getMainViewModel().getNO_FILE_CHOSEN_TO_RENAME(), mainController.getMainViewModel().getWARNING());
+                    Utils.showWarningWindow(mainController.getFtpWindow(), mainController.getMainViewModel().getNO_FILE_SELECTED(), mainController.getMainViewModel().getWARNING());
                 }
             }
         }

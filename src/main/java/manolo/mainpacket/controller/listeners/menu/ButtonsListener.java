@@ -32,6 +32,7 @@ public class ButtonsListener implements ActionListener {
                 if (isLawyer) {
                     mainController.setFtpWindow(new FTPWindow(mainController));
                     mainController.getFtpWindow().setLawyerName(mainController.getCurrentUser().getName());
+                    mainController.getFtpWindow().getUserTypeLabel().setText(mainController.getFtpWindow().getModel().getTextsList().get(1) + mainController.getCurrentUser().getUserType().getType());
                     mainController.getFtpWindow().setLawyerDni(mainController.getCurrentUser().getDni());
                     mainController.getFtpWindow().loadDirectory(mainController.getMainClient(),mainController.getFtpWindow().getLawyerDni());
                     mainController.getFtpWindow().getNameLabel().setText(mainController.getFtpWindow().getModel().getTextsList().get(0) + mainController.getFtpWindow().getLawyerName());

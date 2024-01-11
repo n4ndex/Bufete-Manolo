@@ -32,7 +32,7 @@ public class FTPWindow extends JFrame {
     private JButton refreshButton;         // Button to refresh the directory view
     private JTree treeDirectories;         // Tree component for displaying directory structure
     private JPanel mainPanel;              // Main panel containing FTPWindow components
-    private JLabel rutaLabel;              // Label to display the current directory path
+    private JLabel userTypeLabel;          // Label to display the current directory path
     private JLabel nameLabel;              // Label for displaying user names
     private JLabel serverLabel;            // Label for displaying server information
     private JLabel renameLabel;            // Label for renaming files or directories
@@ -80,7 +80,7 @@ public class FTPWindow extends JFrame {
 
     private void setLabelTexts() {
         nameLabel.setText(model.getTextsList().get(0));
-        rutaLabel.setText(model.getTextsList().get(1));
+        userTypeLabel.setText(model.getTextsList().get(1));
         serverLabel.setText(model.getTextsList().get(2));
         renameLabel.setText(model.getTextsList().get(10));
     }
@@ -162,7 +162,6 @@ public class FTPWindow extends JFrame {
 
             treeDirectories.setModel(new DefaultTreeModel(rootNode));
 
-            rutaLabel.setText(model.getTextsList().get(1) + path);
         } catch (Exception e) {
             e.printStackTrace();
         }

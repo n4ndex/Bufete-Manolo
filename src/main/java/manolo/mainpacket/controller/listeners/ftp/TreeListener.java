@@ -27,33 +27,26 @@ public class TreeListener implements TreeSelectionListener {
         if (selectedPath != null) {
             DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) selectedPath.getLastPathComponent();
 
-            // Verifica si el nodo seleccionado es una hoja (archivo)
-            if (selectedNode.isLeaf()) {
-                String nodeName = selectedNode.getUserObject().toString();
-                mainController.getFtpWindow().getRenameField().setText(nodeName);
+            String nodeName = selectedNode.getUserObject().toString();
+            mainController.getFtpWindow().getRenameField().setText(nodeName);
 
-                String selectedDirectory = getSelectedDirectoryPath(selectedNode);
 
-                // Elimina el primer dígito de selectedDirectory
-                if (selectedDirectory.length() > 1) {
-                    selectedDirectory = selectedDirectory.substring(1);
-                } else {
-                    selectedDirectory = ""; // O maneja el caso especial si la longitud es 1
-                }
+            // Si es un directorio, elimina el primer carácter ("/")
+            if (selectedNode.isLeaf()) {    // file
+                String selectedPathString = getSelectedPath(selectedPath);
 
-                System.out.println(selectedDirectory);
-
-                mainController.getFtpWindow().setDirectory(selectedDirectory);
-                mainController.getFtpWindow().getRutaLabel().setText(mainController.getFtpWindow().getModel().getTextsList().get(1) + mainController.getFtpWindow().getDirectory());
+                mainController.getFtpWindow().setDirectory(selectedPathString.substring(1));
+            } else {    // directory
+                mainController.getFtpWindow().setDirectory(nodeName);
             }
+
         }
     }
 
-    public String getSelectedDirectoryPath(DefaultMutableTreeNode selectedNode) {
-        TreePath path = new TreePath(selectedNode.getPath());
-        int pathCount = path.getPathCount();
+    public String getSelectedPath(TreePath selectedPath) {
+        int pathCount = selectedPath.getPathCount();
 
-        Object penultimatePathComponent = path.getPathComponent(pathCount - 2);
+        Object penultimatePathComponent = selectedPath.getPathComponent(pathCount - 2);
         return penultimatePathComponent.toString();
     }
 }

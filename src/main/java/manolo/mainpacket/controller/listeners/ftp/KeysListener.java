@@ -22,15 +22,16 @@ public class KeysListener implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+
             int option = Utils.showConfirmDialog(mainController.getFtpWindow(), mainController.getMainViewModel().getCONFIRM_RENAME_FILE(), mainController.getMainViewModel().getCONFIRM_RENAME_TITLE());
 
             if (option == JOptionPane.YES_OPTION) {
-                renameSelectedFile();
+                renameSelected();
             }
         }
     }
 
-    private void renameSelectedFile() {
+    private void renameSelected() {
         DefaultMutableTreeNode selectedNode = mainController.getFtpWindow().getSelectedNode();
         if (selectedNode != null) {
             String oldName = mainController.getFtpWindow().getSelectedDirectoryPath(selectedNode);
@@ -39,7 +40,11 @@ public class KeysListener implements KeyListener {
             String newPath = mainController.getFtpWindow().getDirectory() + "/" + newName;
 
             try {
-                mainController.getFtpService().renameFile(currentPath, newPath, mainController.getMainClient());
+                if (selectedNode.isLeaf()) {
+                    mainController.getFtpService().renameFile(currentPath, newPath, mainController.getMainClient());
+                } else {
+                    mainController.getFtpService().renameFile(oldName, newName, mainController.getMainClient());
+                }
                 mainController.getFtpWindow().loadDirectory(mainController.getMainClient(), mainController.getFtpWindow().getLawyerDni());
                 Utils.showInfoWindow(mainController.getFtpWindow(), mainController.getMainViewModel().getFILE_RENAME_SUCCESS(), mainController.getMainViewModel().getINFO());
             } catch (Exception e) {
