@@ -29,4 +29,19 @@ public class Utils {
     public static String showInputDialog(Component parentComponent, String message) {
         return JOptionPane.showInputDialog(parentComponent, message);
     }
+
+    public static boolean isValidDNI(String dni) {
+        String dniRegex = "^[0-9]{8}[A-Za-z]$";
+        return dni.matches(dniRegex);
+    }
+
+    public static boolean isValidEmail(String email) {
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        return email.matches(emailRegex);
+    }
+
+    public static boolean isStrongPassword(String password) {
+        String passwordRegex = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
+        return password.matches(passwordRegex);
+    }
 }

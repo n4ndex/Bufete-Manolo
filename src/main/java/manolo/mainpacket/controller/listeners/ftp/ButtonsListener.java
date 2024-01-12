@@ -56,7 +56,7 @@ public class ButtonsListener implements ActionListener {
                     String newDirectoryPath = selectedDirectory + File.separator + directoryName;
                     Path newDirectory = Paths.get(newDirectoryPath);
                     if (Utils.isLevelsDeep(newDirectory, 3)) {
-                        if (mainController.isValidDNI(directoryName)) {
+                        if (Utils.isValidDNI(directoryName)) {
                             if (mainController.getMainConnection().checkIfUserExists(directoryName)) {
                                 int laywerId = mainController.getMainConnection().whichLawyerHasUserAssigned(directoryName);
                                 if (laywerId == mainController.getCurrentUser().getId_lawyer()) {
