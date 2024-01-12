@@ -32,6 +32,9 @@ public class NewEmailButtonsListener implements ActionListener {
         if (e.getSource() == mainController.getNewEmail().getCancelButton()) {
             mainController.getNewEmail().dispose();
             mainController.getEmailView().setVisible(true);
+            mainController.getEmailView().setKeepChecking(true);
+            Thread thread = new Thread(mainController.getEmailView());
+            thread.start();
         }
 
         //SEND EMAIL BUTTON

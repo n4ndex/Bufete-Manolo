@@ -32,7 +32,7 @@ public class EmailTexts_es implements EmailTexts {
         texts.add("Bandeja de entrada");//2- side panel option 1
         texts.add("Spam");          //3- side panel option 2
         texts.add("Enviados");          //4- side panel option 3
-        texts.add("Notas");             //5- side panel option 4
+        texts.add("Borradores");             //5- side panel option 4
         texts.add("Enviar");            //6
         texts.add("Cancelar");          //7
         texts.add("Adjuntar archivos"); //8

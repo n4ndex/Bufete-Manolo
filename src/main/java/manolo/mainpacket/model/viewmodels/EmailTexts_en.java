@@ -32,7 +32,7 @@ public class EmailTexts_en implements EmailTexts {
         texts.add("Inbox");             //2- side panel option 1
         texts.add("Spam");           //3- side panel option 2
         texts.add("Sent");              //4- side panel option 3
-        texts.add("Notes");             //5- side panel option 4
+        texts.add("Drafts");             //5- side panel option 4
         texts.add("Send");              //6
         texts.add("Cancel");            //7
         texts.add("Attach Files");      //8

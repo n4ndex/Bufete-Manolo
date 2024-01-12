@@ -15,9 +15,17 @@ public class ReceiveEmail{
     private Session session;
     private static String emailFrom = "";
     private static String passwordFrom = "";
+    private String folderToFind;
 
-    public ReceiveEmail(MainController mainController){
+//    public ReceiveEmail(MainController mainController){
+//        this.mainController=mainController;
+//        emailFrom=mainController.getCurrentUser().getEmail();
+//        passwordFrom=mainController.getCurrentUser().getPassword();
+//        properties= new Properties();
+//    }
+    public ReceiveEmail(MainController mainController,String folderToFind){
         this.mainController=mainController;
+        this.folderToFind=folderToFind;
         emailFrom=mainController.getCurrentUser().getEmail();
         passwordFrom=mainController.getCurrentUser().getPassword();
         properties= new Properties();
@@ -39,7 +47,7 @@ public class ReceiveEmail{
         store.connect("imap.gmail.com", emailFrom, passwordFrom);
 
         // Folder object to open email inbox
-        Folder folder= store.getFolder("INBOX");
+        Folder folder= store.getFolder(folderToFind);
         folder.open(Folder.READ_ONLY);
 
         Message[] message = folder.getMessages();

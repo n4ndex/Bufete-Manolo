@@ -42,7 +42,7 @@ public class Email extends JFrame implements Runnable{
         keepChecking = true;
         initComponents(); // Initialize and set up the view
         settings(mainController); // Set parameters for the view
-        receiveEmail = new ReceiveEmail(mainController);
+        receiveEmail = new ReceiveEmail(mainController,"INBOX");
     }
 
     // Method to set view parameters
