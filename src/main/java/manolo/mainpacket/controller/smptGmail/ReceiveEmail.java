@@ -28,6 +28,7 @@ public class ReceiveEmail{
     public void check(){
 
         // Mail transfer protocol
+        properties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
         properties.setProperty("mail.store.protocol", "imaps");
         properties.setProperty("mail.imaps.host", "imap.gmail.com");
         properties.setProperty("mail.imaps.port", "993");

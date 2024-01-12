@@ -36,7 +36,6 @@ import java.io.File;
 public class MainController {
     private String language;
     private User currentUser;
-    private boolean isLawyer;
     private FtpServiceModel ftpServiceModel;
     private MainConnectionModel mainConnectionModel;
     private MainConnection mainConnection;
@@ -74,7 +73,6 @@ public class MainController {
         loginView = new Login(language);
         ftpServiceModel = new FtpServiceModel();
         ftpService = new FtpService(this);
-        isLawyer = false;
     }
 
     private void switchLanguage() {
@@ -111,7 +109,7 @@ public class MainController {
 
     public void addMenuEventListeners() {
         for (int i = 0; i < menu.getButtons().size(); i++) {
-            menu.getButtons().get(i).addActionListener(new manolo.mainpacket.controller.listeners.menu.ButtonsListener(this, isLawyer));
+            menu.getButtons().get(i).addActionListener(new manolo.mainpacket.controller.listeners.menu.ButtonsListener(this));
         }
     }
 
@@ -169,11 +167,9 @@ public class MainController {
             if (currentUser.getUserType().getType().equalsIgnoreCase("lawyer")) {
                 menu.getButtons().get(2).setEnabled(true);
                 mainClient = ftpService.loginFtp(ftpServiceModel.getHost(), ftpServiceModel.getPort(), ftpServiceModel.getUsernameLawyer(), ftpServiceModel.getPassword());
-                isLawyer = true;
             } else {
                 menu.getButtons().get(2).setEnabled(false);
                 mainClient = ftpService.loginFtp(ftpServiceModel.getHost(), ftpServiceModel.getPort(), ftpServiceModel.getUsernameClient(), ftpServiceModel.getPassword());
-                isLawyer = false;
             }
 
             mainConnection.insertLog(currentUser.getDni(), "LOGIN from user: " + currentUser.getName());
@@ -206,7 +202,7 @@ public class MainController {
                     String selectedLawyerName = registerView.getCombos().getFirst().getSelectedItem().toString();
                     int idLawyer = mainConnection.getIdFromName(selectedLawyerName);
 
-                    isLawyer = registerView.getChecks().getFirst().isSelected();
+                    boolean isLawyer = registerView.getChecks().getFirst().isSelected();
                     UserType userType;
 
                     if (isLawyer) {

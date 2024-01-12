@@ -19,11 +19,9 @@ import java.awt.event.ActionListener;
 
 public class ButtonsListener implements ActionListener {
     private final MainController mainController;
-    private final boolean isLawyer;
 
-    public ButtonsListener(MainController mainController, boolean isLawyer) {
+    public ButtonsListener(MainController mainController) {
         this.mainController = mainController;
-        this.isLawyer = isLawyer;
     }
 
     /**
@@ -38,7 +36,7 @@ public class ButtonsListener implements ActionListener {
         mainController.getMenu().dispose();
         switch (((JButton) e.getSource()).getName()) {
             case "FTP" -> {
-                if (isLawyer) {
+                if (mainController.getCurrentUser().getUserType().getType().equals("lawyer")) {
                     mainController.setFtpWindow(new FTPWindow(mainController));
                     mainController.getFtpWindow().setLawyerName(mainController.getCurrentUser().getName());
                     mainController.getFtpWindow().getUserTypeLabel().setText(mainController.getFtpWindow().getModel().getTextsList().get(1) + mainController.getCurrentUser().getUserType().getType());
