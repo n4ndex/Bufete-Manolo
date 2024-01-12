@@ -1,12 +1,3 @@
-
-/**
- * MainConnection - Handles the database connection and executes queries for the MainPacket application.
- *
- * This class provides methods to interact with the database, such as retrieving user data,
- * obtaining lists of lawyer and client names, checking user existence, inserting new users,
- * and updating client lawyer assignments, among other database operations.
- */
-
 package manolo.mainpacket.controller.databaseconnection;
 
 import lombok.Getter;
@@ -18,6 +9,13 @@ import manolo.mainpacket.model.viewmodels.QueriesModel;
 import java.sql.*;
 import java.util.ArrayList;
 
+/**
+ * MainConnection - Handles the database connection and executes queries for the MainPacket application.
+ * This class provides methods to interact with the database, such as retrieving user data, obtaining lists of lawyer and client names, checking user existence, inserting new users, and updating client lawyer assignments, among other database operations.
+ *
+ * @author Diego Fernández Rojo, David Maestre Díaz, Hugo Villodres Moreno, Isaac Requena Santiago
+ * @version 1.0
+ */
 @Getter
 @Setter
 public class MainConnection {
@@ -49,11 +47,9 @@ public class MainConnection {
 
     public User getUserData(String dni, String password) {
         String query = QueriesModel.GET_USER_DATA;
-
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, dni);
             preparedStatement.setString(2, password);
-
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     String name = resultSet.getString("name");
@@ -61,7 +57,6 @@ public class MainConnection {
                     String userType = resultSet.getString("type_name");
                     int idlawyer = resultSet.getInt("id_lawyer");
                     int privilegeLevel = resultSet.getInt("privilege_level");
-
                     UserType userTypeEnum = new UserType(userType, privilegeLevel);
                     return new User(dni, name, password, email, userTypeEnum, idlawyer);
                 }
@@ -69,46 +64,34 @@ public class MainConnection {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
         return null;
     }
 
     public ArrayList<String> getLawyerNames() {
         ArrayList<String> lawyerNames = new ArrayList<>();
-
         String query = QueriesModel.GET_LAWYER_NAMES;
-
         try (PreparedStatement preparedStatement = connection.prepareStatement(query); ResultSet resultSet = preparedStatement.executeQuery()) {
-
             while (resultSet.next()) {
                 String name = resultSet.getString("name");
                 lawyerNames.add(name);
             }
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
         return lawyerNames;
     }
 
     public ArrayList<String> getClientNames() {
         ArrayList<String> clientNames = new ArrayList<>();
-
         String query = QueriesModel.GET_CLIENT_NAMES;
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query); ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
                 String name = resultSet.getString("name");
                 clientNames.add(name);
             }
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
         return clientNames;
     }
 
@@ -116,12 +99,9 @@ public class MainConnection {
         if (name.isEmpty() || name.equals("")) {
             return 0; // Si el nombre del abogado está vacío o es "", asigna id_lawyer = 0
         }
-
         String query = QueriesModel.GET_ID_FROM_NAME;
-
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, name);
-
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     return resultSet.getInt("id_user");
@@ -130,7 +110,6 @@ public class MainConnection {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
         return 0;
     }
 
@@ -138,12 +117,9 @@ public class MainConnection {
         if (name.isEmpty() || name.equals("")) {
             return "";
         }
-
         String query = QueriesModel.GET_DNI_FROM_NAME;
-
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, name);
-
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     return resultSet.getString("dni");
@@ -152,7 +128,6 @@ public class MainConnection {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
         return "";
     }
 
@@ -209,7 +184,6 @@ public class MainConnection {
 
     public void updateClientLawyerId(String clientName, int newLawyerId) {
         String query = QueriesModel.UPDATE_CLIENT_LAWYER_ID;
-
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, newLawyerId);
             preparedStatement.setString(2, clientName);

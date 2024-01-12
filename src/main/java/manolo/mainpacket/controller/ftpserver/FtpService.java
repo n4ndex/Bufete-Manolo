@@ -1,7 +1,6 @@
-
 /**
  * FtpService - Handles FTP server interactions for the MainPacket application.
- *
+ * <p>
  * This class provides methods for connecting to an FTP server, listing files and directories,
  * creating directories, uploading and downloading files, renaming and deleting files and directories,
  * and retrieving client-specific files from the FTP server.
@@ -12,8 +11,10 @@ package manolo.mainpacket.controller.ftpserver;
 import manolo.mainpacket.controller.MainController;
 import manolo.mainpacket.model.controllermodels.Utils;
 import manolo.mainpacket.view.FTPWindow;
-import org.apache.commons.net.*;
-import org.apache.commons.net.ftp.*;
+import org.apache.commons.net.ProtocolCommandEvent;
+import org.apache.commons.net.ProtocolCommandListener;
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
 
 import java.io.*;
 import java.nio.file.Path;
@@ -21,8 +22,14 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * FtpService - Handles FTP server interactions for the MainPacket application.
+ * This class provides methods for connecting to an FTP server, listing files and directories, creating directories, uploading and downloading files, renaming and deleting files and directories, and retrieving client-specific files from the FTP server.
+ *
+ * @author Diego Fernández Rojo, David Maestre Díaz, Hugo Villodres Moreno, Isaac Requena Santiago
+ * @version 1.0
+ */
 public class FtpService {
-
     private final MainController mainController;
 
     public FtpService(MainController mainController) {
@@ -42,8 +49,6 @@ public class FtpService {
                 System.out.printf("[%s][%d] Reply received : %s", Thread.currentThread().getName(), System.currentTimeMillis(), protocolCommandEvent.getMessage());
             }
         });
-
-
         try {
             ftpClient.connect(host, port);
             ftpClient.login(username, password);
@@ -86,7 +91,6 @@ public class FtpService {
         try {
             InputStream inputStream = new ByteArrayInputStream(new byte[0]);
             boolean success = ftpClient.storeFile(filePath, inputStream);
-
             if (success) {
                 System.out.printf("[createEmptyFile][%d] Empty file created successfully: %s%n", System.currentTimeMillis(), filePath);
             } else {
@@ -100,7 +104,6 @@ public class FtpService {
     public boolean deleteDirectory(String path, FTPClient ftpClient, FTPWindow ftpWindow) {
         try {
             FTPFile[] files = ftpClient.listFiles(path);
-
             if (files != null) {
                 for (FTPFile file : files) {
                     String filePath = path + "/" + file.getName();
@@ -112,7 +115,6 @@ public class FtpService {
                     }
                 }
             }
-
             if (ftpClient.removeDirectory(path)) {
                 Utils.showInfoWindow(ftpWindow, mainController.getMainViewModel().getDIRECTORY_DELETED_SUCCESS() + path, mainController.getMainViewModel().getINFO());
                 return true;
@@ -172,15 +174,12 @@ public class FtpService {
 
     public String[] getClientFiles(String clientDni, FTPClient ftpClient) {
         List<String> fileNames = new ArrayList<>();
-
         searchClientFiles("/", clientDni, ftpClient, fileNames);
-
         return fileNames.toArray(new String[0]);
     }
 
     private void searchClientFiles(String currentPath, String clientDni, FTPClient ftpClient, List<String> fileNames) {
         FTPFile[] files = listFiles(currentPath, ftpClient);
-
         for (FTPFile file : files) {
             String filePath = currentPath + file.getName();
             Path filePathPath = Paths.get(filePath);
