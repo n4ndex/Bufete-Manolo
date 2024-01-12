@@ -33,9 +33,7 @@ public class NewEmailButtonsListener implements ActionListener {
         if (e.getSource() == mainController.getNewEmail().getSendButton()) {
             mainController.getMainConnection().openConnection(mainController.getMainConnectionModel().getMYSQL_URL(), mainController.getMainConnectionModel().getMYSQL_DATABASE(), mainController.getMainConnectionModel().getMYSQL_USERNAME(), mainController.getMainConnectionModel().getPASSWORD());
 
-            send.createEmail(mainController.getNewEmail().getToTextfield(),
-                    mainController.getNewEmail().getSubjetTextArea(),
-                    mainController.getNewEmail().getMessageTextfield());
+            send.createEmail(mainController.getNewEmail().getToTextfield(), mainController.getNewEmail().getSubjetTextArea(), mainController.getNewEmail().getMessageTextfield());
             send.sendEmail();
 
             mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), "EMAIL SEND to " + mainController.getNewEmail().getToTextfield().getText());

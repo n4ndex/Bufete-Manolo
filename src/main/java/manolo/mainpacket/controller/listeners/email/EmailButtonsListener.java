@@ -22,6 +22,7 @@ public class EmailButtonsListener implements ActionListener {
             mainController.getEmailView().dispose();
             mainController.setNewEmail(new NewEmail());
             mainController.addNewEmailListeners();
+            mainController.getEmailView().setKeepChecking(false);
         }
 
         //BACK BUTTON

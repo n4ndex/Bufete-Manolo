@@ -39,6 +39,7 @@ public class SendEmail extends JFrame {
         emailFrom=mainController.getCurrentUser().getEmail();
         passwordFrom=mainController.getCurrentUser().getPassword();
         mProperties = new Properties();
+        filesNames="";
     }
 
     public void createEmail(JTextField to,JTextArea message, JTextField subjectt) {
@@ -47,13 +48,10 @@ public class SendEmail extends JFrame {
         content = message.getText().trim();
 
         // Mail transfer protocol
+        mProperties.put("mail.smtp.starttls.enable", "true");
         mProperties.put("mail.smtp.host", "smtp.gmail.com");
-        mProperties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-        mProperties.setProperty("mail.smtp.starttls.enable", "true");
-        mProperties.setProperty("mail.smtp.port", "587");
-        mProperties.setProperty("mail.smtp.user", emailFrom);
-        mProperties.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
-        mProperties.setProperty("mail.smtp.auth", "true");
+        mProperties.put("mail.smtp.port", "587");
+        mProperties.put("mail.smtp.auth", "true");
 
         mSession = Session.getDefaultInstance(mProperties);
 
@@ -76,7 +74,7 @@ public class SendEmail extends JFrame {
     public void sendEmail() {
         try {
             Transport mTransport = mSession.getTransport("smtp");
-            mTransport.connect(emailFrom, passwordFrom);
+            mTransport.connect("smtp.gmail.com", emailFrom, passwordFrom);
             mTransport.sendMessage(mCorreo, mCorreo.getRecipients(Message.RecipientType.TO));
             mTransport.close();
 

@@ -6,9 +6,7 @@ import lombok.SneakyThrows;
 import manolo.mainpacket.controller.MainController;
 import manolo.mainpacket.controller.smptGmail.ReceiveEmail;
 import manolo.mainpacket.model.viewmodels.EmailTexts;
-import manolo.mainpacket.model.viewmodels.EmailTexts_es;
 
-import javax.mail.MessagingException;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -29,18 +27,22 @@ public class Email extends JFrame implements Runnable{
     private ArrayList<JPanel> panels;
     private ArrayList<JButton> buttons;
     private ArrayList<JLabel> labels;
+    private ArrayList<JTextPane> textAreas;
 
     // Variable to store the label name option
     private String optionLabelName;
 
+    // Variable to count the number of inbox recharges
+    private int recharges =0;
+
     // Constructor that takes mainController as a parameter
     public Email(MainController mainController) {
-        receiveEmail = new ReceiveEmail(mainController);
         this.thread = new Thread();
         this.model = mainController.getEmailModel();
         keepChecking = true;
         creation(); // Initialize and set up the view
         settings(); // Set parameters for the view
+        receiveEmail = new ReceiveEmail(mainController);
     }
 
     // Method to set view parameters
@@ -80,7 +82,8 @@ public class Email extends JFrame implements Runnable{
         panels.get(1).setBackground(Color.DARK_GRAY);
 
         // PANEL 2
-        panels.get(2).setBackground(Color.GRAY);
+        //panels.get(2).setBackground(Color.GRAY);
+        panels.get(2).setLayout(new GridLayout(15,1));
 
         // PANEL 3
         panels.get(3).setLayout(new GridLayout(5, 1));
@@ -133,9 +136,14 @@ public class Email extends JFrame implements Runnable{
 
     // Method to set up email JTextArea
     public void emailSettings() {
-        JTextArea emailTextArea = new JTextArea();
-        emailTextArea.setText("AQUI APARECERAN LOS EMAILS");
-        panels.get(2).add(emailTextArea);
+        textAreas= new ArrayList<>();
+
+        for (int i=0; i<15; i++){
+            textAreas.add(new JTextPane());
+            textAreas.get(i).setContentType("text/html");
+            textAreas.get(i).setText("...");
+            panels.get(2).add(textAreas.get(i));
+        }
     }
 
     @SneakyThrows
@@ -144,17 +152,19 @@ public class Email extends JFrame implements Runnable{
 
         while(keepChecking){
 
+            checkEmails();
             try {
-                Thread.sleep(3000);
+                Thread.sleep(1500);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-                checkEmails();
 
         }
     }
 
     private void checkEmails(){
         receiveEmail.check();
+        System.out.println("Inbox recargado"+ recharges);
+        recharges++;
     }
 }

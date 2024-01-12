@@ -28,7 +28,7 @@ public class EmailTexts_es implements EmailTexts {
         texts.add("Nuevo correo");      //0- new email button name
         texts.add("BACK");              //1- back button name
         texts.add("Bandeja de entrada");//2- side panel option 1
-        texts.add("Borrados");          //3- side panel option 2
+        texts.add("Spam");          //3- side panel option 2
         texts.add("Enviados");          //4- side panel option 3
         texts.add("Notas");             //5- side panel option 4
     }
