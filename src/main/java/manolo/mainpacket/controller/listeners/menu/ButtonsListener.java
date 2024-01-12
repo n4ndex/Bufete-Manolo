@@ -58,8 +58,6 @@ public class ButtonsListener implements ActionListener {
                 mainController.setEmailView(new Email(mainController));
                 Thread hilo = new Thread(mainController.getEmailView());
                 hilo.start();
-                //ReceiveEmail receiveEmail= new ReceiveEmail(mainController);
-                //receiveEmail.check();
                 mainController.addEmailListeners();
                 mainController.getMainConnection().insertLog(mainController.getCurrentUser().getDni(), mainController.getCurrentUser().getName() + " open EMAIL explorer");
             }

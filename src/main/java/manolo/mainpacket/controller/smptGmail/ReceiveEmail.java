@@ -1,6 +1,3 @@
-
-
-
 package manolo.mainpacket.controller.smptGmail;
 
 import lombok.Getter;
@@ -20,6 +17,7 @@ public class ReceiveEmail{
     private static String passwordFrom = "";
 
     public ReceiveEmail(MainController mainController){
+        this.mainController=mainController;
         emailFrom=mainController.getCurrentUser().getEmail();
         passwordFrom=mainController.getCurrentUser().getPassword();
         properties= new Properties();
@@ -28,7 +26,7 @@ public class ReceiveEmail{
     public void check(){
 
         // Mail transfer protocol
-        properties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+        properties.put("mail.smtp.starttls.enable", "true");
         properties.setProperty("mail.store.protocol", "imaps");
         properties.setProperty("mail.imaps.host", "imap.gmail.com");
         properties.setProperty("mail.imaps.port", "993");
@@ -46,12 +44,23 @@ public class ReceiveEmail{
 
         Message[] message = folder.getMessages();
 
-        Message message1= message[1];
+        int z=0;
+        String from;
+        for (int i= message.length-1; i>= message.length-15; i--){
+            Message message1= message[i];
+            from=removeExtra(message1.getFrom()[0].toString());
 
-        System.out.println(message1.getSubject());
-        System.out.println(message1.getFrom());
+            mainController.getEmailView().getTextAreas().get(z).setText(from+ " Asunto: "+ message1.getSubject());
+            z++;
+        }
 
         folder.close(true);
         store.close();
+    }
+
+    private String removeExtra(String from){
+        from= from.replaceFirst("<.*?>", "");
+        from="<b>"+ "De: "+ from+"</b>";
+        return from;
     }
 }
